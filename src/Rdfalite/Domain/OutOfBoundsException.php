@@ -37,56 +37,23 @@
 namespace Jkphl\Rdfalite\Domain;
 
 /**
- * Vocabulary
+ * OutOfBoundsException
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class Vocabulary implements VocabularyInterface
+class OutOfBoundsException  extends \OutOfBoundsException
 {
     /**
-     * URL where the vocabulary can be found
+     * Unknown property name
      *
      * @var string
      */
-    public $url;
-
+    const UNKNOWN_PROPERTY_NAME_STR = 'Unknown property name "%s"';
     /**
-     * Vocabulary constructor
+     * Unknown property name
      *
-     * @param string $url URL where the vocabulary can be found
+     * @var int
      */
-    public function __construct($url)
-    {
-        $url = trim($url);
-        if (!strlen($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_VOCABULARY_URL_STR, $url),
-                RuntimeException::INVALID_VOCABULARY_URL
-            );
-        }
-
-        $this->url = $url;
-    }
-
-    /**
-     * Return the vocabulary URL
-     *
-     * @return string URL
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * Expand a local type
-     *
-     * @param string $type Local type
-     * @return string Expanded local type
-     */
-    public function expand($type)
-    {
-        return rtrim($this->url, '/').'/'.$type;
-    }
+    const UNKNOWN_PROPERTY_NAME = 1486849016;
 }

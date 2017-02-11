@@ -37,47 +37,19 @@
 namespace Jkphl\Rdfalite\Domain;
 
 /**
- * Vocabulary
+ * Vocabulary interface
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class Vocabulary implements VocabularyInterface
+interface VocabularyInterface
 {
-    /**
-     * URL where the vocabulary can be found
-     *
-     * @var string
-     */
-    public $url;
-
-    /**
-     * Vocabulary constructor
-     *
-     * @param string $url URL where the vocabulary can be found
-     */
-    public function __construct($url)
-    {
-        $url = trim($url);
-        if (!strlen($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_VOCABULARY_URL_STR, $url),
-                RuntimeException::INVALID_VOCABULARY_URL
-            );
-        }
-
-        $this->url = $url;
-    }
-
     /**
      * Return the vocabulary URL
      *
      * @return string URL
      */
-    public function getUrl()
-    {
-        return $this->url;
-    }
+    public function getUrl();
 
     /**
      * Expand a local type
@@ -85,8 +57,5 @@ class Vocabulary implements VocabularyInterface
      * @param string $type Local type
      * @return string Expanded local type
      */
-    public function expand($type)
-    {
-        return rtrim($this->url, '/').'/'.$type;
-    }
+    public function expand($type);
 }

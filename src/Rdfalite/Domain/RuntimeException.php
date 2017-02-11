@@ -37,12 +37,12 @@
 namespace Jkphl\Rdfalite\Domain;
 
 /**
- * Exception
+ * RuntimeException
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class Exception extends \RuntimeException
+class RuntimeException extends \RuntimeException
 {
     /**
      * Invalid vocabulary URL
@@ -68,4 +68,16 @@ class Exception extends \RuntimeException
      * @var int
      */
     const INVALID_RESOURCE_TYPE = 1486823588;
+    /**
+     * Invalid property name
+     *
+     * @var string
+     */
+    const INVALID_PROPERTY_NAME_STR = 'Invalid property name "%s"';
+    /**
+     * Invalid property name
+     *
+     * @var int
+     */
+    const INVALID_PROPERTY_NAME = 1486848618;
 }

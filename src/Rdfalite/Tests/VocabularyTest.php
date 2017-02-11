@@ -66,7 +66,7 @@ class VocabularyTest extends \PHPUnit_Framework_TestCase
     /**
      * Test invalid vocabulary URL
      *
-     * @expectedException \Jkphl\Rdfalite\Domain\Exception
+     * @expectedException \Jkphl\Rdfalite\Domain\RuntimeException
      * @expectedExceptionCode 1486823170
      */
     public function testInvalidVocabularyURL()

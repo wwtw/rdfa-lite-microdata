@@ -37,56 +37,70 @@
 namespace Jkphl\Rdfalite\Domain;
 
 /**
- * Vocabulary
+ * Thing interface
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class Vocabulary implements VocabularyInterface
+interface ThingInterface
 {
     /**
-     * URL where the vocabulary can be found
+     * Return the resource type
      *
-     * @var string
+     * @return string Resource type
      */
-    public $url;
+    public function getType();
 
     /**
-     * Vocabulary constructor
+     * Return the vocabulary in use
      *
-     * @param string $url URL where the vocabulary can be found
+     * @return VocabularyInterface Vocabulary
      */
-    public function __construct($url)
-    {
-        $url = trim($url);
-        if (!strlen($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_VOCABULARY_URL_STR, $url),
-                RuntimeException::INVALID_VOCABULARY_URL
-            );
-        }
-
-        $this->url = $url;
-    }
+    public function getVocabulary();
 
     /**
-     * Return the vocabulary URL
+     * Return the resource ID
      *
-     * @return string URL
+     * @return null|string Resource ID
      */
-    public function getUrl()
-    {
-        return $this->url;
-    }
+    public function getId();
 
     /**
-     * Expand a local type
+     * Add a property value
      *
-     * @param string $type Local type
-     * @return string Expanded local type
+     * @param string $name Property name
+     * @param mixed $value Property value
+     * @return Thing Self reference
      */
-    public function expand($type)
-    {
-        return rtrim($this->url, '/').'/'.$type;
-    }
+    public function addProperty($name, $value);
+
+    /**
+     * Return all properties
+     *
+     * @return array Properties
+     */
+    public function getProperties();
+
+    /**
+     * Return the values of a single property
+     *
+     * @param string $name Property name
+     * @return array Property values
+     */
+    public function getProperty($name);
+
+    /**
+     * Add a child
+     *
+     * @param ThingInterface $child Child
+     * @return Thing Self reference
+     */
+    public function addChild(ThingInterface $child);
+
+    /**
+     * Return all children
+     *
+     * @return Thing[] Children
+     */
+    public function getChildren();
 }

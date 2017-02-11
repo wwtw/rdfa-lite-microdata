@@ -67,18 +67,93 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public function testMinimumThing()
     {
-        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $type = 'Person';
+        $thing = new Thing($type, self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG.'/'.$type, $thing->getType());
+        $this->assertEquals(self::$schemaOrgVocabulary, $thing->getVocabulary());
+        $this->assertNull($thing->getId());
+        $this->assertTrue(is_array($thing->getChildren()));
+        $this->assertEquals(0, count($thing->getChildren()));
+        $this->assertTrue(is_array($thing->getProperties()));
+        $this->assertEquals(0, count($thing->getProperties()));
     }
 
     /**
      * Test the thing instantiation with an invalid type
      *
-     * @expectedException \Jkphl\Rdfalite\Domain\Exception
+     * @expectedException \Jkphl\Rdfalite\Domain\RuntimeException
      * @expectedExceptionCode 1486823588
      */
     public function testInvalidTypeThing()
     {
         new Thing('', self::$schemaOrgVocabulary);
+    }
+
+    /**
+     * Test adding a property
+     */
+    public function testAddProperty()
+    {
+        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $this->assertInstanceOf(Thing::class, $thing);
+
+        $thing->addProperty('test1', 'value1');
+        $thing->addProperty('test1', 'value2');
+        $thing->addProperty('test2', 'value1');
+
+        $properties = $thing->getProperties();
+        $this->assertTrue(is_array($properties));
+        $this->assertTrue(array_key_exists('test1', $properties));
+        $this->assertTrue(array_key_exists('test2', $properties));
+        $this->assertEquals(2, count($properties));
+
+        $test1Property = $thing->getProperty('test1');
+        $this->assertTrue(is_array($test1Property));
+        $this->assertEquals(2, count($test1Property));
+        $this->assertEquals(['value1', 'value2'], $test1Property);
+    }
+
+    /**
+     * Test setting an invalid property name
+     *
+     * @expectedException \Jkphl\Rdfalite\Domain\RuntimeException
+     * @expectedExceptionCode 1486848618
+     */
+    public function testSetInvalidPropertyName()
+    {
+        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $this->assertInstanceOf(Thing::class, $thing);
+        $thing->addProperty('', null);
+    }
+
+    /**
+     * Test getting an invalid property name
+     *
+     * @expectedException \Jkphl\Rdfalite\Domain\OutOfBoundsException
+     * @expectedExceptionCode 1486849016
+     */
+    public function testGetInvalidPropertyName()
+    {
+        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $this->assertInstanceOf(Thing::class, $thing);
+        $thing->getProperty('invalid');
+    }
+
+    /**
+     * Test adding children
+     */
+    public function testAddChild() {
+        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $this->assertInstanceOf(Thing::class, $thing);
+
+        $child1 = new Thing('Person', self::$schemaOrgVocabulary);
+        $child2 = new Thing('Person', self::$schemaOrgVocabulary);
+        $thing->addChild($child1)->addChild($child2);
+
+        $children = $thing->getChildren();
+        $this->assertTrue(is_array($children));
+        $this->assertEquals(2, count($children));
+        $this->assertEquals([$child1, $child2], $children);
     }
 }

@@ -42,7 +42,7 @@ namespace Jkphl\Rdfalite\Domain;
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class Thing
+class Thing implements ThingInterface
 {
     /**
      * Resource type
@@ -53,7 +53,7 @@ class Thing
     /**
      * Resource vocabulary
      *
-     * @var Vocabulary
+     * @var VocabularyInterface
      */
     protected $vocabulary;
     /**
@@ -62,26 +62,38 @@ class Thing
      * @var string|null
      */
     protected $id = null;
+    /**
+     * Child things
+     *
+     * @var Thing[]
+     */
+    protected $children = [];
+    /**
+     * Property
+     *
+     * @var array
+     */
+    protected $properties = [];
 
     /**
      * Thing constructor
      *
      * @param string $type Resource type
-     * @param Vocabulary $vocabulary Vocabulary in use
+     * @param VocabularyInterface $vocabulary Vocabulary in use
      * @param null|string $id Resource id
      */
-    public function __construct($type, Vocabulary $vocabulary, $id = null)
+    public function __construct($type, VocabularyInterface $vocabulary, $id = null)
     {
         $type = trim($type);
         if (!strlen($type)) {
-            throw new Exception(
-                sprintf(Exception::INVALID_RESOURCE_TYPE_STR, $type, $vocabulary->getUrl()),
-                Exception::INVALID_RESOURCE_TYPE
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_RESOURCE_TYPE_STR, $type, $vocabulary->getUrl()),
+                RuntimeException::INVALID_RESOURCE_TYPE
             );
         }
 
-        $this->type = $type;
         $this->vocabulary = $vocabulary;
+        $this->type = $this->vocabulary->expand($type);
         $this->id = $id;
     }
 
@@ -98,7 +110,7 @@ class Thing
     /**
      * Return the vocabulary in use
      *
-     * @return Vocabulary Vocabulary
+     * @return VocabularyInterface Vocabulary
      */
     public function getVocabulary()
     {
@@ -113,5 +125,102 @@ class Thing
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add a property value
+     *
+     * @param string $name Property name
+     * @param mixed $value Property value
+     * @return Thing Self reference
+     */
+    public function addProperty($name, $value)
+    {
+        $name = $this->validatePropertyName($name);
+
+        // Create the property values list if necessary
+        if (!array_key_exists($name, $this->properties)) {
+            $this->properties[$name] = [];
+        }
+
+        // Register the property value
+        $this->properties[$name][] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Validate a property name
+     *
+     * @param string $name Property name
+     * @return string Sanitized property name
+     * @throws RuntimeException If the property name is invalid
+     */
+    protected function validatePropertyName($name)
+    {
+        $name = trim($name);
+
+        // If the property name is invalid
+        if (!strlen($name) || !preg_match('/^[a-z][a-zA-Z0-9]*$/', $name)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_PROPERTY_NAME_STR, $name), RuntimeException::INVALID_PROPERTY_NAME
+            );
+        }
+
+        return $name;
+    }
+
+    /**
+     * Return all properties
+     *
+     * @return array Properties
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Return the values of a single property
+     *
+     * @param string $name Property name
+     * @return array Property values
+     * @throws OutOfBoundsException If the property name is unknown
+     */
+    public function getProperty($name)
+    {
+        $name = $this->validatePropertyName($name);
+
+        // If the property name is unknown
+        if (!array_key_exists($name, $this->properties)) {
+            throw new OutOfBoundsException(
+                sprintf(OutOfBoundsException::UNKNOWN_PROPERTY_NAME_STR, $name),
+                OutOfBoundsException::UNKNOWN_PROPERTY_NAME
+            );
+        }
+
+        return $this->properties[$name];
+    }
+
+    /**
+     * Add a child
+     *
+     * @param ThingInterface $child Child
+     * @return Thing Self reference
+     */
+    public function addChild(ThingInterface $child)
+    {
+        $this->children[spl_object_hash($child)] = $child;
+        return $this;
+    }
+
+    /**
+     * Return all children
+     *
+     * @return Thing[] Children
+     */
+    public function getChildren()
+    {
+        return array_values($this->children);
     }
 }
