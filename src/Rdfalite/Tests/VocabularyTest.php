@@ -61,6 +61,7 @@ class VocabularyTest extends \PHPUnit_Framework_TestCase
         $vocabulary = new Vocabulary(self::SCHEMA_ORG);
         $this->assertInstanceOf(Vocabulary::class, $vocabulary);
         $this->assertEquals(self::SCHEMA_ORG, $vocabulary->getUrl());
+        $this->assertEquals(self::SCHEMA_ORG.'/Person', $vocabulary->expand('Person'));
     }
 
     /**

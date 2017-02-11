@@ -80,6 +80,16 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the resource ID
+     */
+    public function testResourceId()
+    {
+        $thing = new Thing('Person', self::$schemaOrgVocabulary, 'bob');
+        $this->assertInstanceOf(Thing::class, $thing);
+        $this->assertEquals('bob', $thing->getId());
+    }
+
+    /**
      * Test the thing instantiation with an invalid type
      *
      * @expectedException \Jkphl\Rdfalite\Domain\RuntimeException
@@ -143,7 +153,8 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     /**
      * Test adding children
      */
-    public function testAddChild() {
+    public function testAddChild()
+    {
         $thing = new Thing('Person', self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
 
