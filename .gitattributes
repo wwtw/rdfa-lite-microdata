@@ -14,3 +14,5 @@
 /src/Rdfalite/Tests export-ignore
 /.scrutinizer.yml export-ignore
 /mkdocs.yml export-ignore
+/.codeclimate.yml export-ignore
+/phpmd.xml export-ignore
