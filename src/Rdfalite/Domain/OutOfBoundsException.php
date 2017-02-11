@@ -42,7 +42,7 @@ namespace Jkphl\Rdfalite\Domain;
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class OutOfBoundsException  extends \OutOfBoundsException
+class OutOfBoundsException extends \OutOfBoundsException
 {
     /**
      * Unknown property name
