@@ -34,68 +34,24 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Application\Parser;
+namespace Jkphl\Rdfalite\Application\Contract;
 
-use Jkphl\Rdfalite\Application\Contract\DocumentFactoryInterface;
-use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
-
+use Jkphl\Rdfalite\Application\Parser\ParserInterface;
 
 /**
- * Parser
+ * Element processor interface
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Application
  */
-class Parser implements ParserInterface
+interface ElementProcessorInterface
 {
     /**
-     * Document factory
+     * Process a DOM element
      *
-     * @var DocumentFactoryInterface
-     */
-    protected $documentFactory;
-    /**
-     * Element processor
-     *
-     * @var ElementProcessorInterface
-     */
-    protected $elementProcessor;
-
-    /**
-     * Parser constructor
-     *
-     * @param DocumentFactoryInterface $documentFactory Document factory
-     * @param ElementProcessorInterface $elementProcessor Element processor
-     */
-    public function __construct(DocumentFactoryInterface $documentFactory, ElementProcessorInterface $elementProcessor)
-    {
-        $this->documentFactory = $documentFactory;
-        $this->elementProcessor = $elementProcessor;
-    }
-
-    /**
-     * Parse a string
-     *
-     * @param string $string String
+     * @param \DOMElement $element DOM element
+     * @param ParserInterface $parser Parser instance
      * @return mixed
      */
-    public function parse($string)
-    {
-        $document = $this->documentFactory->createDocumentFromString($string);
-        $iterator = new DOMNodeRecursiveIterator($document->childNodes);
-
-        /**
-         * Recursively run through all child elements
-         *
-         * @var \DOMElement $element
-         */
-        foreach ($iterator->getRecursiveIterator() as $element) {
-            if ($element instanceof \DOMElement) {
-                $this->elementProcessor->processElement($element, $this);
-            }
-        }
-
-        return null;
-    }
+    public function processElement(\DOMElement $element, ParserInterface $parser);
 }
-
