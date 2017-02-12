@@ -34,50 +34,15 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain;
+namespace Jkphl\Rdfalite\Domain\Exceptions;
 
 /**
- * RuntimeException
+ * RDFa Lite domain exception
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Domain
+ * @subpackage Jkphl\Rdfalite\Domain\Exceptions
  */
-class RuntimeException extends \RuntimeException
+interface RdfaliteDomainExceptionInterface extends RdfaliteExceptionInterface
 {
-    /**
-     * Invalid vocabulary URL
-     *
-     * @var string
-     */
-    const INVALID_VOCABULARY_URL_STR = 'Invalid vocabulary URL "%s"';
-    /**
-     * Invalid vocabulary
-     *
-     * @var int
-     */
-    const INVALID_VOCABULARY_URL = 1486823170;
-    /**
-     * Invalid resource type
-     *
-     * @var string
-     */
-    const INVALID_RESOURCE_TYPE_STR = 'Invalid resource type "%s" (vocabulary %s)';
-    /**
-     * Invalid vocabulary
-     *
-     * @var int
-     */
-    const INVALID_RESOURCE_TYPE = 1486823588;
-    /**
-     * Invalid property name
-     *
-     * @var string
-     */
-    const INVALID_PROPERTY_NAME_STR = 'Invalid property name "%s"';
-    /**
-     * Invalid property name
-     *
-     * @var int
-     */
-    const INVALID_PROPERTY_NAME = 1486848618;
+
 }

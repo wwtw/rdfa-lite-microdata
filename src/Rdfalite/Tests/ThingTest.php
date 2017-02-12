@@ -36,8 +36,8 @@
 
 namespace Jkphl\Rdfalite\Tests;
 
-use Jkphl\Rdfalite\Domain\Thing;
-use Jkphl\Rdfalite\Domain\Vocabulary;
+use Jkphl\Rdfalite\Domain\Thing\Thing;
+use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 
 /**
  * Thing tests
@@ -70,7 +70,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $type = 'Person';
         $thing = new Thing($type, self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
-        $this->assertEquals(VocabularyTest::SCHEMA_ORG.'/'.$type, $thing->getType());
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG.$type, $thing->getType());
         $this->assertEquals(self::$schemaOrgVocabulary, $thing->getVocabulary());
         $this->assertNull($thing->getId());
         $this->assertTrue(is_array($thing->getChildren()));
@@ -92,7 +92,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the thing instantiation with an invalid type
      *
-     * @expectedException \Jkphl\Rdfalite\Domain\RuntimeException
+     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
      * @expectedExceptionCode 1486823588
      */
     public function testInvalidTypeThing()
@@ -127,7 +127,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setting an invalid property name
      *
-     * @expectedException \Jkphl\Rdfalite\Domain\RuntimeException
+     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
      * @expectedExceptionCode 1486848618
      */
     public function testSetInvalidPropertyName()
@@ -140,7 +140,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     /**
      * Test getting an invalid property name
      *
-     * @expectedException \Jkphl\Rdfalite\Domain\OutOfBoundsException
+     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\OutOfBoundsException
      * @expectedExceptionCode 1486849016
      */
     public function testGetInvalidPropertyName()

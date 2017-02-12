@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Tests
+ * @subpackage Jkphl\Rdfalite\Domain
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,44 +34,15 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Tests;
-
-use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
+namespace Jkphl\Rdfalite\Domain\Exceptions;
 
 /**
- * Vocabulary tests
+ * RDFa Lite exception
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Tests
+ * @subpackage Jkphl\Rdfalite\Domain\Exceptions
  */
-class VocabularyTest extends \PHPUnit_Framework_TestCase
+interface RdfaliteExceptionInterface
 {
-    /**
-     * schema.org URL
-     *
-     * @var string
-     */
-    const SCHEMA_ORG = 'http://schema.org/';
 
-    /**
-     * Test the vocabulary instantiation
-     */
-    public function testVocabulary()
-    {
-        $vocabulary = new Vocabulary(self::SCHEMA_ORG);
-        $this->assertInstanceOf(Vocabulary::class, $vocabulary);
-        $this->assertEquals(self::SCHEMA_ORG, $vocabulary->getUrl());
-        $this->assertEquals(self::SCHEMA_ORG.'Person', $vocabulary->expand('Person'));
-    }
-
-    /**
-     * Test invalid vocabulary URL
-     *
-     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
-     * @expectedExceptionCode 1486823170
-     */
-    public function testInvalidVocabularyURL()
-    {
-        new Vocabulary('invalid');
-    }
 }

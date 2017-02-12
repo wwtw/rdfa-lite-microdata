@@ -34,7 +34,11 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain;
+namespace Jkphl\Rdfalite\Domain\Thing;
+
+use Jkphl\Rdfalite\Domain\Exceptions\OutOfBoundsException;
+use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
+use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
  * Thing

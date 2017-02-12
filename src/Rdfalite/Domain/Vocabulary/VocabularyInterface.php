@@ -34,26 +34,28 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain;
+namespace Jkphl\Rdfalite\Domain\Vocabulary;
 
 /**
- * OutOfBoundsException
+ * Vocabulary interface
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class OutOfBoundsException extends \OutOfBoundsException
+interface VocabularyInterface
 {
     /**
-     * Unknown property name
+     * Return the vocabulary URL
      *
-     * @var string
+     * @return string URL
      */
-    const UNKNOWN_PROPERTY_NAME_STR = 'Unknown property name "%s"';
+    public function getUrl();
+
     /**
-     * Unknown property name
+     * Expand a local type
      *
-     * @var int
+     * @param string $type Local type
+     * @return string Expanded local type
      */
-    const UNKNOWN_PROPERTY_NAME = 1486849016;
+    public function expand($type);
 }

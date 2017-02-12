@@ -34,73 +34,50 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain;
+namespace Jkphl\Rdfalite\Domain\Exceptions;
 
 /**
- * Thing interface
+ * RuntimeException
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-interface ThingInterface
+class RuntimeException extends \RuntimeException implements RdfaliteDomainExceptionInterface
 {
     /**
-     * Return the resource type
+     * Invalid vocabulary URL
      *
-     * @return string Resource type
+     * @var string
      */
-    public function getType();
-
+    const INVALID_VOCABULARY_URL_STR = 'Invalid vocabulary URL "%s"';
     /**
-     * Return the vocabulary in use
+     * Invalid vocabulary
      *
-     * @return VocabularyInterface Vocabulary
+     * @var int
      */
-    public function getVocabulary();
-
+    const INVALID_VOCABULARY_URL = 1486823170;
     /**
-     * Return the resource ID
+     * Invalid resource type
      *
-     * @return null|string Resource ID
+     * @var string
      */
-    public function getId();
-
+    const INVALID_RESOURCE_TYPE_STR = 'Invalid resource type "%s" (vocabulary %s)';
     /**
-     * Add a property value
+     * Invalid vocabulary
      *
-     * @param string $name Property name
-     * @param mixed $value Property value
-     * @return Thing Self reference
+     * @var int
      */
-    public function addProperty($name, $value);
-
+    const INVALID_RESOURCE_TYPE = 1486823588;
     /**
-     * Return all properties
+     * Invalid property name
      *
-     * @return array Properties
+     * @var string
      */
-    public function getProperties();
-
+    const INVALID_PROPERTY_NAME_STR = 'Invalid property name "%s"';
     /**
-     * Return the values of a single property
+     * Invalid property name
      *
-     * @param string $name Property name
-     * @return array Property values
+     * @var int
      */
-    public function getProperty($name);
-
-    /**
-     * Add a child
-     *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
-     */
-    public function addChild(ThingInterface $child);
-
-    /**
-     * Return all children
-     *
-     * @return Thing[] Children
-     */
-    public function getChildren();
+    const INVALID_PROPERTY_NAME = 1486848618;
 }
