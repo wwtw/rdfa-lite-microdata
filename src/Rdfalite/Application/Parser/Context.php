@@ -56,7 +56,7 @@ class Context
      * @see https://www.w3.org/2011/rdfa-context/rdfa-1.1
      * @link https://www.w3.org/2013/json-ld-context/rdfa11
      */
-    protected static $defaultVocabs = [
+    protected static $defaultVocabularies = [
         'cat' => 'http://www.w3.org/ns/dcat#',
         'qb' => 'http://purl.org/linked-data/cube#',
         'grddl' => 'http://www.w3.org/2003/g/data-view#',
@@ -108,14 +108,21 @@ class Context
      *
      * @var array
      */
-    protected $vocabs;
+    protected $vocabularies;
+
+    /**
+     * Current default vocabulary
+     *
+     * @var VocabularyInterface
+     */
+    protected $defaultVocabulary = null;
 
     /**
      * Context constructor
      */
     public function __construct()
     {
-        $this->vocabs = self::$defaultVocabs;
+        $this->vocabularies = self::$defaultVocabularies;
     }
 
     /**
@@ -132,9 +139,9 @@ class Context
         $uri = Vocabulary::validateVocabUri($uri);
 
         // Register the new URI
-        if (empty($this->vocabs[$prefix]) || ($this->vocabs[$prefix] !== $uri)) {
+        if (empty($this->vocabularies[$prefix]) || ($this->vocabularies[$prefix] !== $uri)) {
             $context = clone $this;
-            $context->vocabs[$prefix] = $uri;
+            $context->vocabularies[$prefix] = $uri;
             return $context;
         }
 
@@ -175,14 +182,14 @@ class Context
         $prefix = self::validateVocabPrefix($prefix);
 
         // If the prefix has not been registered
-        if (empty($this->vocabs[$prefix])) {
+        if (empty($this->vocabularies[$prefix])) {
             throw new OutOfBoundsException(
                 sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
                 OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
             );
         }
 
-        return new Vocabulary($this->vocabs[$prefix]);
+        return new Vocabulary($this->vocabularies[$prefix]);
     }
 
     /**
@@ -193,6 +200,28 @@ class Context
      */
     public function hasVocabulary($prefix)
     {
-        return !empty($this->vocabs[self::validateVocabPrefix($prefix)]);
+        return !empty($this->vocabularies[self::validateVocabPrefix($prefix)]);
+    }
+
+    /**
+     * Return the current default vocabulary
+     *
+     * @return VocabularyInterface Current default vocabulary
+     */
+    public function getDefaultVocabulary()
+    {
+        return $this->defaultVocabulary;
+    }
+
+    /**
+     * Set the default vocabulary by URI
+     *
+     * @param VocabularyInterface $vocabulary Current default vocabulary
+     * @return Context Self reference
+     */
+    public function setDefaultVocabulary(VocabularyInterface $vocabulary)
+    {
+        $this->defaultVocabulary = $vocabulary;
+        return $this;
     }
 }

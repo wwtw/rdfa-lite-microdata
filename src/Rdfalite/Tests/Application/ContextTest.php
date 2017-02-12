@@ -34,7 +34,7 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Application;
+namespace Jkphl\Rdfalite\Tests\Application;
 
 use Jkphl\Rdfalite\Application\Parser\Context;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
@@ -66,7 +66,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the registration of a vocabulary
      */
-    public function testContextVocabRegistration(){
+    public function testContextVocabRegistration()
+    {
         $randomPrefix = 'random'.rand();
         $context = new Context();
         $this->assertInstanceOf(Context::class, $context);
@@ -87,7 +88,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Jkphl\Rdfalite\Application\Exceptions\RuntimeException
      * @expectedExceptionCode 1486927326
      */
-    public function testInvalidVocabularyPrefix() {
+    public function testInvalidVocabularyPrefix()
+    {
         $context = new Context();
         $this->assertInstanceOf(Context::class, $context);
         $context->registerVocabulary('', null);
@@ -99,7 +101,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
      * @expectedExceptionCode 1486823170
      */
-    public function testInvalidVocabularyUri() {
+    public function testInvalidVocabularyUri()
+    {
         $context = new Context();
         $this->assertInstanceOf(Context::class, $context);
         $context->registerVocabulary('test', null);
@@ -111,10 +114,23 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException
      * @expectedExceptionCode 1486928423
      */
-    public function testUnknownVocabularyPrefix() {
+    public function testUnknownVocabularyPrefix()
+    {
         $context = new Context();
         $this->assertInstanceOf(Context::class, $context);
         $context->getVocabulary('random'.rand());
+    }
+
+    /**
+     * Test the default vocabulary
+     */
+    public function testDefaultVocabulary()
+    {
+        $context = new Context();
+        $this->assertInstanceOf(Context::class, $context);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $context->setDefaultVocabulary($vocabulary);
+        $this->assertEquals($vocabulary, $context->getDefaultVocabulary());
     }
 }
 
