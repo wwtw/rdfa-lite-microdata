@@ -34,7 +34,7 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Tests;
+namespace Jkphl\Rdfalite\Tests\Domain;
 
 use Jkphl\Rdfalite\Domain\Thing\Thing;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;

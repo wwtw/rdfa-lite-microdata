@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Tests
+ * @subpackage Jkphl\Rdfalite\Application
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,44 +34,26 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Tests;
-
-use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
+namespace Jkphl\Rdfalite\Application\Exceptions;
 
 /**
- * Vocabulary tests
+ * RuntimeException
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Tests
+ * @subpackage Jkphl\Rdfalite\Application
  */
-class VocabularyTest extends \PHPUnit_Framework_TestCase
+class RuntimeException extends \RuntimeException implements RdfaliteApplicationExceptionInterface
 {
     /**
-     * schema.org URL
+     * Invalid vocabulary prefix
      *
      * @var string
      */
-    const SCHEMA_ORG = 'http://schema.org/';
-
+    const INVALID_VOCABULARY_PREFIX_STR = 'Invalid vocabulary prefix "%s"';
     /**
-     * Test the vocabulary instantiation
-     */
-    public function testVocabulary()
-    {
-        $vocabulary = new Vocabulary(self::SCHEMA_ORG);
-        $this->assertInstanceOf(Vocabulary::class, $vocabulary);
-        $this->assertEquals(self::SCHEMA_ORG, $vocabulary->getUri());
-        $this->assertEquals(self::SCHEMA_ORG.'Person', $vocabulary->expand('Person'));
-    }
-
-    /**
-     * Test invalid vocabulary URL
+     * Invalid vocabulary prefix
      *
-     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
-     * @expectedExceptionCode 1486823170
+     * @var int
      */
-    public function testInvalidVocabularyURL()
-    {
-        new Vocabulary('invalid');
-    }
+    const INVALID_VOCABULARY_PREFIX = 1486927326;
 }
