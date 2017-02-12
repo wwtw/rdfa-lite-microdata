@@ -1,6 +1,6 @@
 # jkphl/rdfa-lite
 
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
 > Simple and lightweight RDFa Lite 1.1 parser for web documents (HTML, SVG, XML)
 
@@ -37,7 +37,7 @@ If you discover any security related issues, please email joschi@tollwerk.de ins
 
 ## License
 
-Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed under the terms of the [MIT license](LICENSE.md).
+Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed under the terms of the [MIT license](LICENSE).
 
 
 [travis-image]: https://secure.travis-ci.org/jkphl/rdfa-lite.svg
@@ -48,6 +48,8 @@ Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed und
 [scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite/?branch=master
 [readthedocs-image]: https://readthedocs.org/projects/jkphl-rdfa-lite/badge/?version=latest
 [readthedocs-url]: http://jkphl-rdfa-lite.readthedocs.io/en/latest/?badge=latest
+[clear-architecture-image]: https://img.shields.io/badge/Clear%20Architecture-%E2%9C%94-brightgreen.svg
+[clear-architecture-url]: https://github.com/jkphl/clear-architecture
 [author-url]: https://jkphl.is
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md

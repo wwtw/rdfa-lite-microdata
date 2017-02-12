@@ -65,7 +65,7 @@ interface ThingInterface
      *
      * @return null|string Resource ID
      */
-    public function getId();
+    public function getResourceId();
 
     /**
      * Add a property value

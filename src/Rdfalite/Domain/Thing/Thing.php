@@ -65,7 +65,7 @@ class Thing implements ThingInterface
      *
      * @var string|null
      */
-    protected $id = null;
+    protected $resourceId = null;
     /**
      * Child things
      *
@@ -84,9 +84,9 @@ class Thing implements ThingInterface
      *
      * @param string $type Resource type
      * @param VocabularyInterface $vocabulary Vocabulary in use
-     * @param null|string $id Resource id
+     * @param null|string $resourceId Resource id
      */
-    public function __construct($type, VocabularyInterface $vocabulary, $id = null)
+    public function __construct($type, VocabularyInterface $vocabulary, $resourceId = null)
     {
         $type = trim($type);
         if (!strlen($type)) {
@@ -98,7 +98,7 @@ class Thing implements ThingInterface
 
         $this->vocabulary = $vocabulary;
         $this->type = $this->vocabulary->expand($type);
-        $this->id = $id;
+        $this->resourceId = $resourceId;
     }
 
     /**
@@ -126,9 +126,9 @@ class Thing implements ThingInterface
      *
      * @return null|string Resource ID
      */
-    public function getId()
+    public function getResourceId()
     {
-        return $this->id;
+        return $this->resourceId;
     }
 
     /**

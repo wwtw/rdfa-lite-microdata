@@ -72,7 +72,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Thing::class, $thing);
         $this->assertEquals(VocabularyTest::SCHEMA_ORG.$type, $thing->getType());
         $this->assertEquals(self::$schemaOrgVocabulary, $thing->getVocabulary());
-        $this->assertNull($thing->getId());
+        $this->assertNull($thing->getResourceId());
         $this->assertTrue(is_array($thing->getChildren()));
         $this->assertEquals(0, count($thing->getChildren()));
         $this->assertTrue(is_array($thing->getProperties()));
@@ -86,7 +86,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     {
         $thing = new Thing('Person', self::$schemaOrgVocabulary, 'bob');
         $this->assertInstanceOf(Thing::class, $thing);
-        $this->assertEquals('bob', $thing->getId());
+        $this->assertEquals('bob', $thing->getResourceId());
     }
 
     /**
