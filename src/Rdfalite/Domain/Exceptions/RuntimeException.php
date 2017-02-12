@@ -49,13 +49,13 @@ class RuntimeException extends \RuntimeException implements RdfaliteDomainExcept
      *
      * @var string
      */
-    const INVALID_VOCABULARY_URL_STR = 'Invalid vocabulary URL "%s"';
+    const INVALID_VOCABULARY_URI_STR = 'Invalid vocabulary URL "%s"';
     /**
      * Invalid vocabulary
      *
      * @var int
      */
-    const INVALID_VOCABULARY_URL = 1486823170;
+    const INVALID_VOCABULARY_URI = 1486823170;
     /**
      * Invalid resource type
      *

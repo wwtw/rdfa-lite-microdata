@@ -47,38 +47,52 @@ use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
 class Vocabulary implements VocabularyInterface
 {
     /**
-     * URL where the vocabulary can be found
+     * URI where the vocabulary can be found
      *
      * @var string
      */
-    public $url;
+    public $uri;
 
     /**
      * Vocabulary constructor
      *
-     * @param string $url URL where the vocabulary can be found
+     * @param string $uri URI where the vocabulary can be found
      */
-    public function __construct($url)
+    public function __construct($uri)
     {
-        $url = trim($url);
-        if (!strlen($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_VOCABULARY_URL_STR, $url),
-                RuntimeException::INVALID_VOCABULARY_URL
-            );
-        }
-
-        $this->url = $url;
+        $this->uri = self::validateVocabUri($uri);
     }
 
     /**
-     * Return the vocabulary URL
+     * Validate a vocabulary URI
      *
-     * @return string URL
+     * @param string $uri URI
+     * @return string Valid vocabulary URI
+     * @throws RuntimeException If the vocabulary URI is invalid
      */
-    public function getUrl()
+    public static function validateVocabUri($uri)
     {
-        return $this->url;
+        $uri = trim($uri);
+
+        // If the vocabulary URI is invalid
+        if (!strlen($uri) || !filter_var($uri, FILTER_VALIDATE_URL)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_VOCABULARY_URI_STR, $uri),
+                RuntimeException::INVALID_VOCABULARY_URI
+            );
+        }
+
+        return $uri;
+    }
+
+    /**
+     * Return the vocabulary URI
+     *
+     * @return string URI
+     */
+    public function getUri()
+    {
+        return $this->uri;
     }
 
     /**
@@ -89,6 +103,6 @@ class Vocabulary implements VocabularyInterface
      */
     public function expand($type)
     {
-        return $this->url.$type;
+        return $this->uri.$type;
     }
 }

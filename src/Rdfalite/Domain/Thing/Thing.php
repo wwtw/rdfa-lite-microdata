@@ -91,7 +91,7 @@ class Thing implements ThingInterface
         $type = trim($type);
         if (!strlen($type)) {
             throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_RESOURCE_TYPE_STR, $type, $vocabulary->getUrl()),
+                sprintf(RuntimeException::INVALID_RESOURCE_TYPE_STR, $type, $vocabulary->getUri()),
                 RuntimeException::INVALID_RESOURCE_TYPE
             );
         }

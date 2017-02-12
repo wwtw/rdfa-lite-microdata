@@ -49,7 +49,7 @@ interface VocabularyInterface
      *
      * @return string URL
      */
-    public function getUrl();
+    public function getUri();
 
     /**
      * Expand a local type
