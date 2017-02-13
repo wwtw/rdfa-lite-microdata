@@ -36,6 +36,8 @@
 
 namespace Jkphl\Rdfalite\Tests\Application;
 
+use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
+use Jkphl\Rdfalite\Application\Parser\Context;
 use Jkphl\Rdfalite\Application\Parser\DOMIterator;
 
 /**
@@ -48,8 +50,21 @@ class DOMNodeIteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test HTML
+     *
+     * @var string
      */
-    const HTML = '<html><head><title>Test title</title></head><body><h1>Test header</h1><p>Test</p></body></html>';
+    protected static $html;
+
+
+    /**
+     * Setup all tests
+     */
+    public static function setUpBeforeClass()
+    {
+        self::$html = file_get_contents(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'rdfa-lite-1.1.html'
+        );
+    }
 
     /**
      * Test recursive DOM node iteration
@@ -57,11 +72,16 @@ class DOMNodeIteratorTest extends \PHPUnit_Framework_TestCase
     public function testDomNodeIteration()
     {
         $dom = new \DOMDocument();
-        $dom->loadHTML(self::HTML);
-        $domNodeIterator = new DOMIterator($dom->childNodes);
+        $dom->loadHTML(self::$html);
+        $context = new Context();
+
+        $elementProcessor = $this->getMock(ElementProcessorInterface::class);
+        $elementProcessor->method('processElement')->willReturn($context);
+        /** @var ElementProcessorInterface $elementProcessor */
+        $domNodeIterator = new DOMIterator($dom->childNodes, $context, $elementProcessor);
         $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
 
-        $elements = ['html', 'head', 'title', 'body', 'h1', 'p'];
+        $elements = ['html', 'head', 'title', 'body', 'h1', 'p', 'span', 'span', 'img', 'span'];
 
         /**
          * Recursively run through all child elements

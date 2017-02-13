@@ -36,7 +36,7 @@
 
 namespace Jkphl\Rdfalite\Application\Contract;
 
-use Jkphl\Rdfalite\Application\Parser\ParserInterface;
+use Jkphl\Rdfalite\Application\Parser\Context;
 
 /**
  * Element processor interface
@@ -50,8 +50,8 @@ interface ElementProcessorInterface
      * Process a DOM element
      *
      * @param \DOMElement $element DOM element
-     * @param ParserInterface $parser Parser instance
-     * @return mixed
+     * @param Context $context Context
+     * @return Context Context for children
      */
-    public function processElement(\DOMElement $element, ParserInterface $parser);
+    public function processElement(\DOMElement $element, Context $context);
 }

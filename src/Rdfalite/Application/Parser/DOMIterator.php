@@ -36,6 +36,8 @@
 
 namespace Jkphl\Rdfalite\Application\Parser;
 
+use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
+
 /**
  * Recursive DOM node iterator
  *
@@ -45,11 +47,26 @@ namespace Jkphl\Rdfalite\Application\Parser;
 class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 {
     /**
+     * Element processor
+     *
+     * @var ElementProcessorInterface
+     */
+    protected $elementProcessor;
+    /**
+     * Parser context
+     *
+     * @var Context
+     */
+    protected $context;
+
+    /**
      * Recursive DOM node iterator constructor
      *
      * @param \DOMNodeList $nodeList Node list
+     * @param Context $context Parser context
+     * @param ElementProcessorInterface $elementProcessor Element processor
      */
-    public function __construct(\DOMNodeList $nodeList)
+    public function __construct(\DOMNodeList $nodeList, Context $context, ElementProcessorInterface $elementProcessor)
     {
         $nodes = array();
         foreach ($nodeList as $node) {
@@ -57,6 +74,9 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
         }
 
         parent::__construct($nodes);
+
+        $this->elementProcessor = $elementProcessor;
+        $this->context = $context;
     }
 
     /**
@@ -86,6 +106,8 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function getChildren()
     {
-        return new static($this->current()->childNodes);
+        $element = $this->current();
+        $context = $this->elementProcessor->processElement($element, $this->context);
+        return new static($element->childNodes, $context, $this->elementProcessor);
     }
 }

@@ -81,19 +81,20 @@ class Parser implements ParserInterface
      */
     public function parse($string)
     {
-        $document = $this->documentFactory->createDocumentFromString($string);
-        $iterator = new DOMIterator($document->childNodes);
+//        $document = $this->documentFactory->createDocumentFromString($string);
+//        $context = new Context();
+//        $iterator = new DOMIterator($document->childNodes, $context, $this->elementProcessor);
 
         /**
          * Recursively run through all child elements
          *
          * @var \DOMElement $element
          */
-        foreach ($iterator->getRecursiveIterator() as $element) {
-            if ($element instanceof \DOMElement) {
-                $this->elementProcessor->processElement($element, $this);
-            }
-        }
+//        foreach ($iterator->getRecursiveIterator() as $element) {
+//            if ($element instanceof \DOMElement) {
+//                $this->elementProcessor->processElement($element, $this);
+//            }
+//        }
 
         return null;
     }
