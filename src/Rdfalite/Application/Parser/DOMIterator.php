@@ -42,7 +42,7 @@ namespace Jkphl\Rdfalite\Application\Parser;
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Application
  */
-class DOMNodeRecursiveIterator extends \ArrayIterator implements \RecursiveIterator
+class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 {
     /**
      * Recursive DOM node iterator constructor
@@ -82,7 +82,7 @@ class DOMNodeRecursiveIterator extends \ArrayIterator implements \RecursiveItera
     /**
      * Return a child node iterator
      *
-     * @return DOMNodeRecursiveIterator Child node iterator
+     * @return DOMIterator Child node iterator
      */
     public function getChildren()
     {

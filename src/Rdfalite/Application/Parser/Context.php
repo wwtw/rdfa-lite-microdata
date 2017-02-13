@@ -38,6 +38,7 @@ namespace Jkphl\Rdfalite\Application\Parser;
 
 use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException;
 use Jkphl\Rdfalite\Application\Exceptions\RuntimeException;
+use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
@@ -118,11 +119,36 @@ class Context
     protected $defaultVocabulary = null;
 
     /**
+     * Parent thing
+     *
+     * @var ThingInterface
+     */
+    protected $parentThing = null;
+
+    /**
+     * Registered child things
+     *
+     * @var ThingInterface[]
+     */
+    protected $children = [];
+
+    /**
      * Context constructor
      */
     public function __construct()
     {
         $this->vocabularies = self::$defaultVocabularies;
+    }
+
+    /**
+     * Return the registered child things
+     *
+     * @return ThingInterface[] Child things
+     */
+    public function getChildren()
+    {
+        return ($this->parentThing instanceof ThingInterface) ?
+            $this->parentThing->getChildren() : array_values($this->children);
     }
 
     /**
@@ -221,7 +247,66 @@ class Context
      */
     public function setDefaultVocabulary(VocabularyInterface $vocabulary)
     {
-        $this->defaultVocabulary = $vocabulary;
+        // If the new default vocabulary differs from the current one
+        if ($this->defaultVocabulary !== $vocabulary) {
+            $context = clone $this;
+            $context->defaultVocabulary = $vocabulary;
+            return $context;
+        }
+
         return $this;
+    }
+
+    /**
+     * Get the current parent thing
+     *
+     * @return ThingInterface|null Parent thing
+     */
+    public function getParentThing()
+    {
+        return $this->parentThing;
+    }
+
+    /**
+     * Set the parent thing
+     *
+     * @param ThingInterface $parentThing Parent thing
+     * @return Context
+     */
+    public function setParentThing(ThingInterface $parentThing)
+    {
+        // If the new parent thing differs from the current one
+        if ($this->parentThing !== $parentThing) {
+            $context = clone $this;
+            $context->parentThing = $parentThing;
+            return $context;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a child thing
+     *
+     * @param ThingInterface $thing Child thing
+     * @return Context Self reference
+     */
+    public function addChild(ThingInterface $thing)
+    {
+        if ($this->parentThing instanceof ThingInterface) {
+            $this->parentThing->addChild($thing);
+        } else {
+            $this->children[spl_object_hash($thing)] = $thing;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clone callback
+     */
+    public function __clone()
+    {
+        $this->children = [];
     }
 }

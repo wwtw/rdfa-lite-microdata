@@ -36,7 +36,7 @@
 
 namespace Jkphl\Rdfalite\Tests\Application;
 
-use Jkphl\Rdfalite\Application\Parser\DOMNodeRecursiveIterator;
+use Jkphl\Rdfalite\Application\Parser\DOMIterator;
 
 /**
  * DOM node iterator tests
@@ -58,8 +58,8 @@ class DOMNodeIteratorTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadHTML(self::HTML);
-        $domNodeIterator = new DOMNodeRecursiveIterator($dom->childNodes);
-        $this->assertInstanceOf(DOMNodeRecursiveIterator::class, $domNodeIterator);
+        $domNodeIterator = new DOMIterator($dom->childNodes);
+        $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
 
         $elements = ['html', 'head', 'title', 'body', 'h1', 'p'];
 

@@ -82,7 +82,7 @@ class Parser implements ParserInterface
     public function parse($string)
     {
         $document = $this->documentFactory->createDocumentFromString($string);
-        $iterator = new DOMNodeRecursiveIterator($document->childNodes);
+        $iterator = new DOMIterator($document->childNodes);
 
         /**
          * Recursively run through all child elements

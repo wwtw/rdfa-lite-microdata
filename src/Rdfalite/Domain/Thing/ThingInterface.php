@@ -102,7 +102,7 @@ interface ThingInterface
     /**
      * Return all children
      *
-     * @return Thing[] Children
+     * @return ThingInterface[] Children
      */
     public function getChildren();
 }

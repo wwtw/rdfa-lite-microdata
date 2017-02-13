@@ -37,6 +37,7 @@
 namespace Jkphl\Rdfalite\Tests\Application;
 
 use Jkphl\Rdfalite\Application\Parser\Context;
+use Jkphl\Rdfalite\Domain\Thing\Thing;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 use Jkphl\Rdfalite\Tests\Domain\VocabularyTest;
 
@@ -129,8 +130,55 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $context = new Context();
         $this->assertInstanceOf(Context::class, $context);
         $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
-        $context->setDefaultVocabulary($vocabulary);
-        $this->assertEquals($vocabulary, $context->getDefaultVocabulary());
+        $newContext = $context->setDefaultVocabulary($vocabulary);
+        $this->assertEquals($vocabulary, $newContext->getDefaultVocabulary());
+        $this->assertNotEquals(spl_object_hash($context), spl_object_hash($newContext));
+        $this->assertEquals(
+            spl_object_hash($newContext),
+            spl_object_hash($newContext->setDefaultVocabulary($vocabulary))
+        );
+    }
+
+    /**
+     * Test the parent thing
+     */
+    public function testParentThing()
+    {
+        $context = new Context();
+        $this->assertInstanceOf(Context::class, $context);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $thing = new Thing('Person', $vocabulary);
+        $newContext = $context->setParentThing($thing);
+        $this->assertEquals($thing, $newContext->getParentThing());
+        $this->assertNotEquals(spl_object_hash($context), spl_object_hash($newContext));
+        $this->assertEquals(
+            spl_object_hash($newContext),
+            spl_object_hash($newContext->setParentThing($thing))
+        );
+    }
+
+    /**
+     * Test adding children
+     */
+    public function testAddingLevelChildren()
+    {
+        $context = new Context();
+        $this->assertInstanceOf(Context::class, $context);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+
+        $thing = new Thing('Person', $vocabulary);
+        $context->addChild($thing);
+        $this->assertEquals([$thing], $context->getChildren());
+        $context->addChild($thing);
+        $this->assertEquals([$thing], $context->getChildren());
+
+        $parent = new Thing('Person', $vocabulary);
+        $newContext = $context->setParentThing($parent);
+        $this->assertEquals([], $newContext->getChildren());
+        $newContext->addChild($thing);
+        $this->assertEquals([$thing], $newContext->getChildren());
+        $newContext->addChild($thing);
+        $this->assertEquals([$thing], $newContext->getChildren());
     }
 }
 

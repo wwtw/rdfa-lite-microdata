@@ -69,7 +69,7 @@ class Thing implements ThingInterface
     /**
      * Child things
      *
-     * @var Thing[]
+     * @var ThingInterface[]
      */
     protected $children = [];
     /**
@@ -221,7 +221,7 @@ class Thing implements ThingInterface
     /**
      * Return all children
      *
-     * @return Thing[] Children
+     * @return ThingInterface[] Children
      */
     public function getChildren()
     {
