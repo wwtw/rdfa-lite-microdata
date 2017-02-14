@@ -64,6 +64,12 @@ class Property implements PropertyInterface
      * @var string
      */
     protected $value;
+    /**
+     * Resource ID
+     *
+     * @var string|null
+     */
+    protected $resourceId = null;
 
     /**
      * Property constructor
@@ -72,11 +78,12 @@ class Property implements PropertyInterface
      * @param VocabularyInterface $vocabulary Property vocabulary
      * @param string $value Property value
      */
-    public function __construct($name, VocabularyInterface $vocabulary, $value)
+    public function __construct($name, VocabularyInterface $vocabulary, $value, $resourceId = null)
     {
         $this->name = (new PropertyService())->validatePropertyName($name);
         $this->vocabulary = $vocabulary;
         $this->value = $value;
+        $this->resourceId = $resourceId;
     }
 
     /**
@@ -100,12 +107,22 @@ class Property implements PropertyInterface
     }
 
     /**
-     * Property value
+     * Return the property value
      *
      * @return string Property value
      */
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Return the property resource ID
+     *
+     * @return null|string Property resource ID
+     */
+    public function getResourceId()
+    {
+        return $this->resourceId;
     }
 }

@@ -34,42 +34,25 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Tests\Domain;
+namespace Jkphl\Rdfalite\Tests\Application;
 
-use Jkphl\Rdfalite\Domain\Property\Property;
-use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
+use Jkphl\Rdfalite\Application\Parser\NullVocabulary;
 
 /**
- * Property tests
+ * Null vocabulary tests
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Tests
  */
-class PropertyTest extends \PHPUnit_Framework_TestCase
+class NullVocabularyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test the property instantiation
+     * Test parser context instantiation
      */
-    public function testProperty()
+    public function testNullVocabulary()
     {
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
-        $property = new Property('test', $vocabulary, 'value', 'resource');
-        $this->assertInstanceOf(Property::class, $property);
-        $this->assertEquals('test', $property->getName());
-        $this->assertEquals('value', $property->getValue());
-        $this->assertEquals($vocabulary, $property->getVocabulary());
-        $this->assertEquals('resource', $property->getResourceId());
-    }
-
-    /**
-     * Test invalid property name
-     *
-     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
-     * @expectedExceptionCode 1486848618
-     */
-    public function testInvalidPropertyName()
-    {
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
-        new Property('', $vocabulary, 'value');
+        $nullVocabulary = new NullVocabulary();
+        $this->assertEquals('', $nullVocabulary->getUri());
+        $this->assertEquals('Test', $nullVocabulary->expand('Test'));
     }
 }
