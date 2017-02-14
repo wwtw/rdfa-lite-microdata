@@ -38,6 +38,7 @@ namespace Jkphl\Rdfalite\Infrastructure\Parser;
 
 use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
 use Jkphl\Rdfalite\Application\Parser\Context;
+use Jkphl\Rdfalite\Domain\Property\Property;
 use Jkphl\Rdfalite\Domain\Thing\Thing;
 use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
@@ -131,75 +132,13 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             // Determine the vocabulary to use
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
             if ($vocabulary instanceof VocabularyInterface) {
-
-
-                // Add the new thing as a child to the current context
-//                $context->getParentThing()->addProperty($name);
+                // Add the property to the current parent thing
+                $property = new Property($name, $vocabulary, $this->getPropertyValue($element, $context));
+                $context->getParentThing()->addProperty($property);
             }
         }
 
         return $context;
-    }
-
-    /**
-     * Create nested children
-     *
-     * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
-     */
-    protected function processTypeof(\DOMElement $element, Context $context)
-    {
-        if ($element->hasAttribute('typeof')) {
-            $thing = $this->getThing($element->getAttribute('typeof'), $context);
-
-            if ($thing instanceof ThingInterface) {
-                // Add the new thing as a child to the current context
-                $context->addChild($thing);
-
-                // Set the thing as parent thing for nested iterations
-                $context = $context->setParentThing($thing);
-            }
-        }
-
-        return $context;
-    }
-
-    /**
-     * Return a property value (type and tag name dependent)
-     *
-     * @param string $typeof Thing type
-     * @param Context $context Context
-     * @return ThingInterface|NULL|string Property value
-     * @throws OutOfBoundsException If the default vocabulary is empty
-     * @throws OutOfBoundsException If the vocabulary prefix is unknown
-     */
-    protected function getThing($typeof, Context $context)
-    {
-        $typeof = explode(':', $typeof);
-        $type = array_pop($typeof);
-        $prefix = array_pop($typeof);
-
-        // Determine the vocabulary to use
-        $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
-        if ($vocabulary instanceof VocabularyInterface) {
-
-            // Return a new thing
-            return new Thing($type, $vocabulary);
-        }
-
-        // If the default vocabulary is empty
-        if (empty($prefix)) {
-            throw new OutOfBoundsException(
-                OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY_STR,
-                OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY
-            );
-        }
-
-        throw new OutOfBoundsException(
-            sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
-            OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
-        );
     }
 
     /**
@@ -250,5 +189,66 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
 //              trigger_error(sprintf('RDFa Lite 1.1 element processor: Unhandled tag name "%s"', $element->tagName), E_USER_WARNING);
                 return $element->textContent;
         }
+    }
+
+    /**
+     * Return a property value (type and tag name dependent)
+     *
+     * @param string $typeof Thing type
+     * @param Context $context Context
+     * @return ThingInterface|NULL|string Property value
+     * @throws OutOfBoundsException If the default vocabulary is empty
+     * @throws OutOfBoundsException If the vocabulary prefix is unknown
+     */
+    protected function getThing($typeof, Context $context)
+    {
+        $typeof = explode(':', $typeof);
+        $type = array_pop($typeof);
+        $prefix = array_pop($typeof);
+
+        // Determine the vocabulary to use
+        $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
+        if ($vocabulary instanceof VocabularyInterface) {
+
+            // Return a new thing
+            return new Thing($type, $vocabulary);
+        }
+
+        // If the default vocabulary is empty
+        if (empty($prefix)) {
+            throw new OutOfBoundsException(
+                OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY_STR,
+                OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY
+            );
+        }
+
+        throw new OutOfBoundsException(
+            sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
+            OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
+        );
+    }
+
+    /**
+     * Create nested children
+     *
+     * @param \DOMElement $element DOM element
+     * @param Context $context Context
+     * @return Context Context for children
+     */
+    protected function processTypeof(\DOMElement $element, Context $context)
+    {
+        if ($element->hasAttribute('typeof')) {
+            $thing = $this->getThing($element->getAttribute('typeof'), $context);
+
+            if ($thing instanceof ThingInterface) {
+                // Add the new thing as a child to the current context
+                $context->addChild($thing);
+
+                // Set the thing as parent thing for nested iterations
+                $context = $context->setParentThing($thing);
+            }
+        }
+
+        return $context;
     }
 }
