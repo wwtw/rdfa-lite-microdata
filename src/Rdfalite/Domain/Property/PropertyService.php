@@ -34,75 +34,36 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain\Thing;
+namespace Jkphl\Rdfalite\Domain\Property;
 
-use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
-use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
 
 /**
- * Thing interface
+ * Property service
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-interface ThingInterface
+class PropertyService
 {
     /**
-     * Return the resource type
-     *
-     * @return string Resource type
-     */
-    public function getType();
-
-    /**
-     * Return the vocabulary in use
-     *
-     * @return VocabularyInterface Vocabulary
-     */
-    public function getVocabulary();
-
-    /**
-     * Return the resource ID
-     *
-     * @return null|string Resource ID
-     */
-    public function getResourceId();
-
-    /**
-     * Add a property value
-     *
-     * @param PropertyInterface $property Property
-     * @return Thing Self reference
-     */
-    public function addProperty(PropertyInterface $property);
-
-    /**
-     * Return all properties
-     *
-     * @return array[] Properties
-     */
-    public function getProperties();
-
-    /**
-     * Return the values of a single property
+     * Validate a property name
      *
      * @param string $name Property name
-     * @return array Property
+     * @return string Sanitized property name
+     * @throws RuntimeException If the property name is invalid
      */
-    public function getProperty($name);
+    public function validatePropertyName($name)
+    {
+        $name = trim($name);
 
-    /**
-     * Add a child
-     *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
-     */
-    public function addChild(ThingInterface $child);
+        // If the property name is invalid
+        if (!strlen($name) || !preg_match('/^[a-z][a-zA-Z0-9]*$/', $name)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_PROPERTY_NAME_STR, $name), RuntimeException::INVALID_PROPERTY_NAME
+            );
+        }
 
-    /**
-     * Return all children
-     *
-     * @return ThingInterface[] Children
-     */
-    public function getChildren();
+        return $name;
+    }
 }

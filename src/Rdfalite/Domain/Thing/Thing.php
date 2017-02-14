@@ -38,8 +38,8 @@ namespace Jkphl\Rdfalite\Domain\Thing;
 
 use Jkphl\Rdfalite\Domain\Exceptions\OutOfBoundsException;
 use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
-use Jkphl\Rdfalite\Domain\Property\Property;
 use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
+use Jkphl\Rdfalite\Domain\Property\PropertyService;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -170,7 +170,7 @@ class Thing implements ThingInterface
      */
     public function getProperty($name)
     {
-        $name = Property::validatePropertyName($name);
+        $name = (new PropertyService())->validatePropertyName($name);
 
         // If the property name is unknown
         if (!array_key_exists($name, $this->properties)) {

@@ -36,7 +36,6 @@
 
 namespace Jkphl\Rdfalite\Domain\Property;
 
-use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -75,30 +74,9 @@ class Property implements PropertyInterface
      */
     public function __construct($name, VocabularyInterface $vocabulary, $value)
     {
-        $this->name = self::validatePropertyName($name);
+        $this->name = (new PropertyService())->validatePropertyName($name);
         $this->vocabulary = $vocabulary;
         $this->value = $value;
-    }
-
-    /**
-     * Validate a property name
-     *
-     * @param string $name Property name
-     * @return string Sanitized property name
-     * @throws RuntimeException If the property name is invalid
-     */
-    public static function validatePropertyName($name)
-    {
-        $name = trim($name);
-
-        // If the property name is invalid
-        if (!strlen($name) || !preg_match('/^[a-z][a-zA-Z0-9]*$/', $name)) {
-            throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_PROPERTY_NAME_STR, $name), RuntimeException::INVALID_PROPERTY_NAME
-            );
-        }
-
-        return $name;
     }
 
     /**

@@ -126,8 +126,8 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     {
         if ($element->hasAttribute('property')) {
             $property = explode(':', $element->getAttribute('property'));
-            $name = array_pop($property);
-            $prefix = array_pop($property);
+            $name = strval(array_pop($property));
+            $prefix = strval(array_pop($property));
 
             // Determine the vocabulary to use
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
@@ -159,7 +159,6 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         switch (strtoupper($element->tagName)) {
             case 'META':
                 return $element->getAttribute('content');
-                break;
             case 'AUDIO':
             case 'EMBED':
             case 'IFRAME':
@@ -168,23 +167,20 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             case 'TRACK':
             case 'VIDEO':
                 return $element->getAttribute('src');
-                break;
             case 'A':
             case 'AREA':
             case 'LINK':
                 return $element->getAttribute('href');
-                break;
             case 'OBJECT':
                 return $element->getAttribute('data');
-                break;
             case 'DATA':
                 return $element->getAttribute('value');
-                break;
             case 'TIME':
                 $datetime = $element->getAttribute('datetime');
                 if (!empty($datetime)) {
                     return $datetime;
                 }
+            // fall through
             default:
 //              trigger_error(sprintf('RDFa Lite 1.1 element processor: Unhandled tag name "%s"', $element->tagName), E_USER_WARNING);
                 return $element->textContent;
@@ -209,7 +205,6 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         // Determine the vocabulary to use
         $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
         if ($vocabulary instanceof VocabularyInterface) {
-
             // Return a new thing
             return new Thing($type, $vocabulary);
         }

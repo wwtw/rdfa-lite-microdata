@@ -296,10 +296,10 @@ class Context
     {
         if ($this->parentThing instanceof ThingInterface) {
             $this->parentThing->addChild($thing);
-        } else {
-            $this->children[spl_object_hash($thing)] = $thing;
+            return $this;
         }
 
+        $this->children[spl_object_hash($thing)] = $thing;
         return $this;
     }
 }
