@@ -162,13 +162,4 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
     {
         parent::rewind();
     }
-
-    /**
-     * Return the context in it's current state
-     *
-     * @return Context Context
-     */
-    public function getContext() {
-        return $this->initialContext;
-    }
 }

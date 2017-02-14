@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Infrastructure
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,64 +34,28 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Application\Parser;
+namespace Jkphl\Rdfalite\Infrastructure\Factories;
 
 use Jkphl\Rdfalite\Application\Contract\DocumentFactoryInterface;
-use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
-use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
-
 
 /**
- * Parser
+ * HTML document factory
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Infrastructure
  */
-class Parser implements ParserInterface
+class HtmlDocumentFactory implements DocumentFactoryInterface
 {
     /**
-     * Document factory
+     * Create a DOM document from a string
      *
-     * @var DocumentFactoryInterface
+     * @param string $string String
+     * @return \DOMDocument DOM document
      */
-    protected $documentFactory;
-    /**
-     * Element processor
-     *
-     * @var ElementProcessorInterface
-     */
-    protected $elementProcessor;
-
-    /**
-     * Parser constructor
-     *
-     * @param DocumentFactoryInterface $documentFactory Document factory
-     * @param ElementProcessorInterface $elementProcessor Element processor
-     */
-    public function __construct(DocumentFactoryInterface $documentFactory, ElementProcessorInterface $elementProcessor)
+    public function createDocumentFromString($string)
     {
-        $this->documentFactory = $documentFactory;
-        $this->elementProcessor = $elementProcessor;
-    }
-
-    /**
-     * Parse a string
-     *
-     * @param string $string Parseable string
-     * @return ThingInterface[] Parsed things
-     */
-    public function parse($string)
-    {
-        $document = $this->documentFactory->createDocumentFromString($string);
-        $context = new Context();
-        $iterator = new DOMIterator($document->childNodes, $context, $this->elementProcessor);
-
-        // Iterate through all $node
-        foreach ($iterator->getRecursiveIterator() as $node) {
-            $node || true;
-        }
-
-        return $context->getChildren();
+        $dom = new \DOMDocument();
+        $dom->loadHTML($string);
+        return $dom;
     }
 }
-

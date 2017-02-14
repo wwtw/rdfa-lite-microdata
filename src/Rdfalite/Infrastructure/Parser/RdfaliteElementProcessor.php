@@ -141,8 +141,11 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             // Determine the vocabulary to use
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
             if ($vocabulary instanceof VocabularyInterface) {
+                // Try to get a resource ID
+                $resourceId = trim($element->getAttribute('resource')) ?: null;
+
                 // Add the property to the current parent thing
-                $property = new Property($name, $vocabulary, $this->getPropertyValue($element, $context));
+                $property = new Property($name, $vocabulary, $this->getPropertyValue($element, $context), $resourceId);
                 $context->getParentThing()->addProperty($property);
             }
         }
@@ -161,7 +164,11 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     {
         // If the property creates a new type: Return the element itself
         if ($element->hasAttribute('typeof')) {
-            return $this->getThing($element->getAttribute('typeof'), $context);
+            return $this->getThing(
+                $element->getAttribute('typeof'),
+                trim($element->getAttribute('resource')) ?: null,
+                $context
+            );
         }
 
         // Else: Depend on the tag name
@@ -200,12 +207,13 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      * Return a property value (type and tag name dependent)
      *
      * @param string $typeof Thing type
+     * @param string $resourceId Resource ID
      * @param Context $context Context
      * @return ThingInterface Thing
      * @throws OutOfBoundsException If the default vocabulary is empty
      * @throws OutOfBoundsException If the vocabulary prefix is unknown
      */
-    protected function getThing($typeof, Context $context)
+    protected function getThing($typeof, $resourceId, Context $context)
     {
         $typeof = explode(':', $typeof);
         $type = array_pop($typeof);
@@ -215,7 +223,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
         if ($vocabulary instanceof VocabularyInterface) {
             // Return a new thing
-            return new Thing($type, $vocabulary);
+            return new Thing($type, $vocabulary, $resourceId);
         }
 
         // If the default vocabulary is empty
@@ -242,7 +250,11 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     protected function processTypeof(\DOMElement $element, Context $context)
     {
         if ($element->hasAttribute('typeof')) {
-            $thing = $this->getThing($element->getAttribute('typeof'), $context);
+            $thing = $this->getThing(
+                $element->getAttribute('typeof'),
+                trim($element->getAttribute('resource')) ?: null,
+                $context
+            );
 
             if ($thing instanceof ThingInterface) {
                 // Add the new thing as a child to the current context

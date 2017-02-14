@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Tests
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,64 +34,31 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Application\Parser;
+namespace Jkphl\Rdfalite\Tests\Application;
 
-use Jkphl\Rdfalite\Application\Contract\DocumentFactoryInterface;
-use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
-use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
-
+use Jkphl\Rdfalite\Application\Parser\Parser;
+use Jkphl\Rdfalite\Infrastructure\Factories\HtmlDocumentFactory;
+use Jkphl\Rdfalite\Infrastructure\Parser\RdfaliteElementProcessor;
 
 /**
- * Parser
+ * Parser tests
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Tests
  */
-class Parser implements ParserInterface
+class ParserTest extends ParserIteratorTestBase
 {
     /**
-     * Document factory
-     *
-     * @var DocumentFactoryInterface
+     * Test parser context instantiation
      */
-    protected $documentFactory;
-    /**
-     * Element processor
-     *
-     * @var ElementProcessorInterface
-     */
-    protected $elementProcessor;
-
-    /**
-     * Parser constructor
-     *
-     * @param DocumentFactoryInterface $documentFactory Document factory
-     * @param ElementProcessorInterface $elementProcessor Element processor
-     */
-    public function __construct(DocumentFactoryInterface $documentFactory, ElementProcessorInterface $elementProcessor)
+    public function testParser()
     {
-        $this->documentFactory = $documentFactory;
-        $this->elementProcessor = $elementProcessor;
-    }
+        $htmlDocumentFactory = new HtmlDocumentFactory();
+        $rdfaElementProcessor = new RdfaliteElementProcessor();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $this->assertInstanceOf(Parser::class, $parser);
 
-    /**
-     * Parse a string
-     *
-     * @param string $string Parseable string
-     * @return ThingInterface[] Parsed things
-     */
-    public function parse($string)
-    {
-        $document = $this->documentFactory->createDocumentFromString($string);
-        $context = new Context();
-        $iterator = new DOMIterator($document->childNodes, $context, $this->elementProcessor);
-
-        // Iterate through all $node
-        foreach ($iterator->getRecursiveIterator() as $node) {
-            $node || true;
-        }
-
-        return $context->getChildren();
+        $things = $parser->parse(self::$html);
+        $this->validateIteratorResult($things);
     }
 }
-
