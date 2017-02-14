@@ -34,75 +34,36 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain\Thing;
+namespace Jkphl\Rdfalite\Domain\Property;
 
-use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Thing interface
+ * Property interface
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-interface ThingInterface
+interface PropertyInterface
 {
     /**
-     * Return the resource type
+     * Return the property name
      *
-     * @return string Resource type
+     * @return string Property name
      */
-    public function getType();
+    public function getName();
 
     /**
-     * Return the vocabulary in use
+     * Return the property vocabulary
      *
-     * @return VocabularyInterface Vocabulary
+     * @return VocabularyInterface Property vocabulary
      */
     public function getVocabulary();
 
     /**
-     * Return the resource ID
+     * Property value
      *
-     * @return null|string Resource ID
+     * @return string Property value
      */
-    public function getResourceId();
-
-    /**
-     * Add a property value
-     *
-     * @param PropertyInterface $property Property
-     * @return Thing Self reference
-     */
-    public function addProperty(PropertyInterface $property);
-
-    /**
-     * Return all properties
-     *
-     * @return PropertyInterface[] Properties
-     */
-    public function getProperties();
-
-    /**
-     * Return the values of a single property
-     *
-     * @param string $name Property name
-     * @return PropertyInterface Property
-     */
-    public function getProperty($name);
-
-    /**
-     * Add a child
-     *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
-     */
-    public function addChild(ThingInterface $child);
-
-    /**
-     * Return all children
-     *
-     * @return ThingInterface[] Children
-     */
-    public function getChildren();
+    public function getValue();
 }

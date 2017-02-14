@@ -36,6 +36,7 @@
 
 namespace Jkphl\Rdfalite\Tests\Domain;
 
+use Jkphl\Rdfalite\Domain\Property\Property;
 use Jkphl\Rdfalite\Domain\Thing\Thing;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 
@@ -108,9 +109,13 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $thing = new Thing('Person', self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
 
-        $thing->addProperty('test1', 'value1');
-        $thing->addProperty('test1', 'value2');
-        $thing->addProperty('test2', 'value1');
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $property1 = new Property('test1', $vocabulary, 'value1');
+        $property2 = new Property('test1', $vocabulary, 'value2');
+        $property3 = new Property('test2', $vocabulary, 'value1');
+        $thing->addProperty($property1);
+        $thing->addProperty($property2);
+        $thing->addProperty($property3);
 
         $properties = $thing->getProperties();
         $this->assertTrue(is_array($properties));
@@ -121,20 +126,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $test1Property = $thing->getProperty('test1');
         $this->assertTrue(is_array($test1Property));
         $this->assertEquals(2, count($test1Property));
-        $this->assertEquals(['value1', 'value2'], $test1Property);
-    }
-
-    /**
-     * Test setting an invalid property name
-     *
-     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
-     * @expectedExceptionCode 1486848618
-     */
-    public function testSetInvalidPropertyName()
-    {
-        $thing = new Thing('Person', self::$schemaOrgVocabulary);
-        $this->assertInstanceOf(Thing::class, $thing);
-        $thing->addProperty('', null);
+        $this->assertEquals([$property1, $property2], $test1Property);
     }
 
     /**

@@ -38,6 +38,8 @@ namespace Jkphl\Rdfalite\Domain\Thing;
 
 use Jkphl\Rdfalite\Domain\Exceptions\OutOfBoundsException;
 use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
+use Jkphl\Rdfalite\Domain\Property\Property;
+use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -75,7 +77,7 @@ class Thing implements ThingInterface
     /**
      * Property
      *
-     * @var array
+     * @var array[]
      */
     protected $properties = [];
 
@@ -134,50 +136,26 @@ class Thing implements ThingInterface
     /**
      * Add a property value
      *
-     * @param string $name Property name
-     * @param mixed $value Property value
+     * @param PropertyInterface $property Property
      * @return Thing Self reference
      */
-    public function addProperty($name, $value)
+    public function addProperty(PropertyInterface $property)
     {
-        $name = $this->validatePropertyName($name);
-
         // Create the property values list if necessary
-        if (!array_key_exists($name, $this->properties)) {
-            $this->properties[$name] = [];
+        if (!array_key_exists($property->getName(), $this->properties)) {
+            $this->properties[$property->getName()] = [];
         }
 
         // Register the property value
-        $this->properties[$name][] = $value;
+        $this->properties[$property->getName()][] = $property;
 
         return $this;
     }
 
     /**
-     * Validate a property name
-     *
-     * @param string $name Property name
-     * @return string Sanitized property name
-     * @throws RuntimeException If the property name is invalid
-     */
-    protected function validatePropertyName($name)
-    {
-        $name = trim($name);
-
-        // If the property name is invalid
-        if (!strlen($name) || !preg_match('/^[a-z][a-zA-Z0-9]*$/', $name)) {
-            throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_PROPERTY_NAME_STR, $name), RuntimeException::INVALID_PROPERTY_NAME
-            );
-        }
-
-        return $name;
-    }
-
-    /**
      * Return all properties
      *
-     * @return array Properties
+     * @return array[] Properties
      */
     public function getProperties()
     {
@@ -189,11 +167,10 @@ class Thing implements ThingInterface
      *
      * @param string $name Property name
      * @return array Property values
-     * @throws OutOfBoundsException If the property name is unknown
      */
     public function getProperty($name)
     {
-        $name = $this->validatePropertyName($name);
+        $name = Property::validatePropertyName($name);
 
         // If the property name is unknown
         if (!array_key_exists($name, $this->properties)) {

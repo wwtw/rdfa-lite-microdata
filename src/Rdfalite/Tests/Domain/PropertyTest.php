@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Domain
+ * @subpackage Jkphl\Rdfalite\Tests
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,75 +34,41 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain\Thing;
+namespace Jkphl\Rdfalite\Tests\Domain;
 
-use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
-use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\Rdfalite\Domain\Property\Property;
+use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 
 /**
- * Thing interface
+ * Property tests
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Domain
+ * @subpackage Jkphl\Rdfalite\Tests
  */
-interface ThingInterface
+class PropertyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Return the resource type
-     *
-     * @return string Resource type
+     * Test the property instantiation
      */
-    public function getType();
+    public function testProperty()
+    {
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $property = new Property('test', $vocabulary, 'value');
+        $this->assertInstanceOf(Property::class, $property);
+        $this->assertEquals('test', $property->getName());
+        $this->assertEquals('value', $property->getValue());
+        $this->assertEquals($vocabulary, $property->getVocabulary());
+    }
 
     /**
-     * Return the vocabulary in use
+     * Test invalid property name
      *
-     * @return VocabularyInterface Vocabulary
+     * @expectedException \Jkphl\Rdfalite\Domain\Exceptions\RuntimeException
+     * @expectedExceptionCode 1486848618
      */
-    public function getVocabulary();
-
-    /**
-     * Return the resource ID
-     *
-     * @return null|string Resource ID
-     */
-    public function getResourceId();
-
-    /**
-     * Add a property value
-     *
-     * @param PropertyInterface $property Property
-     * @return Thing Self reference
-     */
-    public function addProperty(PropertyInterface $property);
-
-    /**
-     * Return all properties
-     *
-     * @return PropertyInterface[] Properties
-     */
-    public function getProperties();
-
-    /**
-     * Return the values of a single property
-     *
-     * @param string $name Property name
-     * @return PropertyInterface Property
-     */
-    public function getProperty($name);
-
-    /**
-     * Add a child
-     *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
-     */
-    public function addChild(ThingInterface $child);
-
-    /**
-     * Return all children
-     *
-     * @return ThingInterface[] Children
-     */
-    public function getChildren();
+    public function testInvalidPropertyName()
+    {
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        new Property('', $vocabulary, 'value');
+    }
 }

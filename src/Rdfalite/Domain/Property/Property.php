@@ -34,75 +34,100 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Domain\Thing;
+namespace Jkphl\Rdfalite\Domain\Property;
 
-use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
+use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Thing interface
+ * Property
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-interface ThingInterface
+class Property implements PropertyInterface
 {
     /**
-     * Return the resource type
+     * Property name
      *
-     * @return string Resource type
+     * @var string
      */
-    public function getType();
+    protected $name;
+    /**
+     * Vocabulary
+     *
+     * @var VocabularyInterface
+     */
+    protected $vocabulary;
+    /**
+     * Property value
+     *
+     * @var string
+     */
+    protected $value;
 
     /**
-     * Return the vocabulary in use
-     *
-     * @return VocabularyInterface Vocabulary
-     */
-    public function getVocabulary();
-
-    /**
-     * Return the resource ID
-     *
-     * @return null|string Resource ID
-     */
-    public function getResourceId();
-
-    /**
-     * Add a property value
-     *
-     * @param PropertyInterface $property Property
-     * @return Thing Self reference
-     */
-    public function addProperty(PropertyInterface $property);
-
-    /**
-     * Return all properties
-     *
-     * @return PropertyInterface[] Properties
-     */
-    public function getProperties();
-
-    /**
-     * Return the values of a single property
+     * Property constructor
      *
      * @param string $name Property name
-     * @return PropertyInterface Property
+     * @param VocabularyInterface $vocabulary Property vocabulary
+     * @param string $value Property value
      */
-    public function getProperty($name);
+    public function __construct($name, VocabularyInterface $vocabulary, $value)
+    {
+        $this->name = self::validatePropertyName($name);
+        $this->vocabulary = $vocabulary;
+        $this->value = $value;
+    }
 
     /**
-     * Add a child
+     * Validate a property name
      *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
+     * @param string $name Property name
+     * @return string Sanitized property name
+     * @throws RuntimeException If the property name is invalid
      */
-    public function addChild(ThingInterface $child);
+    public static function validatePropertyName($name)
+    {
+        $name = trim($name);
+
+        // If the property name is invalid
+        if (!strlen($name) || !preg_match('/^[a-z][a-zA-Z0-9]*$/', $name)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_PROPERTY_NAME_STR, $name), RuntimeException::INVALID_PROPERTY_NAME
+            );
+        }
+
+        return $name;
+    }
 
     /**
-     * Return all children
+     * Return the property name
      *
-     * @return ThingInterface[] Children
+     * @return string Property name
      */
-    public function getChildren();
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Return the property vocabulary
+     *
+     * @return VocabularyInterface Property vocabulary
+     */
+    public function getVocabulary()
+    {
+        return $this->vocabulary;
+    }
+
+    /**
+     * Property value
+     *
+     * @return string Property value
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }
