@@ -40,6 +40,7 @@ use Jkphl\Rdfalite\Domain\Property\Property;
 use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
 use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
+use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\Rdfalite\Tests\Domain\VocabularyTest;
 
 /**
@@ -51,19 +52,19 @@ use Jkphl\Rdfalite\Tests\Domain\VocabularyTest;
 abstract class ParserIteratorTestBase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test HTML
+     * Test HTML with person RDFa Lite 1.1
      *
      * @var string
      */
-    protected static $html;
+    protected static $personRdfa;
 
     /**
      * Setup all tests
      */
     public static function setUpBeforeClass()
     {
-        self::$html = file_get_contents(
-            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'rdfa-lite-1.1.html'
+        self::$personRdfa = file_get_contents(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'person-rdfa-lite.html'
         );
     }
 
@@ -72,7 +73,7 @@ abstract class ParserIteratorTestBase extends \PHPUnit_Framework_TestCase
      *
      * @param ThingInterface[] $things Parsing Results
      */
-    protected function validateIteratorResult(array $things)
+    protected function validatePersonResult(array $things)
     {
         $schemaOrgVocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
 
@@ -89,29 +90,26 @@ abstract class ParserIteratorTestBase extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($properties));
         $this->assertEquals(4, count($properties));
 
-        $name = $thing->getProperty('name');
-        $this->assertTrue(is_array($name));
-        $this->assertEquals(1, count($name));
-        $this->assertInstanceOf(PropertyInterface::class, $name[0]);
-        $this->assertEquals(new Property('name', $schemaOrgVocabulary, 'Joschi Kuphal'), $name[0]);
+        $this->validateProperty($thing, 'name', $schemaOrgVocabulary, 'Joschi Kuphal');
+        $this->validateProperty($thing, 'telephone', $schemaOrgVocabulary, '+49 911 9593945');
+        $this->validateProperty($thing, 'image', $schemaOrgVocabulary, 'https://jkphl.is/avatar.jpg');
+        $this->validateProperty($thing, 'preferredAnimal', new Vocabulary('http://open.vocab.org/terms/'), 'Unicorn');
+    }
 
-        $telephone = $thing->getProperty('telephone');
-        $this->assertTrue(is_array($telephone));
-        $this->assertEquals(1, count($telephone));
-        $this->assertInstanceOf(PropertyInterface::class, $telephone[0]);
-        $this->assertEquals(new Property('telephone', $schemaOrgVocabulary, '+49 911 9593945'), $telephone[0]);
-
-        $image = $thing->getProperty('image');
-        $this->assertTrue(is_array($image));
-        $this->assertEquals(1, count($image));
-        $this->assertInstanceOf(PropertyInterface::class, $image[0]);
-        $this->assertEquals(new Property('image', $schemaOrgVocabulary, 'https://jkphl.is/avatar.jpg'), $image[0]);
-
-        $preferredAnimal = $thing->getProperty('preferredAnimal');
-        $this->assertTrue(is_array($preferredAnimal));
-        $this->assertEquals(1, count($preferredAnimal));
-        $this->assertInstanceOf(PropertyInterface::class, $preferredAnimal[0]);
-        $this->assertEquals(new Property('preferredAnimal', new Vocabulary('http://open.vocab.org/terms/'), 'Unicorn'),
-            $preferredAnimal[0]);
+    /**
+     * Validate a single property
+     *
+     * @param ThingInterface $thing Thing
+     * @param string $name Property name
+     * @param VocabularyInterface $vocabulary Property vocabulary
+     * @param string $value Property value
+     */
+    protected function validateProperty(ThingInterface $thing, $name, VocabularyInterface $vocabulary, $value)
+    {
+        $property = $thing->getProperty($name);
+        $this->assertTrue(is_array($property));
+        $this->assertEquals(1, count($property));
+        $this->assertInstanceOf(PropertyInterface::class, $property[0]);
+        $this->assertEquals(new Property($name, $vocabulary, $value), $property[0]);
     }
 }

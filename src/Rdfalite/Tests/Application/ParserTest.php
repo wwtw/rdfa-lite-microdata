@@ -49,16 +49,74 @@ use Jkphl\Rdfalite\Infrastructure\Parser\RdfaliteElementProcessor;
 class ParserTest extends ParserIteratorTestBase
 {
     /**
-     * Test parser context instantiation
+     * Test person parsing
      */
-    public function testParser()
+    public function testPerson()
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
         $rdfaElementProcessor = new RdfaliteElementProcessor();
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
         $this->assertInstanceOf(Parser::class, $parser);
 
-        $things = $parser->parse(self::$html);
-        $this->validateIteratorResult($things);
+        $things = $parser->parse(self::$personRdfa);
+        $this->validatePersonResult($things);
+    }
+
+    /**
+     * Test article parsing
+     */
+    public function testArticle()
+    {
+        $htmlDocumentFactory = new HtmlDocumentFactory();
+        $rdfaElementProcessor = new RdfaliteElementProcessor();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $this->assertInstanceOf(Parser::class, $parser);
+
+        // TODO: Validate result
+        $parser->parse(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
+            )
+        );
+    }
+
+    /**
+     * Test empty default vocabulary parsing
+     *
+     * @expectedException \Jkphl\Rdfalite\Infrastructure\Exceptions\OutOfBoundsException
+     * @expectedExceptionCode 1487030264
+     */
+    public function testEmptyDefaultVocabulary()
+    {
+        $htmlDocumentFactory = new HtmlDocumentFactory();
+        $rdfaElementProcessor = new RdfaliteElementProcessor();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $this->assertInstanceOf(Parser::class, $parser);
+
+        $parser->parse(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
+            )
+        );
+    }
+
+    /**
+     * Test unknown vocabulary prefix parsing
+     *
+     * @expectedException \Jkphl\Rdfalite\Infrastructure\Exceptions\OutOfBoundsException
+     * @expectedExceptionCode 1486928423
+     */
+    public function testUnknownVocabularyPrefix()
+    {
+        $htmlDocumentFactory = new HtmlDocumentFactory();
+        $rdfaElementProcessor = new RdfaliteElementProcessor();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $this->assertInstanceOf(Parser::class, $parser);
+
+        $parser->parse(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
+            )
+        );
     }
 }

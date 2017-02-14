@@ -54,6 +54,28 @@ use Jkphl\Rdfalite\Infrastructure\Exceptions\OutOfBoundsException;
 class RdfaliteElementProcessor implements ElementProcessorInterface
 {
     /**
+     * Tag name / attribute map
+     *
+     * @var array
+     */
+    protected static $tagNameAttributes = [
+        'META' => 'content',
+        'AUDIO' => 'src',
+        'EMBED' => 'src',
+        'IFRAME' => 'src',
+        'IMG' => 'src',
+        'SOURCE' => 'src',
+        'TRACK' => 'src',
+        'VIDEO' => 'src',
+        'A' => 'href',
+        'AREA' => 'href',
+        'LINK' => 'href',
+        'OBJECT' => 'data',
+        'DATA' => 'value',
+        'TIME' => 'datetime'
+    ];
+
+    /**
      * Process a DOM element
      *
      * @param \DOMElement $element DOM element
@@ -131,9 +153,18 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
                 // Try to get a resource ID
                 $resourceId = trim($element->getAttribute('resource')) ?: null;
 
+                // Get the property value
+                $propertyValue = $this->getPropertyValue($element, $context);
+                $property = new Property($name, $vocabulary, $propertyValue, $resourceId);
+
                 // Add the property to the current parent thing
-                $property = new Property($name, $vocabulary, $this->getPropertyValue($element, $context), $resourceId);
                 $context->getParentThing()->addProperty($property);
+
+                // If the property value is a thing
+                if ($propertyValue instanceof ThingInterface) {
+                    // Set the thing as parent thing for nested iterations
+                    $context = $context->setParentThing($propertyValue);
+                }
             }
         }
 
@@ -179,18 +210,21 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         $prefix = array_pop($typeof);
 
         // Determine the vocabulary to use
-        $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
-        if ($vocabulary instanceof VocabularyInterface) {
-            // Return a new thing
-            return new Thing($type, $vocabulary, $resourceId);
-        }
+        try {
+            $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
+            if ($vocabulary instanceof VocabularyInterface) {
+                // Return a new thing
+                return new Thing($type, $vocabulary, $resourceId);
+            }
 
-        // If the default vocabulary is empty
-        if (empty($prefix)) {
-            throw new OutOfBoundsException(
-                OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY_STR,
-                OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY
-            );
+            // If the default vocabulary is empty
+            if (empty($prefix)) {
+                throw new OutOfBoundsException(
+                    OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY_STR,
+                    OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY
+                );
+            }
+        } catch (\Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException $e) {
         }
 
         throw new OutOfBoundsException(
@@ -209,29 +243,17 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     {
         $tagName = strtoupper($element->tagName);
 
-        // Else: Depend on the tag name
-        switch (true) {
-            case $tagName === 'META':
-                return strval($element->getAttribute('content'));
-            case in_array($tagName, ['AUDIO', 'EMBED', 'IFRAME', 'IMG', 'SOURCE', 'TRACK', 'VIDEO']):
-                return strval($element->getAttribute('src'));
-
-            case in_array($tagName, ['A', 'AREA', 'LINK']):
-                return strval($element->getAttribute('href'));
-            case $tagName === 'OBJECT':
-                return strval($element->getAttribute('data'));
-            case $tagName === 'DATA':
-                return strval($element->getAttribute('value'));
-            case $tagName === 'TIME':
-                $datetime = $element->getAttribute('datetime');
-                if (!empty($datetime)) {
-                    return strval($datetime);
-                }
-            // fall through
-            default:
-//              trigger_error(sprintf('RDFa Lite 1.1 element processor: Unhandled tag name "%s"', $element->tagName), E_USER_WARNING);
-                return $element->textContent;
+        // Map to an attribute (if applicable)
+        if (array_key_exists($tagName, self::$tagNameAttributes)) {
+            $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
+            if (($tagName != 'TIME') || !empty($value)) {
+                return $value;
+            }
         }
+
+        // Return the text content
+//        trigger_error(sprintf('RDFa Lite 1.1 element processor: Unhandled tag name "%s"', $element->tagName), E_USER_WARNING);
+        return $element->textContent;
     }
 
     /**
@@ -256,7 +278,9 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      */
     protected function processTypeof(\DOMElement $element, Context $context)
     {
-        if ($element->hasAttribute('typeof')) {
+        if ($element->hasAttribute('typeof') &&
+            (!$element->hasAttribute('property') || empty($element->getAttribute('property')))
+        ) {
             $thing = $this->getThing(
                 $element->getAttribute('typeof'),
                 trim($element->getAttribute('resource')) ?: null,

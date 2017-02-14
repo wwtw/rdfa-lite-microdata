@@ -36,6 +36,7 @@
 
 namespace Jkphl\Rdfalite\Domain\Property;
 
+use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -61,9 +62,9 @@ interface PropertyInterface
     public function getVocabulary();
 
     /**
-     * Property value
+     * Return the property value
      *
-     * @return string Property value
+     * @return string|ThingInterface Property value
      */
     public function getValue();
 }

@@ -55,7 +55,9 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
     public function createDocumentFromString($string)
     {
         $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
         $dom->loadHTML($string);
+        libxml_clear_errors();
         return $dom;
     }
 }

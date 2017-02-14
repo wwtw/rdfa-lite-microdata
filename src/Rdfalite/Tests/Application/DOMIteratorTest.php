@@ -55,7 +55,7 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
     public function testDomNodeIteration()
     {
         $dom = new \DOMDocument();
-        $dom->loadHTML(self::$html);
+        $dom->loadHTML(self::$personRdfa);
         $context = new Context();
 
         $elementProcessor = $this->getMock(ElementProcessorInterface::class);
@@ -87,7 +87,7 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
     public function testRdfaLiteProcessor()
     {
         $dom = new \DOMDocument();
-        $dom->loadHTML(self::$html);
+        $dom->loadHTML(self::$personRdfa);
         $context = new Context();
         $domNodeIterator = new DOMIterator($dom->childNodes, $context, new RdfaliteElementProcessor());
         $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
@@ -106,6 +106,6 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
             }
         }
         $this->assertEquals(0, count($elements));
-        $this->validateIteratorResult($context->getChildren());
+        $this->validatePersonResult($context->getChildren());
     }
 }
