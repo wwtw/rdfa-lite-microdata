@@ -74,19 +74,6 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     }
 
     /**
-     * Process a DOM element's children
-     *
-     * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
-     */
-    public function processElementChildren(\DOMElement $element, Context $context)
-    {
-        // Process nested children
-        return $this->processTypeof($element, $context);
-    }
-
-    /**
      * Process changes of the default vocabulary
      *
      * @param \DOMElement $element DOM element
@@ -171,36 +158,8 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             );
         }
 
-        // Else: Depend on the tag name
-        switch (strtoupper($element->tagName)) {
-            case 'META':
-                return strval($element->getAttribute('content'));
-            case 'AUDIO':
-            case 'EMBED':
-            case 'IFRAME':
-            case 'IMG':
-            case 'SOURCE':
-            case 'TRACK':
-            case 'VIDEO':
-                return strval($element->getAttribute('src'));
-            case 'A':
-            case 'AREA':
-            case 'LINK':
-                return strval($element->getAttribute('href'));
-            case 'OBJECT':
-                return strval($element->getAttribute('data'));
-            case 'DATA':
-                return strval($element->getAttribute('value'));
-            case 'TIME':
-                $datetime = $element->getAttribute('datetime');
-                if (!empty($datetime)) {
-                    return strval($datetime);
-                }
-            // fall through
-            default:
-//              trigger_error(sprintf('RDFa Lite 1.1 element processor: Unhandled tag name "%s"', $element->tagName), E_USER_WARNING);
-                return $element->textContent;
-        }
+        // Return a string property value
+        return $this->getPropertyStringValue($element);
     }
 
     /**
@@ -238,6 +197,54 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
             OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
         );
+    }
+
+    /**
+     * Return a property value (type and tag name dependent)
+     *
+     * @param \DOMElement $element DOM element
+     * @return ThingInterface|string Property value
+     */
+    protected function getPropertyStringValue(\DOMElement $element)
+    {
+        $tagName = strtoupper($element->tagName);
+
+        // Else: Depend on the tag name
+        switch (true) {
+            case $tagName === 'META':
+                return strval($element->getAttribute('content'));
+            case in_array($tagName, ['AUDIO', 'EMBED', 'IFRAME', 'IMG', 'SOURCE', 'TRACK', 'VIDEO']):
+                return strval($element->getAttribute('src'));
+
+            case in_array($tagName, ['A', 'AREA', 'LINK']):
+                return strval($element->getAttribute('href'));
+            case $tagName === 'OBJECT':
+                return strval($element->getAttribute('data'));
+            case $tagName === 'DATA':
+                return strval($element->getAttribute('value'));
+            case $tagName === 'TIME':
+                $datetime = $element->getAttribute('datetime');
+                if (!empty($datetime)) {
+                    return strval($datetime);
+                }
+            // fall through
+            default:
+//              trigger_error(sprintf('RDFa Lite 1.1 element processor: Unhandled tag name "%s"', $element->tagName), E_USER_WARNING);
+                return $element->textContent;
+        }
+    }
+
+    /**
+     * Process a DOM element's children
+     *
+     * @param \DOMElement $element DOM element
+     * @param Context $context Context
+     * @return Context Context for children
+     */
+    public function processElementChildren(\DOMElement $element, Context $context)
+    {
+        // Process nested children
+        return $this->processTypeof($element, $context);
     }
 
     /**

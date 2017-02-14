@@ -36,6 +36,7 @@
 
 namespace Jkphl\Rdfalite\Domain\Property;
 
+use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -61,7 +62,7 @@ class Property implements PropertyInterface
     /**
      * Property value
      *
-     * @var string
+     * @var string|ThingInterface
      */
     protected $value;
     /**
@@ -76,7 +77,7 @@ class Property implements PropertyInterface
      *
      * @param string $name Property name
      * @param VocabularyInterface $vocabulary Property vocabulary
-     * @param string $value Property value
+     * @param string|ThingInterface $value Property value
      */
     public function __construct($name, VocabularyInterface $vocabulary, $value, $resourceId = null)
     {
@@ -109,7 +110,7 @@ class Property implements PropertyInterface
     /**
      * Return the property value
      *
-     * @return string Property value
+     * @return string|ThingInterface Property value
      */
     public function getValue()
     {
