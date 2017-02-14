@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Infrastructure
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,26 +34,40 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Application\Exceptions;
+namespace Jkphl\Rdfalite\Infrastructure\Exceptions;
+
+use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException as ApplicationOutOfBoundsException;
 
 /**
- * Runtime exception
+ * Out of bounds exception
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Infrastructure
  */
-class RuntimeException extends \RuntimeException implements RdfaliteApplicationExceptionInterface
+class OutOfBoundsException extends \RuntimeException implements RdfaliteInfrastructureExceptionInterface
 {
     /**
-     * Invalid vocabulary prefix
+     * Unknown vocabulary prefix
      *
      * @var string
      */
-    const INVALID_VOCABULARY_PREFIX_STR = 'Invalid vocabulary prefix "%s"';
+    const UNKNOWN_VOCABULARY_PREFIX_STR = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR;
     /**
-     * Invalid vocabulary prefix
+     * Unknown vocabulary prefix
      *
      * @var int
      */
-    const INVALID_VOCABULARY_PREFIX = 1486927326;
+    const UNKNOWN_VOCABULARY_PREFIX = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX;
+    /**
+     * Empty default vocabulary
+     *
+     * @var string
+     */
+    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
+    /**
+     * Empty default vocabulary
+     *
+     * @var int
+     */
+    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
 }

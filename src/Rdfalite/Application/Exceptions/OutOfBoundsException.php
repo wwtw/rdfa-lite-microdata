@@ -37,7 +37,7 @@
 namespace Jkphl\Rdfalite\Application\Exceptions;
 
 /**
- * RuntimeException
+ * Out of bounds exception
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Application

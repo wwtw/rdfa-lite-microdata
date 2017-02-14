@@ -279,6 +279,7 @@ class Context
         if ($this->parentThing !== $parentThing) {
             $context = clone $this;
             $context->parentThing = $parentThing;
+            $context->children = [];
             return $context;
         }
 
@@ -300,13 +301,5 @@ class Context
         }
 
         return $this;
-    }
-
-    /**
-     * Clone callback
-     */
-    public function __clone()
-    {
-        $this->children = [];
     }
 }
