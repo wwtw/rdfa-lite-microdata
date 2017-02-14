@@ -225,6 +225,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
                 );
             }
         } catch (\Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException $e) {
+            // Promote to client level exception
         }
 
         throw new OutOfBoundsException(
@@ -278,22 +279,16 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      */
     protected function processTypeof(\DOMElement $element, Context $context)
     {
-        if ($element->hasAttribute('typeof') &&
-            (!$element->hasAttribute('property') || empty($element->getAttribute('property')))
-        ) {
+        if ($element->hasAttribute('typeof') && empty($element->getAttribute('property'))) {
             $thing = $this->getThing(
                 $element->getAttribute('typeof'),
                 trim($element->getAttribute('resource')) ?: null,
                 $context
             );
 
-            if ($thing instanceof ThingInterface) {
-                // Add the new thing as a child to the current context
-                $context->addChild($thing);
-
-                // Set the thing as parent thing for nested iterations
-                $context = $context->setParentThing($thing);
-            }
+            // Add the new thing as a child to the current context
+            // and set the thing as parent thing for nested iterations
+            $context = $context->addChild($thing)->setParentThing($thing);
         }
 
         return $context;
