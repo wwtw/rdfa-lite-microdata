@@ -34,33 +34,36 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Application\Contract;
+namespace Jkphl\Rdfalite\Application\Parser;
 
-use Jkphl\Rdfalite\Application\Parser\Context;
+use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Element processor interface
+ * Empty pseudo vocabulary
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Application
+ * @subpackage Jkphl\Rdfalite\Application\Parser
  */
-interface ElementProcessorInterface
+class NullVocabulary implements VocabularyInterface
 {
     /**
-     * Process a DOM element
+     * Return the vocabulary URI
      *
-     * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @return string URI
      */
-    public function processElement(\DOMElement $element, Context $context);
+    public function getUri()
+    {
+        return '';
+    }
 
     /**
-     * Process a DOM element's children
+     * Expand a local type
      *
-     * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param string $type Local type
+     * @return string Expanded local type
      */
-    public function processElementChildren(\DOMElement $element, Context $context);
+    public function expand($type)
+    {
+        return $type;
+    }
 }

@@ -45,9 +45,9 @@ namespace Jkphl\Rdfalite\Domain\Vocabulary;
 interface VocabularyInterface
 {
     /**
-     * Return the vocabulary URL
+     * Return the vocabulary URI
      *
-     * @return string URL
+     * @return string URI
      */
     public function getUri();
 

@@ -38,6 +38,7 @@ namespace Jkphl\Rdfalite\Application\Parser;
 
 use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException;
 use Jkphl\Rdfalite\Application\Exceptions\RuntimeException;
+use Jkphl\Rdfalite\Domain\Thing\Thing;
 use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
@@ -124,20 +125,14 @@ class Context
      *
      * @var ThingInterface
      */
-    protected $parentThing = null;
-
-    /**
-     * Registered child things
-     *
-     * @var ThingInterface[]
-     */
-    protected $children = [];
+    protected $parentThing;
 
     /**
      * Context constructor
      */
     public function __construct()
     {
+        $this->parentThing = new Thing('Null', new NullVocabulary());
         $this->vocabularies = self::$defaultVocabularies;
     }
 
@@ -148,8 +143,7 @@ class Context
      */
     public function getChildren()
     {
-        return ($this->parentThing instanceof ThingInterface) ?
-            $this->parentThing->getChildren() : array_values($this->children);
+        return $this->parentThing->getChildren();
     }
 
     /**
@@ -280,7 +274,6 @@ class Context
         if ($this->parentThing !== $parentThing) {
             $context = clone $this;
             $context->parentThing = $parentThing;
-            $context->children = [];
             return $context;
         }
 
@@ -295,12 +288,7 @@ class Context
      */
     public function addChild(ThingInterface $thing)
     {
-        if ($this->parentThing instanceof ThingInterface) {
-            $this->parentThing->addChild($thing);
-            return $this;
-        }
-
-        $this->children[spl_object_hash($thing)] = $thing;
+        $this->parentThing->addChild($thing);
         return $this;
     }
 }

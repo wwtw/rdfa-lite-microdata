@@ -57,8 +57,8 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      * Process a DOM element
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param Context $context Inherited Context
+     * @return Context Local context for this element
      */
     public function processElement(\DOMElement $element, Context $context)
     {
@@ -69,10 +69,19 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         $context = $this->processPrefix($element, $context);
 
         // Create properties
-        if ($element->hasAttribute('property')) {
-            return $this->processProperty($element, $context);
-        }
+        $context = $this->processProperty($element, $context);
+        return $context;
+    }
 
+    /**
+     * Process a DOM element's children
+     *
+     * @param \DOMElement $element DOM element
+     * @param Context $context Context
+     * @return Context Context for children
+     */
+    public function processElementChildren(\DOMElement $element, Context $context)
+    {
         // Process nested children
         return $this->processTypeof($element, $context);
     }
@@ -81,8 +90,8 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      * Process changes of the default vocabulary
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param Context $context Inherited Context
+     * @return Context Local context for this element
      */
     protected function processVocab(\DOMElement $element, Context $context)
     {
@@ -98,8 +107,8 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      * Process vocabulary prefixes
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param Context $context Inherited Context
+     * @return Context Local context for this element
      */
     protected function processPrefix(\DOMElement $element, Context $context)
     {
@@ -119,12 +128,12 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      * Create properties
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param Context $context Inherited Context
+     * @return Context Local context for this element
      */
     protected function processProperty(\DOMElement $element, Context $context)
     {
-        if ($element->hasAttribute('property')) {
+        if ($element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface)) {
             $property = explode(':', $element->getAttribute('property'));
             $name = strval(array_pop($property));
             $prefix = strval(array_pop($property));

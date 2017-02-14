@@ -53,30 +53,65 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      */
     protected $elementProcessor;
     /**
-     * Parser context
+     * Initial parser context
      *
      * @var Context
      */
-    protected $context;
+    protected $initialContext;
+    /**
+     * Registered contexts
+     *
+     * @var Context[]
+     */
+    public $contexts = [];
+    /**
+     * Element context map
+     *
+     * @var array
+     */
+    protected $contextMap = [];
 
     /**
      * Recursive DOM node iterator constructor
      *
      * @param \DOMNodeList $nodeList Node list
-     * @param Context $context Parser context
+     * @param Context $initialContext Initial parser context
      * @param ElementProcessorInterface $elementProcessor Element processor
      */
-    public function __construct(\DOMNodeList $nodeList, Context $context, ElementProcessorInterface $elementProcessor)
-    {
-        $nodes = array();
+    public function __construct(
+        \DOMNodeList $nodeList,
+        Context $initialContext,
+        ElementProcessorInterface $elementProcessor
+    ) {
+        $this->elementProcessor = $elementProcessor;
+        $this->initialContext = $initialContext;
+
+        $nodes = [];
+
+        // Run through all nodes
+        /** @var \DOMNode $node */
         foreach ($nodeList as $node) {
-            $nodes[] = $node;
+            $nodeId = spl_object_hash($node);
+
+            // If it's an element node: Process it and register it's local context
+            if ($node->nodeType == XML_ELEMENT_NODE) {
+                /** @var \DOMElement $node */
+                $localContext = $this->elementProcessor->processElement($node, $this->initialContext);
+
+                // Register the node context
+                $localContextId = spl_object_hash($localContext);
+                if (empty($this->contexts[$localContextId])) {
+                    $this->contexts[$localContextId] = $localContext;
+                }
+
+                $this->contextMap[$nodeId] = $localContextId;
+            }
+
+            // Register the node
+            $nodes[$nodeId] = $node;
         }
 
         parent::__construct($nodes);
-
-        $this->elementProcessor = $elementProcessor;
-        $this->context = $context;
     }
 
     /**
@@ -91,6 +126,10 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 
     /**
      * Return whether the current node has child nodes
+     *
+     * This method gets called once per element and prior to the call to current(),
+     * so this seems like the perfect place for the first processing steps (even
+     * for elements without children).
      *
      * @return boolean Current node has child nodes
      */
@@ -107,7 +146,29 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
     public function getChildren()
     {
         $element = $this->current();
-        $context = $this->elementProcessor->processElement($element, $this->context);
-        return new static($element->childNodes, $context, $this->elementProcessor);
+        $childContext = $this->elementProcessor->processElementChildren(
+            $element,
+            $this->contexts[$this->contextMap[$this->key()]]
+        );
+        return new static($element->childNodes, $childContext, $this->elementProcessor);
+    }
+
+    /**
+     * Rewind array back to the start
+     *
+     * @return void
+     */
+    public function rewind()
+    {
+        parent::rewind();
+    }
+
+    /**
+     * Return the context in it's current state
+     *
+     * @return Context Context
+     */
+    public function getContext() {
+        return $this->initialContext;
     }
 }
