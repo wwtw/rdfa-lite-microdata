@@ -36,49 +36,35 @@
 
 namespace Jkphl\Rdfalite\Domain\Vocabulary;
 
+use Jkphl\Rdfalite\Domain\Exceptions\RuntimeException;
+
 /**
- * Vocabulary
+ * Vocabulary service
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Domain
  */
-class Vocabulary implements VocabularyInterface
+class VocabularyService
 {
     /**
-     * URI where the vocabulary can be found
+     * Validate a vocabulary URI
      *
-     * @var string
+     * @param string $uri URI
+     * @return string Valid vocabulary URI
+     * @throws RuntimeException If the vocabulary URI is invalid
      */
-    public $uri;
-
-    /**
-     * Vocabulary constructor
-     *
-     * @param string $uri URI where the vocabulary can be found
-     */
-    public function __construct($uri)
+    public function validateVocabularyUri($uri)
     {
-        $this->uri = (new VocabularyService())->validateVocabularyUri($uri);
-    }
+        $uri = trim($uri);
 
-    /**
-     * Return the vocabulary URI
-     *
-     * @return string URI
-     */
-    public function getUri()
-    {
-        return $this->uri;
-    }
+        // If the vocabulary URI is invalid
+        if (!strlen($uri) || !filter_var($uri, FILTER_VALIDATE_URL)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_VOCABULARY_URI_STR, $uri),
+                RuntimeException::INVALID_VOCABULARY_URI
+            );
+        }
 
-    /**
-     * Expand a local type
-     *
-     * @param string $type Local type
-     * @return string Expanded local type
-     */
-    public function expand($type)
-    {
-        return $this->uri.$type;
+        return $uri;
     }
 }

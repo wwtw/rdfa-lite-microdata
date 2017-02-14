@@ -146,7 +146,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      *
      * @param \DOMElement $element DOM element
      * @param Context $context Context
-     * @return ThingInterface|NULL|string Property value
+     * @return ThingInterface|string Property value
      */
     protected function getPropertyValue(\DOMElement $element, Context $context)
     {
@@ -158,7 +158,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         // Else: Depend on the tag name
         switch (strtoupper($element->tagName)) {
             case 'META':
-                return $element->getAttribute('content');
+                return strval($element->getAttribute('content'));
             case 'AUDIO':
             case 'EMBED':
             case 'IFRAME':
@@ -166,19 +166,19 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             case 'SOURCE':
             case 'TRACK':
             case 'VIDEO':
-                return $element->getAttribute('src');
+                return strval($element->getAttribute('src'));
             case 'A':
             case 'AREA':
             case 'LINK':
-                return $element->getAttribute('href');
+                return strval($element->getAttribute('href'));
             case 'OBJECT':
-                return $element->getAttribute('data');
+                return strval($element->getAttribute('data'));
             case 'DATA':
-                return $element->getAttribute('value');
+                return strval($element->getAttribute('value'));
             case 'TIME':
                 $datetime = $element->getAttribute('datetime');
                 if (!empty($datetime)) {
-                    return $datetime;
+                    return strval($datetime);
                 }
             // fall through
             default:
@@ -192,7 +192,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      *
      * @param string $typeof Thing type
      * @param Context $context Context
-     * @return ThingInterface|NULL|string Property value
+     * @return ThingInterface Thing
      * @throws OutOfBoundsException If the default vocabulary is empty
      * @throws OutOfBoundsException If the vocabulary prefix is unknown
      */

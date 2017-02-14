@@ -41,6 +41,7 @@ use Jkphl\Rdfalite\Application\Exceptions\RuntimeException;
 use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyService;
 
 /**
  * Parsing context
@@ -162,7 +163,7 @@ class Context
     public function registerVocabulary($prefix, $uri)
     {
         $prefix = self::validateVocabPrefix($prefix);
-        $uri = Vocabulary::validateVocabUri($uri);
+        $uri = (new VocabularyService())->validateVocabularyUri($uri);
 
         // Register the new URI
         if (empty($this->vocabularies[$prefix]) || ($this->vocabularies[$prefix] !== $uri)) {
