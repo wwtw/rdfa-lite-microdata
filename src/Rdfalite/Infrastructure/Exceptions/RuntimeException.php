@@ -36,26 +36,24 @@
 
 namespace Jkphl\Rdfalite\Infrastructure\Exceptions;
 
-use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException as ApplicationOutOfBoundsException;
-
 /**
  * Out of bounds exception
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Infrastructure
  */
-class OutOfBoundsException extends \OutOfBoundsException implements RdfaliteInfrastructureExceptionInterface
+class RuntimeException extends \RuntimeException implements RdfaliteInfrastructureExceptionInterface
 {
     /**
-     * Unknown vocabulary prefix
+     * Empty default vocabulary
      *
      * @var string
      */
-    const UNKNOWN_VOCABULARY_PREFIX_STR = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR;
+    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
     /**
-     * Unknown vocabulary prefix
+     * Empty default vocabulary
      *
      * @var int
      */
-    const UNKNOWN_VOCABULARY_PREFIX = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX;
+    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
 }

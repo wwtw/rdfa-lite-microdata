@@ -41,6 +41,7 @@ use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
 use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\Rdfalite\Tests\AbstractTest;
 use Jkphl\Rdfalite\Tests\Domain\VocabularyTest;
 
 /**
@@ -49,7 +50,7 @@ use Jkphl\Rdfalite\Tests\Domain\VocabularyTest;
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Tests
  */
-abstract class ParserIteratorTestBase extends \PHPUnit_Framework_TestCase
+abstract class ParserIteratorTestBase extends AbstractTest
 {
     /**
      * Test HTML with person RDFa Lite 1.1

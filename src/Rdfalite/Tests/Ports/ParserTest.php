@@ -37,6 +37,7 @@
 namespace Jkphl\Rdfalite\Tests\Ports;
 
 use Jkphl\Rdfalite\Ports\Parser\RdfaLite\Html;
+use Jkphl\Rdfalite\Tests\AbstractTest;
 
 /**
  * Parser tests
@@ -44,7 +45,7 @@ use Jkphl\Rdfalite\Ports\Parser\RdfaLite\Html;
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Tests
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends AbstractTest
 {
     /**
      * Test parsing an RDFa Lite HTML file
@@ -54,7 +55,16 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $things = Html::parseFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
         );
-//        print_r($things);
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
+                    )
+                )
+            ),
+            $this->castArray($things)
+        );
     }
 
     /**
@@ -73,22 +83,22 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \Jkphl\Rdfalite\Ports\Exceptions\RuntimeException
      */
-//    public function testRuntimeException()
-//    {
-//        Html::parseFile(
-//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
-//        );
-//    }
+    public function testRuntimeException()
+    {
+        Html::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
+        );
+    }
 
     /**
      * Test a out of bounds exception
      *
      * @expectedException \Jkphl\Rdfalite\Ports\Exceptions\OutOfBoundsException
      */
-//    public function testOutOfBoundsException()
-//    {
-//        Html::parseFile(
-//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
-//        );
-//    }
+    public function testOutOfBoundsException()
+    {
+        Html::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
+        );
+    }
 }

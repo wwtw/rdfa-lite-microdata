@@ -83,7 +83,7 @@ class ParserTest extends ParserIteratorTestBase
     /**
      * Test empty default vocabulary parsing
      *
-     * @expectedException \Jkphl\Rdfalite\Infrastructure\Exceptions\OutOfBoundsException
+     * @expectedException \Jkphl\Rdfalite\Infrastructure\Exceptions\RuntimeException
      * @expectedExceptionCode 1487030264
      */
     public function testEmptyDefaultVocabulary()

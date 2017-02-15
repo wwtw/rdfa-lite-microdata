@@ -1,0 +1,59 @@
+[
+    {
+        "type": "NewsArticle",
+        "context": "http:\/\/schema.org\/",
+        "id": null,
+        "properties": {
+            "name": {
+                "context": "http:\/\/schema.org\/",
+                "values": [
+                    "Nam dictum eros at libero tempor semper"
+                ]
+            },
+            "description": {
+                "context": "http:\/\/schema.org\/",
+                "values": [
+                    "Nullam in convallis metus, quis hendrerit velit. Nam mollis congue orci, a\n                lobortis nibh feugiat id."
+                ]
+            },
+            "articleBody": {
+                "context": "http:\/\/schema.org\/",
+                "values": [
+                    "\n                Lorem ipsum dolor.News article content here.\n            "
+                ]
+            },
+            "datePublished": {
+                "context": "http:\/\/schema.org\/",
+                "values": [
+                    "2014-03-04T09:00:00+00:00"
+                ]
+            },
+            "associatedMedia": {
+                "context": "http:\/\/schema.org\/",
+                "values": [
+                    {
+                        "type": "ImageObject",
+                        "context": "http:\/\/schema.org\/",
+                        "id": null,
+                        "properties": {
+                            "contentURL": {
+                                "context": "http:\/\/schema.org\/",
+                                "values": [
+                                    "image.jpg"
+                                ]
+                            },
+                            "caption": {
+                                "context": "http:\/\/schema.org\/",
+                                "values": [
+                                    "Lorem ipsum dolor."
+                                ]
+                            }
+                        },
+                        "children": []
+                    }
+                ]
+            }
+        },
+        "children": []
+    }
+]

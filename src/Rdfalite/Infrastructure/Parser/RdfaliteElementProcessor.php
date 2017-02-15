@@ -44,6 +44,7 @@ use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
 use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\Rdfalite\Infrastructure\Exceptions\OutOfBoundsException;
+use Jkphl\Rdfalite\Infrastructure\Exceptions\RuntimeException;
 
 /**
  * RDFa Lite 1.1 element processor
@@ -200,7 +201,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
      * @param string $resourceId Resource ID
      * @param Context $context Context
      * @return ThingInterface Thing
-     * @throws OutOfBoundsException If the default vocabulary is empty
+     * @throws RuntimeException If the default vocabulary is empty
      * @throws OutOfBoundsException If the vocabulary prefix is unknown
      */
     protected function getThing($typeof, $resourceId, Context $context)
@@ -219,9 +220,9 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
 
             // If the default vocabulary is empty
             if (empty($prefix)) {
-                throw new OutOfBoundsException(
-                    OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY_STR,
-                    OutOfBoundsException::EMPTY_DEFAULT_VOCABULARY
+                throw new RuntimeException(
+                    RuntimeException::EMPTY_DEFAULT_VOCABULARY_STR,
+                    RuntimeException::EMPTY_DEFAULT_VOCABULARY
                 );
             }
         } catch (\Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException $e) {
