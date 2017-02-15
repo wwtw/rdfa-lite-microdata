@@ -87,9 +87,10 @@ interface ThingInterface
      * Return the values of a single property
      *
      * @param string $name Property name
-     * @return array Property
+     * @param VocabularyInterface $vocabulary Vocabulary
+     * @return array Property values
      */
-    public function getProperty($name);
+    public function getProperty($name, VocabularyInterface $vocabulary);
 
     /**
      * Add a child

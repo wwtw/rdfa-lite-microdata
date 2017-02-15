@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Infrastructure
+ * @subpackage Jkphl\Rdfalite\Tests
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,40 +34,61 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Infrastructure\Exceptions;
+namespace Jkphl\Rdfalite\Tests\Ports;
 
-use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException as ApplicationOutOfBoundsException;
+use Jkphl\Rdfalite\Ports\Parser\RdfaLite\Html;
 
 /**
- * Out of bounds exception
+ * Parser tests
  *
  * @package Jkphl\Rdfalite
- * @subpackage Jkphl\Rdfalite\Infrastructure
+ * @subpackage Jkphl\Rdfalite\Tests
  */
-class OutOfBoundsException extends \OutOfBoundsException implements RdfaliteInfrastructureExceptionInterface
+class ParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Unknown vocabulary prefix
-     *
-     * @var string
+     * Test parsing an RDFa Lite HTML file
      */
-    const UNKNOWN_VOCABULARY_PREFIX_STR = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR;
+    public function testRdfaLiteHtmlFile()
+    {
+        $things = Html::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
+        );
+//        print_r($things);
+    }
+
     /**
-     * Unknown vocabulary prefix
+     * Test an invalid file
      *
-     * @var int
+     * @expectedException \Jkphl\Rdfalite\Ports\Exceptions\RuntimeException
+     * @expectedExceptionCode 1487190674
      */
-    const UNKNOWN_VOCABULARY_PREFIX = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX;
+    public function testInvalidFile()
+    {
+        Html::parseFile('invalid');
+    }
+
     /**
-     * Empty default vocabulary
+     * Test a runtime exception
      *
-     * @var string
+     * @expectedException \Jkphl\Rdfalite\Ports\Exceptions\RuntimeException
      */
-    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
+//    public function testRuntimeException()
+//    {
+//        Html::parseFile(
+//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
+//        );
+//    }
+
     /**
-     * Empty default vocabulary
+     * Test a out of bounds exception
      *
-     * @var int
+     * @expectedException \Jkphl\Rdfalite\Ports\Exceptions\OutOfBoundsException
      */
-    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
+//    public function testOutOfBoundsException()
+//    {
+//        Html::parseFile(
+//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
+//        );
+//    }
 }

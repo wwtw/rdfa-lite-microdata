@@ -99,7 +99,7 @@ class Thing implements ThingInterface
         }
 
         $this->vocabulary = $vocabulary;
-        $this->type = $this->vocabulary->expand($type);
+        $this->type = $type;
         $this->resourceId = $resourceId;
     }
 
@@ -141,13 +141,15 @@ class Thing implements ThingInterface
      */
     public function addProperty(PropertyInterface $property)
     {
+        $name = $property->getVocabulary()->expand($property->getName());
+
         // Create the property values list if necessary
-        if (!array_key_exists($property->getName(), $this->properties)) {
-            $this->properties[$property->getName()] = [];
+        if (!array_key_exists($name, $this->properties)) {
+            $this->properties[$name] = [];
         }
 
         // Register the property value
-        $this->properties[$property->getName()][] = $property;
+        $this->properties[$name][] = $property;
 
         return $this;
     }
@@ -166,11 +168,13 @@ class Thing implements ThingInterface
      * Return the values of a single property
      *
      * @param string $name Property name
+     * @param VocabularyInterface $vocabulary Vocabulary
      * @return array Property values
      */
-    public function getProperty($name)
+    public function getProperty($name, VocabularyInterface $vocabulary)
     {
         $name = (new PropertyService())->validatePropertyName($name);
+        $name = $vocabulary->expand($name);
 
         // If the property name is unknown
         if (!array_key_exists($name, $this->properties)) {

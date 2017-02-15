@@ -82,7 +82,7 @@ abstract class ParserIteratorTestBase extends \PHPUnit_Framework_TestCase
         $thing = $things[0];
 
         $this->assertInstanceOf(ThingInterface::class, $thing);
-        $this->assertEquals(VocabularyTest::SCHEMA_ORG.'Person', $thing->getType());
+        $this->assertEquals('Person', $thing->getType());
         $this->assertEquals($schemaOrgVocabulary, $thing->getVocabulary());
         $this->assertEquals('#joschi', $thing->getResourceId());
 
@@ -106,7 +106,7 @@ abstract class ParserIteratorTestBase extends \PHPUnit_Framework_TestCase
      */
     protected function validateProperty(ThingInterface $thing, $name, VocabularyInterface $vocabulary, $value)
     {
-        $property = $thing->getProperty($name);
+        $property = $thing->getProperty($name, $vocabulary);
         $this->assertTrue(is_array($property));
         $this->assertEquals(1, count($property));
         $this->assertInstanceOf(PropertyInterface::class, $property[0]);

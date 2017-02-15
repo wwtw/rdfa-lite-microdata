@@ -34,40 +34,68 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Infrastructure\Exceptions;
+namespace Jkphl\Rdfalite\Infrastructure\Service;
 
-use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException as ApplicationOutOfBoundsException;
+use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
+use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 
 /**
- * Out of bounds exception
+ * Thing gateway
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Infrastructure
  */
-class OutOfBoundsException extends \OutOfBoundsException implements RdfaliteInfrastructureExceptionInterface
+class ThingGateway
 {
     /**
-     * Unknown vocabulary prefix
+     * Export things
      *
-     * @var string
+     * @param ThingInterface[] $things Things
+     * @return array Exported things
      */
-    const UNKNOWN_VOCABULARY_PREFIX_STR = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR;
+    public function export(array $things)
+    {
+        return array_map([$this, 'exportThing'], $things);
+    }
+
     /**
-     * Unknown vocabulary prefix
+     * Export a property
      *
-     * @var int
+     * @param PropertyInterface $property Property
+     * @return ThingInterface|string Exported property
      */
-    const UNKNOWN_VOCABULARY_PREFIX = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX;
+    protected function exportProperty(PropertyInterface $property)
+    {
+        $value = $property->getValue();
+        return ($value instanceof ThingInterface) ? $this->exportThing($value) : $value;
+    }
+
     /**
-     * Empty default vocabulary
+     * Export a single thing
      *
-     * @var string
+     * @param ThingInterface $thing Thing
+     * @return \stdClass Exported thing
      */
-    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
-    /**
-     * Empty default vocabulary
-     *
-     * @var int
-     */
-    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
+    protected function exportThing(ThingInterface $thing)
+    {
+        $properties = [];
+        foreach ($thing->getProperties() as $values) {
+            if (count($values)) {
+                /** @var PropertyInterface $firstProperty */
+                $firstProperty = $values[0];
+                $properties[$firstProperty->getName()] = (object)[
+                    'context' => $firstProperty->getVocabulary()->getUri(),
+                    'values' => array_map([$this, 'exportProperty'], $values)
+                ];
+            }
+        }
+
+        return (object)[
+            'type' => $thing->getType(),
+            'context' => $thing->getVocabulary()->getUri(),
+            'id' => $thing->getResourceId(),
+            'properties' => $properties,
+            'children' => array_map([$this, 'exportThing'], $thing->getChildren()),
+        ];
+    }
 }

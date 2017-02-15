@@ -36,6 +36,7 @@
 
 namespace Jkphl\Rdfalite\Tests\Domain;
 
+use Jkphl\Rdfalite\Application\Parser\NullVocabulary;
 use Jkphl\Rdfalite\Domain\Property\Property;
 use Jkphl\Rdfalite\Domain\Thing\Thing;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
@@ -71,7 +72,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $type = 'Person';
         $thing = new Thing($type, self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
-        $this->assertEquals(VocabularyTest::SCHEMA_ORG.$type, $thing->getType());
+        $this->assertEquals($type, $thing->getType());
         $this->assertEquals(self::$schemaOrgVocabulary, $thing->getVocabulary());
         $this->assertNull($thing->getResourceId());
         $this->assertTrue(is_array($thing->getChildren()));
@@ -119,11 +120,11 @@ class ThingTest extends \PHPUnit_Framework_TestCase
 
         $properties = $thing->getProperties();
         $this->assertTrue(is_array($properties));
-        $this->assertTrue(array_key_exists('test1', $properties));
-        $this->assertTrue(array_key_exists('test2', $properties));
+        $this->assertTrue(array_key_exists($vocabulary->expand('test1'), $properties));
+        $this->assertTrue(array_key_exists($vocabulary->expand('test2'), $properties));
         $this->assertEquals(2, count($properties));
 
-        $test1Property = $thing->getProperty('test1');
+        $test1Property = $thing->getProperty('test1', $vocabulary);
         $this->assertTrue(is_array($test1Property));
         $this->assertEquals(2, count($test1Property));
         $this->assertEquals([$property1, $property2], $test1Property);
@@ -139,7 +140,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     {
         $thing = new Thing('Person', self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
-        $thing->getProperty('invalid');
+        $thing->getProperty('invalid', new NullVocabulary());
     }
 
     /**

@@ -34,40 +34,26 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Infrastructure\Exceptions;
-
-use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException as ApplicationOutOfBoundsException;
+namespace Jkphl\Rdfalite\Ports\Exceptions;
 
 /**
- * Out of bounds exception
+ * Runtime exception
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Infrastructure
  */
-class OutOfBoundsException extends \OutOfBoundsException implements RdfaliteInfrastructureExceptionInterface
+class RuntimeException extends \RuntimeException implements RdfalitePortsExceptionInterface
 {
     /**
-     * Unknown vocabulary prefix
+     * Invalid file
      *
      * @var string
      */
-    const UNKNOWN_VOCABULARY_PREFIX_STR = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR;
+    const INVALID_FILE_STR = 'Invalid file "%s"';
     /**
-     * Unknown vocabulary prefix
+     * Invalid file
      *
      * @var int
      */
-    const UNKNOWN_VOCABULARY_PREFIX = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX;
-    /**
-     * Empty default vocabulary
-     *
-     * @var string
-     */
-    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
-    /**
-     * Empty default vocabulary
-     *
-     * @var int
-     */
-    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
+    const INVALID_FILE = 1487190674;
 }

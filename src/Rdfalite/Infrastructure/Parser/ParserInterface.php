@@ -34,40 +34,29 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Rdfalite\Infrastructure\Exceptions;
-
-use Jkphl\Rdfalite\Application\Exceptions\OutOfBoundsException as ApplicationOutOfBoundsException;
+namespace Jkphl\Rdfalite\Infrastructure\Parser;
 
 /**
- * Out of bounds exception
+ * Parser interface
  *
  * @package Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Infrastructure
  */
-class OutOfBoundsException extends \OutOfBoundsException implements RdfaliteInfrastructureExceptionInterface
+interface ParserInterface
 {
     /**
-     * Unknown vocabulary prefix
+     * Parse a string
      *
-     * @var string
+     * @param string $string String
+     * @return array Extracted things
      */
-    const UNKNOWN_VOCABULARY_PREFIX_STR = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR;
+    public static function parseString($string);
+
     /**
-     * Unknown vocabulary prefix
+     * Parse a file
      *
-     * @var int
+     * @param string $file File
+     * @return array Extracted things
      */
-    const UNKNOWN_VOCABULARY_PREFIX = ApplicationOutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX;
-    /**
-     * Empty default vocabulary
-     *
-     * @var string
-     */
-    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
-    /**
-     * Empty default vocabulary
-     *
-     * @var int
-     */
-    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
+    public static function parseFile($file);
 }
