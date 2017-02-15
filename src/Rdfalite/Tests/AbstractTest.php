@@ -124,30 +124,33 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         // Sort them by data type and value
         $array = $this->sortArrayRecursive($array);
-        usort(
-            $array,
-            function (
-                $first,
-                $second
-            ) {
-                $aType = gettype($first);
-                $bType = gettype($second);
-                if ($aType === $bType) {
-                    switch ($aType) {
-                        case 'array':
-                            return strcmp(implode('', array_keys($first)), implode('', array_keys($second)));
-                        case 'object':
-                            return strcmp(spl_object_hash($first), spl_object_hash($second));
-                        default:
-                            return strcmp(strval($first), strval($second));
-                    }
-                }
-
-                return strcmp($aType, $bType);
-            }
-        );
-
+        usort($array, [$this, 'compare']);
         return $array;
+    }
+
+    /**
+     * Compare values
+     *
+     * @param mixed $first First value
+     * @param mixed $second Second value
+     * @return int Sorting
+     */
+    protected function compare($first, $second)
+    {
+        $aType = gettype($first);
+        $bType = gettype($second);
+        if ($aType === $bType) {
+            switch ($aType) {
+                case 'array':
+                    return strcmp(implode('', array_keys($first)), implode('', array_keys($second)));
+                case 'object':
+                    return strcmp(spl_object_hash($first), spl_object_hash($second));
+                default:
+                    return strcmp(strval($first), strval($second));
+            }
+        }
+
+        return strcmp($aType, $bType);
     }
 
     /**

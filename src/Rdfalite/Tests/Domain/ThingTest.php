@@ -38,8 +38,11 @@ namespace Jkphl\Rdfalite\Tests\Domain;
 
 use Jkphl\Rdfalite\Application\Parser\NullVocabulary;
 use Jkphl\Rdfalite\Domain\Property\Property;
+use Jkphl\Rdfalite\Domain\Property\PropertyInterface;
 use Jkphl\Rdfalite\Domain\Thing\Thing;
+use Jkphl\Rdfalite\Domain\Thing\ThingInterface;
 use Jkphl\Rdfalite\Domain\Vocabulary\Vocabulary;
+use Jkphl\Rdfalite\Domain\Vocabulary\VocabularyInterface;
 
 /**
  * Thing tests
@@ -118,16 +121,8 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $thing->addProperty($property2);
         $thing->addProperty($property3);
 
-        $properties = $thing->getProperties();
-        $this->assertTrue(is_array($properties));
-        $this->assertTrue(array_key_exists($vocabulary->expand('test1'), $properties));
-        $this->assertTrue(array_key_exists($vocabulary->expand('test2'), $properties));
-        $this->assertEquals(2, count($properties));
-
-        $test1Property = $thing->getProperty('test1', $vocabulary);
-        $this->assertTrue(is_array($test1Property));
-        $this->assertEquals(2, count($test1Property));
-        $this->assertEquals([$property1, $property2], $test1Property);
+        $this->validateProperties($thing, $vocabulary);
+        $this->validateProperty($thing, $vocabulary, $property1, $property2);
     }
 
     /**
@@ -159,5 +154,40 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($children));
         $this->assertEquals(2, count($children));
         $this->assertEquals([$child1, $child2], $children);
+    }
+
+    /**
+     * Validate all properties
+     *
+     * @param ThingInterface $thing Thing
+     * @param VocabularyInterface $vocabulary Vocabulary
+     */
+    protected function validateProperties(ThingInterface $thing, VocabularyInterface $vocabulary)
+    {
+        $properties = $thing->getProperties();
+        $this->assertTrue(is_array($properties));
+        $this->assertTrue(array_key_exists($vocabulary->expand('test1'), $properties));
+        $this->assertTrue(array_key_exists($vocabulary->expand('test2'), $properties));
+        $this->assertEquals(2, count($properties));
+    }
+
+    /**
+     * Validate a single property
+     *
+     * @param ThingInterface $thing Thing
+     * @param VocabularyInterface $vocabulary Vocabulary
+     * @param PropertyInterface $property1 First property
+     * @param PropertyInterface $property2 Second property
+     */
+    protected function validateProperty(
+        ThingInterface $thing,
+        VocabularyInterface $vocabulary,
+        PropertyInterface $property1,
+        PropertyInterface $property2
+    ) {
+        $test1Property = $thing->getProperty('test1', $vocabulary);
+        $this->assertTrue(is_array($test1Property));
+        $this->assertEquals(2, count($test1Property));
+        $this->assertEquals([$property1, $property2], $test1Property);
     }
 }

@@ -144,11 +144,7 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     protected function processProperty(\DOMElement $element, Context $context)
     {
         if ($element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface)) {
-            $property = explode(':', $element->getAttribute('property'));
-            $name = strval(array_pop($property));
-            $prefix = strval(array_pop($property));
-
-            // Determine the vocabulary to use
+            list($prefix, $name) = $this->splitProperty($element->getAttribute('property'));
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
             if ($vocabulary instanceof VocabularyInterface) {
                 $context = $this->addProperty($element, $context, $name, $vocabulary);
@@ -156,6 +152,20 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         }
 
         return $context;
+    }
+
+    /**
+     * Split a property into prefix and name
+     *
+     * @param string $property Prefixed property
+     * @return array Prefix and name
+     */
+    protected function splitProperty($property)
+    {
+        $property = explode(':', $property);
+        $name = strval(array_pop($property));
+        $prefix = strval(array_pop($property));
+        return [$prefix, $name];
     }
 
     /**
@@ -211,14 +221,12 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
     }
 
     /**
-     * Return a property value (type and tag name dependent)
+     * Return a thing by typeof value
      *
      * @param string $typeof Thing type
      * @param string $resourceId Resource ID
      * @param Context $context Context
      * @return ThingInterface Thing
-     * @throws RuntimeException If the default vocabulary is empty
-     * @throws OutOfBoundsException If the vocabulary prefix is unknown
      */
     protected function getThing($typeof, $resourceId, Context $context)
     {
@@ -226,6 +234,22 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
         $type = array_pop($typeof);
         $prefix = array_pop($typeof);
 
+        return $this->getThingByPrefixType($prefix, $type, $resourceId, $context);
+    }
+
+    /**
+     * Return a thing by prefix and type
+     *
+     * @param string $prefix Prefix
+     * @param string $type Type
+     * @param string $resourceId Resource ID
+     * @param Context $context Context
+     * @return ThingInterface Thing
+     * @throws RuntimeException If the default vocabulary is empty
+     * @throws OutOfBoundsException If the vocabulary prefix is unknown
+     */
+    protected function getThingByPrefixType($prefix, $type, $resourceId, Context $context)
+    {
         // Determine the vocabulary to use
         try {
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
