@@ -151,22 +151,38 @@ class RdfaliteElementProcessor implements ElementProcessorInterface
             // Determine the vocabulary to use
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
             if ($vocabulary instanceof VocabularyInterface) {
-                // Try to get a resource ID
-                $resourceId = trim($element->getAttribute('resource')) ?: null;
-
-                // Get the property value
-                $propertyValue = $this->getPropertyValue($element, $context);
-                $property = new Property($name, $vocabulary, $propertyValue, $resourceId);
-
-                // Add the property to the current parent thing
-                $context->getParentThing()->addProperty($property);
-
-                // If the property value is a thing
-                if ($propertyValue instanceof ThingInterface) {
-                    // Set the thing as parent thing for nested iterations
-                    $context = $context->setParentThing($propertyValue);
-                }
+                $context = $this->addProperty($element, $context, $name, $vocabulary);
             }
+        }
+
+        return $context;
+    }
+
+    /**
+     * Create properties
+     *
+     * @param \DOMElement $element DOM element
+     * @param Context $context Inherited Context
+     * @param string $name Property name
+     * @param VocabularyInterface $vocabulary Property vocabulary
+     * @return Context Local context for this element
+     */
+    protected function addProperty(\DOMElement $element, Context $context, $name, VocabularyInterface $vocabulary)
+    {
+        // Try to get a resource ID
+        $resourceId = trim($element->getAttribute('resource')) ?: null;
+
+        // Get the property value
+        $propertyValue = $this->getPropertyValue($element, $context);
+        $property = new Property($name, $vocabulary, $propertyValue, $resourceId);
+
+        // Add the property to the current parent thing
+        $context->getParentThing()->addProperty($property);
+
+        // If the property value is a thing
+        if ($propertyValue instanceof ThingInterface) {
+            // Set the thing as parent thing for nested iterations
+            $context = $context->setParentThing($propertyValue);
         }
 
         return $context;

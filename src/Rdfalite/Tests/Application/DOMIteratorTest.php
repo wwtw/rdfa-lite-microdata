@@ -50,6 +50,19 @@ use Jkphl\Rdfalite\Infrastructure\Parser\RdfaliteElementProcessor;
 class DOMNodeIteratorTest extends ParserIteratorTestBase
 {
     /**
+     * Context
+     *
+     * @var Context
+     */
+    protected $context;
+    /**
+     * Element processor mock
+     *
+     * @var ElementProcessorInterface
+     */
+    protected $elementProcessor;
+
+    /**
      * Test recursive DOM node iteration
      */
     public function testDomNodeIteration()
@@ -57,11 +70,22 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
         $dom = new \DOMDocument();
         $dom->loadHTML(self::$personRdfa);
         $context = new Context();
-
         $elementProcessor = $this->getMock(ElementProcessorInterface::class);
         $elementProcessor->method('processElement')->willReturn($context);
         $elementProcessor->method('processElementChildren')->willReturn($context);
-        /** @var ElementProcessorInterface $elementProcessor */
+        /** @var $elementProcessor ElementProcessorInterface */
+        $this->iterateDom($dom, $context, $elementProcessor);
+    }
+
+    /**
+     * Iterate through the dom
+     *
+     * @param \DOMDocument $dom DOM
+     * @param Context $context Context
+     * @param ElementProcessorInterface $elementProcessor Element processor
+     */
+    protected function iterateDom(\DOMDocument $dom, Context $context, ElementProcessorInterface $elementProcessor)
+    {
         $domNodeIterator = new DOMIterator($dom->childNodes, $context, $elementProcessor);
         $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
 
@@ -89,23 +113,7 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
         $dom = new \DOMDocument();
         $dom->loadHTML(self::$personRdfa);
         $context = new Context();
-        $domNodeIterator = new DOMIterator($dom->childNodes, $context, new RdfaliteElementProcessor());
-        $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
-
-        $elements = ['html', 'head', 'title', 'body', 'h1', 'p', 'span', 'span', 'img', 'span'];
-
-        /**
-         * Recursively run through all child elements
-         *
-         * @var int $nodeIndex Element index
-         * @var \DOMElement $node Element
-         */
-        foreach ($domNodeIterator->getRecursiveIterator() as $element) {
-            if ($element instanceof \DOMElement) {
-                $this->assertEquals($element->localName, array_shift($elements));
-            }
-        }
-        $this->assertEquals(0, count($elements));
+        $this->iterateDom($dom, $context, new RdfaliteElementProcessor());
         $this->validatePersonResult($context->getChildren());
     }
 }

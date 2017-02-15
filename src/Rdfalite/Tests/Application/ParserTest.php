@@ -39,6 +39,7 @@ namespace Jkphl\Rdfalite\Tests\Application;
 use Jkphl\Rdfalite\Application\Parser\Parser;
 use Jkphl\Rdfalite\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\Rdfalite\Infrastructure\Parser\RdfaliteElementProcessor;
+use Jkphl\Rdfalite\Infrastructure\Service\ThingGateway;
 
 /**
  * Parser tests
@@ -72,11 +73,20 @@ class ParserTest extends ParserIteratorTestBase
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
         $this->assertInstanceOf(Parser::class, $parser);
 
-        // TODO: Validate result
-        $parser->parse(
+        $things = $parser->parse(
             file_get_contents(
                 dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
             )
+        );
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
+                    )
+                )
+            ),
+            $this->castArray((new ThingGateway())->export($things))
         );
     }
 
@@ -115,7 +125,9 @@ class ParserTest extends ParserIteratorTestBase
 
         $parser->parse(
             file_get_contents(
-                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
+                dirname(
+                    __DIR__
+                ).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
             )
         );
     }

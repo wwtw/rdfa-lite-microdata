@@ -68,7 +68,23 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function sortArrayForComparison(array $array)
     {
-        // Tests if all array keys are numeric
+        // If not all keys are numeric: Sort the array by key
+        if (!$this->isAllNumericArray($array)) {
+            ksort($array, SORT_STRING);
+            return $this->sortArrayRecursive($array);
+        }
+
+        return $this->sortNumericArrayForComparison($array);
+    }
+
+    /**
+     * Tests if all keys of an array are numeric
+     *
+     * @param array $array Array
+     * @return bool All keys are numeric
+     */
+    protected function isAllNumericArray(array $array)
+    {
         $allNumeric = true;
         foreach (array_keys($array) as $key) {
             if (!is_numeric($key)) {
@@ -76,13 +92,36 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
                 break;
             }
         }
+        return $allNumeric;
+    }
 
-        // If not all keys are numeric: Sort the array by key
-        if (!$allNumeric) {
-            ksort($array, SORT_STRING);
-            return $this->sortArrayRecursive($array);
+    /**
+     * Recursively sort an array for comparison
+     *
+     * @param array $array Original array
+     * @return array Sorted array
+     */
+    protected function sortArrayRecursive(array $array)
+    {
+        // Run through all elements and sort them recursively if they are an array
+        reset($array);
+        while (list($key, $value) = each($array)) {
+            if (is_array($value)) {
+                $array[$key] = $this->sortArrayForComparison($value);
+            }
         }
 
+        return $array;
+    }
+
+    /**
+     * Recursively sort a numeric array for comparison with another array
+     *
+     * @param array $array Array
+     * @return array                Sorted array
+     */
+    protected function sortNumericArrayForComparison(array $array)
+    {
         // Sort them by data type and value
         $array = $this->sortArrayRecursive($array);
         usort(
@@ -107,26 +146,6 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
                 return strcmp($aType, $bType);
             }
         );
-
-        return $array;
-    }
-
-    /**
-     * Recursively sort an array for comparison
-     *
-     * @param array $array Original array
-     * @return array Sorted array
-     */
-    protected function sortArrayRecursive(array $array)
-    {
-
-        // Run through all elements and sort them recursively if they are an array
-        reset($array);
-        while (list($key, $value) = each($array)) {
-            if (is_array($value)) {
-                $array[$key] = $this->sortArrayForComparison($value);
-            }
-        }
 
         return $array;
     }

@@ -47,6 +47,12 @@ use Jkphl\Rdfalite\Application\Contract\ElementProcessorInterface;
 class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 {
     /**
+     * Registered contexts
+     *
+     * @var Context[]
+     */
+    public $contexts = [];
+    /**
      * Element processor
      *
      * @var ElementProcessorInterface
@@ -58,12 +64,6 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      * @var Context
      */
     protected $initialContext;
-    /**
-     * Registered contexts
-     *
-     * @var Context[]
-     */
-    public $contexts = [];
     /**
      * Element context map
      *
@@ -88,30 +88,37 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 
         $nodes = [];
 
-        // Run through all nodes
+        // Run through and register all nodes
         /** @var \DOMNode $node */
         foreach ($nodeList as $node) {
-            $nodeId = spl_object_hash($node);
-
-            // If it's an element node: Process it and register it's local context
-            if ($node->nodeType == XML_ELEMENT_NODE) {
-                /** @var \DOMElement $node */
-                $localContext = $this->elementProcessor->processElement($node, $this->initialContext);
-
-                // Register the node context
-                $localContextId = spl_object_hash($localContext);
-                if (empty($this->contexts[$localContextId])) {
-                    $this->contexts[$localContextId] = $localContext;
-                }
-
-                $this->contextMap[$nodeId] = $localContextId;
-            }
-
-            // Register the node
-            $nodes[$nodeId] = $node;
+            $nodes[spl_object_hash($node)] = $this->registerNode($node);
         }
 
         parent::__construct($nodes);
+    }
+
+    /**
+     * Register an element node
+     *
+     * @param \DOMNode $node Node
+     * @return \DOMNode Node
+     */
+    protected function registerNode(\DOMNode $node)
+    {
+        if ($node->nodeType == XML_ELEMENT_NODE) {
+            /** @var \DOMElement $node */
+            $localContext = $this->elementProcessor->processElement($node, $this->initialContext);
+
+            // Register the node context
+            $localContextId = spl_object_hash($localContext);
+            if (empty($this->contexts[$localContextId])) {
+                $this->contexts[$localContextId] = $localContext;
+            }
+
+            $this->contextMap[spl_object_hash($node)] = $localContextId;
+        }
+
+        return $node;
     }
 
     /**
