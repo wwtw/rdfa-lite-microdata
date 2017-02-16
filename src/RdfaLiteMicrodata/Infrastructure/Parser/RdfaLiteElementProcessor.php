@@ -91,7 +91,7 @@ class RdfaLiteElementProcessor implements ElementProcessorInterface
         // Register vocabulary prefixes
         $context = $this->processPrefix($element, $context);
 
-        // Create properties
+        // Create a property
         $context = $this->processProperty($element, $context);
         return $context;
     }
@@ -135,7 +135,7 @@ class RdfaLiteElementProcessor implements ElementProcessorInterface
     }
 
     /**
-     * Create properties
+     * Create a property
      *
      * @param \DOMElement $element DOM element
      * @param Context $context Inherited Context
@@ -143,13 +143,9 @@ class RdfaLiteElementProcessor implements ElementProcessorInterface
      */
     protected function processProperty(\DOMElement $element, Context $context)
     {
-        $processProperty = $element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface);
-        if ($processProperty) {
+        if ($element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface)) {
             list($prefix, $name) = $this->splitProperty($element->getAttribute('property'));
-            $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
-            if ($vocabulary instanceof VocabularyInterface) {
-                $context = $this->addProperty($element, $context, $name, $vocabulary);
-            }
+            $context = $this->processPropertyPrefixName($prefix, $name, $element, $context);
         }
 
         return $context;
@@ -167,6 +163,37 @@ class RdfaLiteElementProcessor implements ElementProcessorInterface
         $name = strval(array_pop($property));
         $prefix = strval(array_pop($property));
         return [$prefix, $name];
+    }
+
+    /**
+     * Create a property
+     *
+     * @param string $prefix Property prefix
+     * @param string $name Property name
+     * @param \DOMElement $element DOM element
+     * @param Context $context Inherited Context
+     * @return Context Local context for this element
+     */
+    protected function processPropertyPrefixName($prefix, $name, \DOMElement $element, Context $context)
+    {
+        $vocabulary = $this->getVocabulary($prefix, $context);
+        if ($vocabulary instanceof VocabularyInterface) {
+            $context = $this->addProperty($element, $context, $name, $vocabulary);
+        }
+
+        return $context;
+    }
+
+    /**
+     * Return a vocabulary by prefix with fallback to the default vocabulary
+     *
+     * @param string $prefix Vocabulary prefix
+     * @param Context $context Context
+     * @return VocabularyInterface Vocabulary
+     */
+    protected function getVocabulary($prefix, Context $context)
+    {
+        return empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
     }
 
     /**
@@ -253,9 +280,8 @@ class RdfaLiteElementProcessor implements ElementProcessorInterface
     {
         // Determine the vocabulary to use
         try {
-            $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
+            $vocabulary = $this->getVocabulary($prefix, $context);
             if ($vocabulary instanceof VocabularyInterface) {
-                // Return a new thing
                 return new Thing($type, $vocabulary, $resourceId);
             }
 
