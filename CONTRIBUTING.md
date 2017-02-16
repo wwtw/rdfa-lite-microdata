@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions are **welcome** and will be fully **credited**. We accept contributions via Pull Requests on [Github](https://github.com/jkphl/rdfa-lite).
+Contributions are **welcome** and will be fully **credited**. We accept contributions via Pull Requests on [Github](https://github.com/jkphl/rdfa-lite-microdata).
 
 
 ## Pull Requests

@@ -1,7 +1,7 @@
-site_name: jkphl/rdfa-lite
+site_name: jkphl/rdfa-lite-microdata
 site_description: Simple and lightweight RDFa Lite 1.1 parser for web documents (HTML, SVG, XML)
 site_author: Joschi Kuphal
-repo_url: https://github.com/jkphl/rdfa-lite
+repo_url: https://github.com/jkphl/rdfa-lite-microdata
 docs_dir: doc
 pages:
 - Home: 'index.md'

@@ -1,4 +1,4 @@
-# jkphl/rdfa-lite
+# jkphl/rdfa-lite-microdata
 
 [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
@@ -6,7 +6,7 @@
 
 ## Documentation
 
-Please find the [project documentation](doc/index.md) in the `doc` directory. We recommend [reading it](http://jkphl-rdfa-lite.readthedocs.io/) via *Read the Docs*.
+Please find the [project documentation](doc/index.md) in the `doc` directory. We recommend [reading it](http://jkphl-rdfa-lite-microdata.readthedocs.io/) via *Read the Docs*.
 
 ## Installation
 
@@ -14,7 +14,7 @@ This library requires PHP >=5.5 or later. I recommend using the latest available
 
 ## Dependencies
 
-![Composer dependency graph](https://rawgit.com/jkphl/rdfa-lite/master/doc/dependencies.svg)
+![Composer dependency graph](https://rawgit.com/jkphl/rdfa-lite-microdata/master/doc/dependencies.svg)
 
 ## Quality
 
@@ -24,7 +24,7 @@ This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If you
 
 ## Contributing
 
-Found a bug or have a feature request? [Please have a look at the known issues](https://github.com/jkphl/rdfa-lite/issues) first and open a new issue if necessary. Please see [contributing](CONTRIBUTING.md) and [conduct](CONDUCT.md) for details.
+Found a bug or have a feature request? [Please have a look at the known issues](https://github.com/jkphl/rdfa-lite-microdata/issues) first and open a new issue if necessary. Please see [contributing](CONTRIBUTING.md) and [conduct](CONDUCT.md) for details.
 
 ## Security
 
@@ -40,14 +40,14 @@ If you discover any security related issues, please email joschi@tollwerk.de ins
 Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed under the terms of the [MIT license](LICENSE).
 
 
-[travis-image]: https://secure.travis-ci.org/jkphl/rdfa-lite.svg
-[travis-url]: https://travis-ci.org/jkphl/rdfa-lite
-[coveralls-image]: https://coveralls.io/repos/jkphl/rdfa-lite/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/jkphl/rdfa-lite?branch=master
-[scrutinizer-image]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite/badges/quality-score.png?b=master
-[scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite/?branch=master
-[readthedocs-image]: https://readthedocs.org/projects/jkphl-rdfa-lite/badge/?version=latest
-[readthedocs-url]: http://jkphl-rdfa-lite.readthedocs.io/en/latest/?badge=latest
+[travis-image]: https://secure.travis-ci.org/jkphl/rdfa-lite-microdata.svg
+[travis-url]: https://travis-ci.org/jkphl/rdfa-lite-microdata
+[coveralls-image]: https://coveralls.io/repos/jkphl/rdfa-lite-microdata/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/jkphl/rdfa-lite-microdata?branch=master
+[scrutinizer-image]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite-microdata/badges/quality-score.png?b=master
+[scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite-microdata/?branch=master
+[readthedocs-image]: https://readthedocs.org/projects/jkphl-rdfa-lite-microdata/badge/?version=latest
+[readthedocs-url]: http://jkphl-rdfa-lite-microdata.readthedocs.io/en/latest/?badge=latest
 [clear-architecture-image]: https://img.shields.io/badge/Clear%20Architecture-%E2%9C%94-brightgreen.svg
 [clear-architecture-url]: https://github.com/jkphl/clear-architecture
 [author-url]: https://jkphl.is

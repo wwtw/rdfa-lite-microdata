@@ -1,7 +1,7 @@
 {
-    "name": "jkphl/rdfa-lite",
-    "description": "Simple and lightweight RDFa Lite 1.1 parser for web documents (HTML, SVG, XML)",
-    "homepage": "https://github.com/jkphl/rdfa-lite",
+    "name": "jkphl/rdfa-lite-microdata",
+    "description": "Simple and lightweight RDFa Lite 1.1 and HTML microdata parser for web documents (HTML, SVG, XML)",
+    "homepage": "https://github.com/jkphl/rdfa-lite-microdata",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [
@@ -14,8 +14,8 @@
     ],
     "support": {
         "email": "joschi@tollwerk.de",
-        "source": "https://github.com/jkphl/rdfa-lite",
-        "issues": "https://github.com/jkphl/rdfa-lite/issues"
+        "source": "https://github.com/jkphl/rdfa-lite-microdata",
+        "issues": "https://github.com/jkphl/rdfa-lite-microdata/issues"
     },
     "config": {
         "sort-packages": true

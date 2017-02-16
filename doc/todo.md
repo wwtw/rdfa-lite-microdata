@@ -1,3 +1,3 @@
-# jkphl/rdfa-lite
+# jkphl/rdfa-lite-microdata
 
 * [ ] ...
