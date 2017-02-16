@@ -143,7 +143,8 @@ class RdfaLiteElementProcessor implements ElementProcessorInterface
      */
     protected function processProperty(\DOMElement $element, Context $context)
     {
-        if ($element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface)) {
+        $processProperty = $element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface);
+        if ($processProperty) {
             list($prefix, $name) = $this->splitProperty($element->getAttribute('property'));
             $vocabulary = empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
             if ($vocabulary instanceof VocabularyInterface) {
