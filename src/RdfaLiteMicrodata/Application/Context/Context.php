@@ -34,10 +34,11 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
+namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\RuntimeException;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\NullVocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;

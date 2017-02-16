@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;

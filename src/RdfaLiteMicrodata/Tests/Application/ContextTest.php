@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
-use Jkphl\RdfaLiteMicrodata\Application\Parser\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Tests\Domain\VocabularyTest;

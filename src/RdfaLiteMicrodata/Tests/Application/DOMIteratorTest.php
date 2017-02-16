@@ -36,8 +36,8 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
-use Jkphl\RdfaLiteMicrodata\Application\Parser\Context;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\DOMIterator;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
 

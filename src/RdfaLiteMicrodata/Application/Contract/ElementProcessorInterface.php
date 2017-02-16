@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Contract;
 
-use Jkphl\RdfaLiteMicrodata\Application\Parser\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
 
 /**
  * Element processor interface
