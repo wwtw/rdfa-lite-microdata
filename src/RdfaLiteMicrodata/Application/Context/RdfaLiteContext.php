@@ -40,18 +40,17 @@ use Jkphl\RdfaLiteMicrodata\Application\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\NullVocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyService;
 
 /**
- * Parsing context
+ * RDFa Lite parsing context
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Application
  */
-class Context
+class RdfaLiteContext extends AbstractContext
 {
     /**
      * Default vocabularies and their prefixes
@@ -115,20 +114,6 @@ class Context
     protected $vocabularies;
 
     /**
-     * Current default vocabulary
-     *
-     * @var VocabularyInterface
-     */
-    protected $defaultVocabulary = null;
-
-    /**
-     * Parent thing
-     *
-     * @var ThingInterface
-     */
-    protected $parentThing;
-
-    /**
      * Context constructor
      */
     public function __construct()
@@ -138,21 +123,11 @@ class Context
     }
 
     /**
-     * Return the registered child things
-     *
-     * @return ThingInterface[] Child things
-     */
-    public function getChildren()
-    {
-        return $this->parentThing->getChildren();
-    }
-
-    /**
      * Register a vocabulary and its prefix
      *
      * @param string $prefix Vocabulary prefix
      * @param string $uri Vocabulary URI
-     * @return Context New context
+     * @return ContextInterface New context
      *
      */
     public function registerVocabulary($prefix, $uri)
@@ -239,7 +214,7 @@ class Context
      * Set the default vocabulary by URI
      *
      * @param VocabularyInterface $vocabulary Current default vocabulary
-     * @return Context Self reference
+     * @return ContextInterface Self reference
      */
     public function setDefaultVocabulary(VocabularyInterface $vocabulary)
     {
@@ -250,46 +225,6 @@ class Context
             return $context;
         }
 
-        return $this;
-    }
-
-    /**
-     * Get the current parent thing
-     *
-     * @return ThingInterface|null Parent thing
-     */
-    public function getParentThing()
-    {
-        return $this->parentThing;
-    }
-
-    /**
-     * Set the parent thing
-     *
-     * @param ThingInterface $parentThing Parent thing
-     * @return Context
-     */
-    public function setParentThing(ThingInterface $parentThing)
-    {
-        // If the new parent thing differs from the current one
-        if ($this->parentThing !== $parentThing) {
-            $context = clone $this;
-            $context->parentThing = $parentThing;
-            return $context;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a child thing
-     *
-     * @param ThingInterface $thing Child thing
-     * @return Context Self reference
-     */
-    public function addChild(ThingInterface $thing)
-    {
-        $this->parentThing->addChild($thing);
         return $this;
     }
 }
