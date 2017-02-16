@@ -34,11 +34,11 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
+namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata;
 
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\MicrodataElementProcessor;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
@@ -62,8 +62,8 @@ class Html extends AbstractParser
     {
         try {
             $htmlDocumentFactory = new HtmlDocumentFactory();
-            $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-            $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+            $microdataElementProcessor = new MicrodataElementProcessor();
+            $parser = new Parser($htmlDocumentFactory, $microdataElementProcessor);
             $things = $parser->parse($string);
             $gateway = new ThingGateway();
             return $gateway->export($things);

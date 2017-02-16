@@ -34,23 +34,23 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
+namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata;
 
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\XmlDocumentFactory;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\MicrodataElementProcessor;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
 
 /**
- * HTML parser
+ * XML parser
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Ports
  */
-class Html extends AbstractParser
+class Xml extends AbstractParser
 {
     /**
      * Parse a string
@@ -61,9 +61,9 @@ class Html extends AbstractParser
     public static function parseString($string)
     {
         try {
-            $htmlDocumentFactory = new HtmlDocumentFactory();
-            $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-            $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+            $xmlDocumentFactory = new XmlDocumentFactory();
+            $microdataElementProcessor = new MicrodataElementProcessor();
+            $parser = new Parser($xmlDocumentFactory, $microdataElementProcessor);
             $things = $parser->parse($string);
             $gateway = new ThingGateway();
             return $gateway->export($things);

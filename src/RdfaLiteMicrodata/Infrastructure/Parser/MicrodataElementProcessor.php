@@ -38,15 +38,14 @@ namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Context;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 
 /**
- * RDFa Lite 1.1 element processor
+ * Microdata element processor
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  */
-class RdfaLiteElementProcessor extends AbstractElementProcessor
+class MicrodataElementProcessor extends AbstractElementProcessor
 {
     /**
      * Process a DOM element
@@ -57,52 +56,8 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      */
     public function processElement(\DOMElement $element, Context $context)
     {
-        // Process default vocabulary registrations
-        $context = $this->processVocab($element, $context);
-
-        // Register vocabulary prefixes
-        $context = $this->processPrefix($element, $context);
-
         // Create a property
         return $this->processProperty($element, $context);
-    }
-
-    /**
-     * Process changes of the default vocabulary
-     *
-     * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
-     */
-    protected function processVocab(\DOMElement $element, Context $context)
-    {
-        if ($element->hasAttribute('vocab')) {
-            $defaultVocabulary = new Vocabulary($element->getAttribute('vocab'));
-            $context = $context->setDefaultVocabulary($defaultVocabulary);
-        }
-
-        return $context;
-    }
-
-    /**
-     * Process vocabulary prefixes
-     *
-     * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
-     */
-    protected function processPrefix(\DOMElement $element, Context $context)
-    {
-        if ($element->hasAttribute('prefix')) {
-            $prefixes = preg_split('/\s+/', $element->getAttribute('prefix'));
-            while (count($prefixes)) {
-                $prefix = rtrim(array_shift($prefixes), ':');
-                $uri = array_shift($prefixes);
-                $context = $context->registerVocabulary($prefix, $uri);
-            }
-        }
-
-        return $context;
     }
 
     /**
@@ -114,9 +69,8 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      */
     protected function processProperty(\DOMElement $element, Context $context)
     {
-        if ($element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface)) {
-            list($prefix, $name) = $this->splitProperty($element->getAttribute('property'));
-            $context = $this->processPropertyPrefixName($prefix, $name, $element, $context);
+        if ($element->hasAttribute('itemprop') && ($context->getParentThing() instanceof ThingInterface)) {
+            $context = $this->processPropertyPrefixName(null, $element->getAttribute('itemprop'), $element, $context);
         }
 
         return $context;
@@ -131,12 +85,8 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      */
     protected function processChild(\DOMElement $element, Context $context)
     {
-        if ($element->hasAttribute('typeof') && empty($element->getAttribute('property'))) {
-            $thing = $this->getThing(
-                $element->getAttribute('typeof'),
-                trim($element->getAttribute('resource')) ?: null,
-                $context
-            );
+        if ($element->hasAttribute('itemtype') && empty($element->getAttribute('itemprop'))) {
+            $thing = $this->getThing($element->getAttribute('itemtype'), null, $context);
 
             // Add the new thing as a child to the current context
             // and set the thing as parent thing for nested iterations
@@ -144,6 +94,17 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
         }
 
         return $context;
+    }
+
+    /**
+     * Return the resource ID
+     *
+     * @param \DOMElement $element DOM element
+     * @return string|null Resource ID
+     */
+    protected function getResourceId(\DOMElement $element)
+    {
+        return null;
     }
 
     /**
@@ -156,26 +117,11 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
     protected function getPropertyValue(\DOMElement $element, Context $context)
     {
         // If the property creates a new type: Return the element itself
-        if ($element->hasAttribute('typeof')) {
-            return $this->getThing(
-                $element->getAttribute('typeof'),
-                trim($element->getAttribute('resource')) ?: null,
-                $context
-            );
+        if ($element->hasAttribute('itemscope') && $element->hasAttribute('itemtype')) {
+            return $this->getThing($element->getAttribute('itemtype'), null, $context);
         }
 
         // Return a string property value
         return $this->getPropertyStringValue($element);
-    }
-
-    /**
-     * Return the resource ID
-     *
-     * @param \DOMElement $element DOM element
-     * @return string|null Resource ID
-     */
-    protected function getResourceId(\DOMElement $element)
-    {
-        return trim($element->getAttribute('resource')) ?: null;
     }
 }

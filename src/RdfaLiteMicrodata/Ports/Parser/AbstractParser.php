@@ -3,12 +3,12 @@
 /**
  * rdfa-lite-microdata
  *
- * @category    Jkphl
- * @package     Jkphl\RdfaLiteMicrodata
- * @subpackage  Jkphl\RdfaLiteMicrodata\Ports
- * @author      Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @copyright   Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @license     http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @category Jkphl
+ * @package Jkphl\RdfaLiteMicrodata
+ * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
+ * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
@@ -34,43 +34,35 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
+namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
 
-use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
-use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\ParserInterface;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
-use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
 
 /**
- * HTML parser
+ * Abstract parser
  *
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Ports
+ * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  */
-class Html extends AbstractParser
+abstract class AbstractParser implements ParserInterface
 {
     /**
-     * Parse a string
+     * Parse a file
      *
-     * @param string $string String
+     * @param string $file File
      * @return array Extracted things
      */
-    public static function parseString($string)
+    public static function parseFile($file)
     {
-        try {
-            $htmlDocumentFactory = new HtmlDocumentFactory();
-            $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-            $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
-            $things = $parser->parse($string);
-            $gateway = new ThingGateway();
-            return $gateway->export($things);
-        } catch (\OutOfBoundsException $e) {
-            throw new OutOfBoundsException($e->getMessage(), $e->getCode());
-        } catch (\RuntimeException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode());
+        // If the file does not exist
+        if (!is_readable($file)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_FILE_STR, $file),
+                RuntimeException::INVALID_FILE
+            );
         }
+
+        return static::parseString(file_get_contents($file));
     }
 }
