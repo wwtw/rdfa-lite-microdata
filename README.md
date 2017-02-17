@@ -2,7 +2,7 @@
 
 [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
-> Simple and lightweight RDFa Lite 1.1 parser for web documents (HTML, SVG, XML)
+> Simple and lightweight RDFa Lite 1.1 and HTML Microdata parser for web documents (HTML, SVG, XML)
 
 ## Documentation
 
