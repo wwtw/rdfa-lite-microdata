@@ -42,7 +42,7 @@ Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed und
 
 [travis-image]: https://secure.travis-ci.org/jkphl/rdfa-lite-microdata.svg
 [travis-url]: https://travis-ci.org/jkphl/rdfa-lite-microdata
-[coveralls-image]: https://coveralls.io/repos/jkphl/rdfa-lite-microdata/badge.svg?branch=master&service=github
+[coveralls-image]: https://coveralls.io/repos/github/jkphl/rdfa-lite-microdata/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/jkphl/rdfa-lite-microdata?branch=master
 [scrutinizer-image]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite-microdata/badges/quality-score.png?b=master
 [scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite-microdata/?branch=master
