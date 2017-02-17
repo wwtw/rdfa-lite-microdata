@@ -36,11 +36,11 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\MicrodataContext;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\MicrodataElementProcessor;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
-use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
 
@@ -49,6 +49,8 @@ use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Ports
+ * @see https://www.w3.org/TR/microdata/
+ * @see https://www.w3.org/TR/microdata/#json
  */
 class Html extends AbstractParser
 {
@@ -62,13 +64,12 @@ class Html extends AbstractParser
     {
         try {
             $htmlDocumentFactory = new HtmlDocumentFactory();
-            $microdataElementProcessor = new MicrodataElementProcessor();
-            $parser = new Parser($htmlDocumentFactory, $microdataElementProcessor);
+            $microdataElementProcessor = new MicrodataElementProcessor(true);
+            $microdataContext = new MicrodataContext();
+            $parser = new Parser($htmlDocumentFactory, $microdataElementProcessor, $microdataContext);
             $things = $parser->parse($string);
             $gateway = new ThingGateway();
             return $gateway->export($things);
-        } catch (\OutOfBoundsException $e) {
-            throw new OutOfBoundsException($e->getMessage(), $e->getCode());
         } catch (\RuntimeException $e) {
             throw new RuntimeException($e->getMessage(), $e->getCode());
         }

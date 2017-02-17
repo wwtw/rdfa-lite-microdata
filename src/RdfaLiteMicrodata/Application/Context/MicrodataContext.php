@@ -34,33 +34,25 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Application\Contract;
+namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\NullVocabulary;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 
 /**
- * Element processor interface
+ * Microdata parsing context
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Application
  */
-interface ElementProcessorInterface
+class MicrodataContext extends AbstractContext
 {
     /**
-     * Process a DOM element
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Inherited Context
-     * @return ContextInterface Local context for this element
+     * Context constructor
      */
-    public function processElement(\DOMElement $element, ContextInterface $context);
-
-    /**
-     * Process a DOM element's children
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Context
-     * @return ContextInterface Context for children
-     */
-    public function processElementChildren(\DOMElement $element, ContextInterface $context);
+    public function __construct()
+    {
+        $this->defaultVocabulary = new NullVocabulary();
+        $this->parentThing = new RootThing();
+    }
 }

@@ -52,54 +52,41 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testMicrodataHtmlFile()
     {
-//        $things = Html::parseFile(
-//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
-//        );
-//        print_r($this->castArray($things));
-//        $this->assertArrayEquals(
-//            $this->castArray(
-//                json_decode(
-//                    file_get_contents(
-//                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
-//                    )
-//                )
-//            ),
-//            $this->castArray($things)
-//        );
+        $things = Html::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
+        );
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.json'
+                    )
+                )
+            ),
+            $this->castArray($things)
+        );
     }
 
-//    /**
-//     * Test an invalid file
-//     *
-//     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
-//     * @expectedExceptionCode 1487190674
-//     */
-//    public function testInvalidFile()
-//    {
-//        Html::parseFile('invalid');
-//    }
-//
-//    /**
-//     * Test a runtime exception
-//     *
-//     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
-//     */
-//    public function testRuntimeException()
-//    {
-//        Html::parseFile(
-//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
-//        );
-//    }
-//
-//    /**
-//     * Test a out of bounds exception
-//     *
-//     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException
-//     */
-//    public function testOutOfBoundsException()
-//    {
-//        Html::parseFile(
-//            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
-//        );
-//    }
+    /**
+     * Test an invalid file
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
+     * @expectedExceptionCode 1487190674
+     */
+    public function testInvalidFile()
+    {
+        Html::parseFile('invalid');
+    }
+
+    /**
+     * Test a HTML runtime exception
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
+     */
+    public function testRuntimeException()
+    {
+        Html::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-property-microdata.html'
+        );
+    }
 }

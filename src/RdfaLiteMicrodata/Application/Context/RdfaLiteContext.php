@@ -38,8 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\RuntimeException;
-use Jkphl\RdfaLiteMicrodata\Application\Parser\NullVocabulary;
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyService;
@@ -118,7 +117,7 @@ class RdfaLiteContext extends AbstractContext
      */
     public function __construct()
     {
-        $this->parentThing = new Thing('Null', new NullVocabulary());
+        $this->parentThing = new RootThing();
         $this->vocabularies = self::$defaultVocabularies;
     }
 
@@ -127,7 +126,7 @@ class RdfaLiteContext extends AbstractContext
      *
      * @param string $prefix Vocabulary prefix
      * @param string $uri Vocabulary URI
-     * @return ContextInterface New context
+     * @return RdfaLiteContext New context
      *
      */
     public function registerVocabulary($prefix, $uri)
@@ -201,20 +200,10 @@ class RdfaLiteContext extends AbstractContext
     }
 
     /**
-     * Return the current default vocabulary
-     *
-     * @return VocabularyInterface Current default vocabulary
-     */
-    public function getDefaultVocabulary()
-    {
-        return $this->defaultVocabulary;
-    }
-
-    /**
      * Set the default vocabulary by URI
      *
      * @param VocabularyInterface $vocabulary Current default vocabulary
-     * @return ContextInterface Self reference
+     * @return RdfaLiteContext Self reference
      */
     public function setDefaultVocabulary(VocabularyInterface $vocabulary)
     {

@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\DOMIterator;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
@@ -50,9 +50,9 @@ use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
 class DOMNodeIteratorTest extends ParserIteratorTestBase
 {
     /**
-     * Context
+     * RdfaLiteContext
      *
-     * @var Context
+     * @var RdfaLiteContext
      */
     protected $context;
     /**
@@ -69,7 +69,7 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
     {
         $dom = new \DOMDocument();
         $dom->loadHTML(self::$personRdfa);
-        $context = new Context();
+        $context = new RdfaLiteContext();
         $elementProcessor = $this->getMock(ElementProcessorInterface::class);
         $elementProcessor->method('processElement')->willReturn($context);
         $elementProcessor->method('processElementChildren')->willReturn($context);
@@ -81,10 +81,10 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
      * Iterate through the dom
      *
      * @param \DOMDocument $dom DOM
-     * @param Context $context Context
+     * @param RdfaLiteContext $context RdfaLiteContext
      * @param ElementProcessorInterface $elementProcessor Element processor
      */
-    protected function iterateDom(\DOMDocument $dom, Context $context, ElementProcessorInterface $elementProcessor)
+    protected function iterateDom(\DOMDocument $dom, RdfaLiteContext $context, ElementProcessorInterface $elementProcessor)
     {
         $domNodeIterator = new DOMIterator($dom->childNodes, $context, $elementProcessor);
         $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
@@ -112,7 +112,7 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
     {
         $dom = new \DOMDocument();
         $dom->loadHTML(self::$personRdfa);
-        $context = new Context();
+        $context = new RdfaLiteContext();
         $this->iterateDom($dom, $context, new RdfaLiteElementProcessor(true));
         $this->validatePersonResult($context->getChildren());
     }

@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
@@ -56,7 +57,8 @@ class ParserTest extends ParserIteratorTestBase
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
         $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $rdfaContext = new RdfaLiteContext();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
 
         $things = $parser->parse(self::$personRdfa);
@@ -70,7 +72,8 @@ class ParserTest extends ParserIteratorTestBase
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
         $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $rdfaContext = new RdfaLiteContext();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
 
         $things = $parser->parse(
@@ -100,7 +103,8 @@ class ParserTest extends ParserIteratorTestBase
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
         $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $rdfaContext = new RdfaLiteContext();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
 
         $parser->parse(
@@ -120,7 +124,8 @@ class ParserTest extends ParserIteratorTestBase
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
         $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor);
+        $rdfaContext = new RdfaLiteContext();
+        $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
 
         $parser->parse(

@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Tests\Ports;
 
 use Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite\Html;
+use Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite\Xml;
 use Jkphl\RdfaLiteMicrodata\Tests\AbstractTest;
 
 /**
@@ -79,11 +80,11 @@ class RdfaLiteParserTest extends AbstractTest
     }
 
     /**
-     * Test a runtime exception
+     * Test an XML runtime exception
      *
      * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
      */
-    public function testRuntimeException()
+    public function testHTMLRuntimeException()
     {
         Html::parseFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
@@ -91,13 +92,59 @@ class RdfaLiteParserTest extends AbstractTest
     }
 
     /**
-     * Test a out of bounds exception
+     * Test an HTML out of bounds exception
      *
      * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException
      */
-    public function testOutOfBoundsException()
+    public function testHTMLOutOfBoundsException()
     {
         Html::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
+        );
+    }
+
+    /**
+     * Test parsing an RDFa Lite XML (XHTML) file
+     */
+    public function testRdfaLiteXmlFile()
+    {
+        $things = Xml::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'typed-property-rdfa-lite.xhtml'
+        );
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'
+                        .DIRECTORY_SEPARATOR.'typed-property-rdfa-lite.json'
+                    )
+                )
+            ),
+            $this->castArray($things)
+        );
+    }
+
+
+    /**
+     * Test an XML runtime exception
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
+     */
+    public function testXMLRuntimeException()
+    {
+        Xml::parseFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
+        );
+    }
+
+    /**
+     * Test an XML out of bounds exception
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException
+     */
+    public function testXMLOutOfBoundsException()
+    {
+        Xml::parseFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
         );
     }

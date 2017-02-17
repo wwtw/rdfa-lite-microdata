@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
@@ -62,17 +62,28 @@ class Parser implements ParserInterface
      * @var ElementProcessorInterface
      */
     protected $elementProcessor;
+    /**
+     * Base context
+     *
+     * @var ContextInterface
+     */
+    protected $context;
 
     /**
      * Parser constructor
      *
      * @param DocumentFactoryInterface $documentFactory Document factory
      * @param ElementProcessorInterface $elementProcessor Element processor
+     * @param ContextInterface $context Base context
      */
-    public function __construct(DocumentFactoryInterface $documentFactory, ElementProcessorInterface $elementProcessor)
-    {
+    public function __construct(
+        DocumentFactoryInterface $documentFactory,
+        ElementProcessorInterface $elementProcessor,
+        ContextInterface $context
+    ) {
         $this->documentFactory = $documentFactory;
         $this->elementProcessor = $elementProcessor;
+        $this->context = $context;
     }
 
     /**
@@ -84,7 +95,7 @@ class Parser implements ParserInterface
     public function parse($string)
     {
         $document = $this->documentFactory->createDocumentFromString($string);
-        $context = new Context();
+        $context = clone $this->context;
         $iterator = new DOMIterator($document->childNodes, $context, $this->elementProcessor);
 
         // Iterate through all $node

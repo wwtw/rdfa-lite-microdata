@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
  * Parsing context interface
@@ -75,4 +76,11 @@ interface ContextInterface
      * @return ContextInterface Self reference
      */
     public function addChild(ThingInterface $thing);
+
+    /**
+     * Return the current default vocabulary
+     *
+     * @return VocabularyInterface Current default vocabulary
+     */
+    public function getDefaultVocabulary();
 }

@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Tests\Domain\VocabularyTest;
@@ -54,14 +54,14 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testContext()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $this->assertTrue($context->hasVocabulary('schema'));
 
         // Test vocabulary retrieval
         $schemaOrgVocabulary = $context->getVocabulary('schema');
         $this->assertInstanceOf(Vocabulary::class, $schemaOrgVocabulary);
-        $this->assertEquals($schemaOrgVocabulary, new Vocabulary(VocabularyTest::SCHEMA_ORG));
+        $this->assertEquals($schemaOrgVocabulary, new Vocabulary(VocabularyTest::SCHEMA_ORG_URI));
     }
 
     /**
@@ -70,12 +70,12 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testContextVocabRegistration()
     {
         $randomPrefix = 'random'.rand();
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $this->assertFalse($context->hasVocabulary($randomPrefix));
         $contextHash = spl_object_hash($context);
 
-        $sameContext = $context->registerVocabulary('schema', VocabularyTest::SCHEMA_ORG);
+        $sameContext = $context->registerVocabulary('schema', VocabularyTest::SCHEMA_ORG_URI);
         $this->assertEquals($contextHash, spl_object_hash($sameContext));
 
         $newContext = $sameContext->registerVocabulary($randomPrefix, 'http://example.com');
@@ -91,8 +91,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidVocabularyPrefix()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $context->registerVocabulary('', null);
     }
 
@@ -104,8 +104,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidVocabularyUri()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $context->registerVocabulary('test', null);
     }
 
@@ -117,8 +117,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnknownVocabularyPrefix()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $context->getVocabulary('random'.rand());
     }
 
@@ -127,9 +127,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultVocabulary()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
         $newContext = $context->setDefaultVocabulary($vocabulary);
         $this->assertEquals($vocabulary, $newContext->getDefaultVocabulary());
         $this->assertNotEquals(spl_object_hash($context), spl_object_hash($newContext));
@@ -144,9 +144,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testParentThing()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
         $thing = new Thing('Person', $vocabulary);
         $newContext = $context->setParentThing($thing);
         $this->assertEquals($thing, $newContext->getParentThing());
@@ -162,9 +162,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddingLevelChildren()
     {
-        $context = new Context();
-        $this->assertInstanceOf(Context::class, $context);
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $context = new RdfaLiteContext();
+        $this->assertInstanceOf(RdfaLiteContext::class, $context);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
 
         $thing = new Thing('Person', $vocabulary);
         $context->addChild($thing);

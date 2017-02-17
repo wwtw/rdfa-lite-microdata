@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
 
 /**
@@ -50,7 +50,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
     /**
      * Registered contexts
      *
-     * @var Context[]
+     * @var ContextInterface[]
      */
     public $contexts = [];
     /**
@@ -62,7 +62,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
     /**
      * Initial parser context
      *
-     * @var Context
+     * @var ContextInterface
      */
     protected $initialContext;
     /**
@@ -76,12 +76,12 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      * Recursive DOM node iterator constructor
      *
      * @param \DOMNodeList $nodeList Node list
-     * @param Context $initialContext Initial parser context
+     * @param ContextInterface $initialContext Initial parser context
      * @param ElementProcessorInterface $elementProcessor Element processor
      */
     public function __construct(
         \DOMNodeList $nodeList,
-        Context $initialContext,
+        ContextInterface $initialContext,
         ElementProcessorInterface $elementProcessor
     ) {
         $this->elementProcessor = $elementProcessor;

@@ -36,8 +36,10 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
  * Microdata element processor
@@ -51,10 +53,10 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      * Process a DOM element
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    public function processElement(\DOMElement $element, Context $context)
+    public function processElement(\DOMElement $element, ContextInterface $context)
     {
         // Create a property
         return $this->processProperty($element, $context);
@@ -64,12 +66,12 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      * Create a property
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    protected function processProperty(\DOMElement $element, Context $context)
+    protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('itemprop') && ($context->getParentThing() instanceof ThingInterface)) {
+        if ($element->hasAttribute('itemprop') && !($context->getParentThing() instanceof RootThing)) {
             $context = $this->processPropertyPrefixName(null, $element->getAttribute('itemprop'), $element, $context);
         }
 
@@ -80,13 +82,19 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      * Create a nested child
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param ContextInterface $context Context
+     * @return ContextInterface Context for children
      */
-    protected function processChild(\DOMElement $element, Context $context)
+    protected function processChild(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('itemtype') && empty($element->getAttribute('itemprop'))) {
-            $thing = $this->getThing($element->getAttribute('itemtype'), null, $context);
+        if ($element->hasAttribute('itemtype')
+            && (empty($element->getAttribute('itemprop')) || $context->getParentThing() instanceof RootThing)
+        ) {
+            $thing = $this->getThing(
+                $element->getAttribute('itemtype'),
+                trim($element->getAttribute('itemid')) ?: null,
+                $context
+            );
 
             // Add the new thing as a child to the current context
             // and set the thing as parent thing for nested iterations
@@ -104,17 +112,17 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function getResourceId(\DOMElement $element)
     {
-        return null;
+        return trim($element->getAttribute('itemid')) ?: null;
     }
 
     /**
      * Return a property value (type and tag name dependent)
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
+     * @param ContextInterface $context Context
      * @return ThingInterface|string Property value
      */
-    protected function getPropertyValue(\DOMElement $element, Context $context)
+    protected function getPropertyValue(\DOMElement $element, ContextInterface $context)
     {
         // If the property creates a new type: Return the element itself
         if ($element->hasAttribute('itemscope') && $element->hasAttribute('itemtype')) {
@@ -123,5 +131,17 @@ class MicrodataElementProcessor extends AbstractElementProcessor
 
         // Return a string property value
         return $this->getPropertyStringValue($element);
+    }
+
+    /**
+     * Return a vocabulary by prefix with fallback to the default vocabulary
+     *
+     * @param string $prefix Vocabulary prefix
+     * @param ContextInterface $context Context
+     * @return VocabularyInterface Vocabulary
+     */
+    protected function getVocabulary($prefix, ContextInterface $context)
+    {
+        return $context->getDefaultVocabulary();
     }
 }

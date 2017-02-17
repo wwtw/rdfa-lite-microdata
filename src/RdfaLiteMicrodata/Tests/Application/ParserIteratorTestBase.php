@@ -76,7 +76,7 @@ abstract class ParserIteratorTestBase extends AbstractTest
      */
     protected function validatePersonResult(array $things)
     {
-        $schemaOrgVocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $schemaOrgVocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
 
         $this->assertTrue(is_array($things));
         $this->assertEquals(1, count($things));

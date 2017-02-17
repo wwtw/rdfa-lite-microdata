@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\XmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
@@ -49,6 +50,7 @@ use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Ports
+ * @see https://www.w3.org/TR/rdfa-lite/
  */
 class Xml extends AbstractParser
 {
@@ -62,8 +64,9 @@ class Xml extends AbstractParser
     {
         try {
             $xmlDocumentFactory = new XmlDocumentFactory();
-            $rdfaElementProcessor = new RdfaLiteElementProcessor();
-            $parser = new Parser($xmlDocumentFactory, $rdfaElementProcessor);
+            $rdfaElementProcessor = new RdfaLiteElementProcessor(false);
+            $rdfaContext = new RdfaLiteContext();
+            $parser = new Parser($xmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
             $things = $parser->parse($string);
             $gateway = new ThingGateway();
             return $gateway->export($things);

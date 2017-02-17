@@ -36,8 +36,8 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
@@ -72,6 +72,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         'LINK' => 'href',
         'OBJECT' => 'data',
         'DATA' => 'value',
+        'METER' => 'value',
         'TIME' => 'datetime'
     ];
     /**
@@ -95,10 +96,10 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * Process a DOM element's child
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param ContextInterface $context Context
+     * @return ContextInterface Context for children
      */
-    public function processElementChildren(\DOMElement $element, Context $context)
+    public function processElementChildren(\DOMElement $element, ContextInterface $context)
     {
         // Process a child
         return $this->processChild($element, $context);
@@ -108,19 +109,19 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * Create a nested child
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param ContextInterface $context Context
+     * @return ContextInterface Context for children
      */
-    abstract protected function processChild(\DOMElement $element, Context $context);
+    abstract protected function processChild(\DOMElement $element, ContextInterface $context);
 
     /**
      * Create a property
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    abstract protected function processProperty(\DOMElement $element, Context $context);
+    abstract protected function processProperty(\DOMElement $element, ContextInterface $context);
 
     /**
      * Split a property into prefix and name
@@ -142,10 +143,10 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param string $prefix Property prefix
      * @param string $name Property name
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    protected function processPropertyPrefixName($prefix, $name, \DOMElement $element, Context $context)
+    protected function processPropertyPrefixName($prefix, $name, \DOMElement $element, ContextInterface $context)
     {
         $vocabulary = $this->getVocabulary($prefix, $context);
         if ($vocabulary instanceof VocabularyInterface) {
@@ -160,25 +161,26 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * Return a vocabulary by prefix with fallback to the default vocabulary
      *
      * @param string $prefix Vocabulary prefix
-     * @param Context $context Context
+     * @param ContextInterface $context Context
      * @return VocabularyInterface Vocabulary
      */
-    protected function getVocabulary($prefix, Context $context)
-    {
-        return empty($prefix) ? $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
-    }
+    abstract protected function getVocabulary($prefix, ContextInterface $context);
 
     /**
      * Add a single property
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
+     * @param ContextInterface $context Inherited Context
      * @param string $name Property name
      * @param VocabularyInterface $vocabulary Property vocabulary
-     * @return Context Local context for this element
+     * @return ContextInterface Local context for this element
      */
-    protected function addProperty(\DOMElement $element, Context $context, $name, VocabularyInterface $vocabulary)
-    {
+    protected function addProperty(
+        \DOMElement $element,
+        ContextInterface $context,
+        $name,
+        VocabularyInterface $vocabulary
+    ) {
         $resourceId = $this->getResourceId($element);
 
         // Get the property value
@@ -209,20 +211,20 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * Return a property value (type and tag name dependent)
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
+     * @param ContextInterface $context Context
      * @return ThingInterface|string Property value
      */
-    abstract protected function getPropertyValue(\DOMElement $element, Context $context);
+    abstract protected function getPropertyValue(\DOMElement $element, ContextInterface $context);
 
     /**
      * Return a thing by typeof value
      *
      * @param string $typeof Thing type
      * @param string $resourceId Resource ID
-     * @param Context $context Context
+     * @param ContextInterface $context Context
      * @return Thing Thing
      */
-    protected function getThing($typeof, $resourceId, Context $context)
+    protected function getThing($typeof, $resourceId, ContextInterface $context)
     {
         $typeof = explode(':', $typeof);
         $type = array_pop($typeof);
@@ -237,12 +239,12 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param string $prefix Prefix
      * @param string $type Type
      * @param string $resourceId Resource ID
-     * @param Context $context Context
+     * @param ContextInterface $context Context
      * @return Thing Thing
      * @throws RuntimeException If the default vocabulary is empty
      * @throws OutOfBoundsException If the vocabulary prefix is unknown
      */
-    protected function getThingByPrefixType($prefix, $type, $resourceId, Context $context)
+    protected function getThingByPrefixType($prefix, $type, $resourceId, ContextInterface $context)
     {
         // Determine the vocabulary to use
         try {

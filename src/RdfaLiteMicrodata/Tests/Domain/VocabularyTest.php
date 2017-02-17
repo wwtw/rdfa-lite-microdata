@@ -47,21 +47,21 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 class VocabularyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * schema.org URL
+     * schema.org vocabulary URI
      *
      * @var string
      */
-    const SCHEMA_ORG = 'http://schema.org/';
+    const SCHEMA_ORG_URI = 'http://schema.org/';
 
     /**
      * Test the vocabulary instantiation
      */
     public function testVocabulary()
     {
-        $vocabulary = new Vocabulary(self::SCHEMA_ORG);
+        $vocabulary = new Vocabulary(self::SCHEMA_ORG_URI);
         $this->assertInstanceOf(Vocabulary::class, $vocabulary);
-        $this->assertEquals(self::SCHEMA_ORG, $vocabulary->getUri());
-        $this->assertEquals(self::SCHEMA_ORG.'Person', $vocabulary->expand('Person'));
+        $this->assertEquals(self::SCHEMA_ORG_URI, $vocabulary->getUri());
+        $this->assertEquals(self::SCHEMA_ORG_URI.'Person', $vocabulary->expand('Person'));
     }
 
     /**

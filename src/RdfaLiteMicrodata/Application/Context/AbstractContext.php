@@ -110,4 +110,14 @@ abstract class AbstractContext implements ContextInterface
         $this->parentThing->addChild($thing);
         return $this;
     }
+
+    /**
+     * Return the current default vocabulary
+     *
+     * @return VocabularyInterface Current default vocabulary
+     */
+    public function getDefaultVocabulary()
+    {
+        return $this->defaultVocabulary;
+    }
 }

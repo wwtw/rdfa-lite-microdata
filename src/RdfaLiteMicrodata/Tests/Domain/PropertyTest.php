@@ -52,7 +52,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     public function testProperty()
     {
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
         $property = new Property('test', $vocabulary, 'value', 'resource');
         $this->assertInstanceOf(Property::class, $property);
         $this->assertEquals('test', $property->getName());
@@ -69,7 +69,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidPropertyName()
     {
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
         new Property('', $vocabulary, 'value');
     }
 }

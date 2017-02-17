@@ -34,33 +34,26 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Application\Contract;
+namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
+use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Element processor interface
+ * Root thing
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Application
  */
-interface ElementProcessorInterface
+class RootThing extends Thing
 {
     /**
-     * Process a DOM element
+     * Root thing constructor
      *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Inherited Context
-     * @return ContextInterface Local context for this element
+     * @param VocabularyInterface $vocabulary Vocabulary
      */
-    public function processElement(\DOMElement $element, ContextInterface $context);
-
-    /**
-     * Process a DOM element's children
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Context
-     * @return ContextInterface Context for children
-     */
-    public function processElementChildren(\DOMElement $element, ContextInterface $context);
+    public function __construct(VocabularyInterface $vocabulary = null)
+    {
+        parent::__construct('Root', $vocabulary ?: new NullVocabulary(), null);
+    }
 }

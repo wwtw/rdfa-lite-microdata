@@ -1,0 +1,53 @@
+[
+    {
+        "type": "\/\/schema.org\/Movie",
+        "context": "",
+        "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
+        "properties": {
+            "name": {
+                "context": "",
+                "values": [
+                    "Avatar"
+                ]
+            },
+            "director": {
+                "context": "",
+                "values": [
+                    {
+                        "type": "\/\/schema.org\/Person",
+                        "context": "",
+                        "id": null,
+                        "properties": {
+                            "name": {
+                                "context": "",
+                                "values": [
+                                    "James Cameron"
+                                ]
+                            },
+                            "birthDate": {
+                                "context": "",
+                                "values": [
+                                    "August 16, 1954"
+                                ]
+                            }
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            "genre": {
+                "context": "",
+                "values": [
+                    "Science fiction"
+                ]
+            },
+            "trailer": {
+                "context": "",
+                "values": [
+                    "..\/movies\/avatar-theatrical-trailer.html"
+                ]
+            }
+        },
+        "children": []
+    }
+]

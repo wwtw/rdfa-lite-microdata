@@ -36,9 +36,12 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
-use Jkphl\RdfaLiteMicrodata\Application\Context\Context;
+use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
+use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
  * RDFa Lite 1.1 element processor
@@ -52,10 +55,10 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      * Process a DOM element
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    public function processElement(\DOMElement $element, Context $context)
+    public function processElement(\DOMElement $element, ContextInterface $context)
     {
         // Process default vocabulary registrations
         $context = $this->processVocab($element, $context);
@@ -71,12 +74,12 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      * Process changes of the default vocabulary
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    protected function processVocab(\DOMElement $element, Context $context)
+    protected function processVocab(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('vocab')) {
+        if ($element->hasAttribute('vocab') && ($context instanceof RdfaLiteContext)) {
             $defaultVocabulary = new Vocabulary($element->getAttribute('vocab'));
             $context = $context->setDefaultVocabulary($defaultVocabulary);
         }
@@ -88,12 +91,12 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      * Process vocabulary prefixes
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    protected function processPrefix(\DOMElement $element, Context $context)
+    protected function processPrefix(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('prefix')) {
+        if ($element->hasAttribute('prefix') && ($context instanceof RdfaLiteContext)) {
             $prefixes = preg_split('/\s+/', $element->getAttribute('prefix'));
             while (count($prefixes)) {
                 $prefix = rtrim(array_shift($prefixes), ':');
@@ -109,12 +112,12 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      * Create a property
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Inherited Context
-     * @return Context Local context for this element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
      */
-    protected function processProperty(\DOMElement $element, Context $context)
+    protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('property') && ($context->getParentThing() instanceof ThingInterface)) {
+        if ($element->hasAttribute('property') && !($context->getParentThing() instanceof RootThing)) {
             list($prefix, $name) = $this->splitProperty($element->getAttribute('property'));
             $context = $this->processPropertyPrefixName($prefix, $name, $element, $context);
         }
@@ -126,12 +129,14 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      * Create a nested child
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
-     * @return Context Context for children
+     * @param ContextInterface $context Context
+     * @return ContextInterface Context for children
      */
-    protected function processChild(\DOMElement $element, Context $context)
+    protected function processChild(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('typeof') && empty($element->getAttribute('property'))) {
+        if ($element->hasAttribute('typeof')
+            && (empty($element->getAttribute('property')) || $context->getParentThing() instanceof RootThing)
+        ) {
             $thing = $this->getThing(
                 $element->getAttribute('typeof'),
                 trim($element->getAttribute('resource')) ?: null,
@@ -150,10 +155,10 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
      * Return a property value (type and tag name dependent)
      *
      * @param \DOMElement $element DOM element
-     * @param Context $context Context
+     * @param ContextInterface $context Context
      * @return ThingInterface|string Property value
      */
-    protected function getPropertyValue(\DOMElement $element, Context $context)
+    protected function getPropertyValue(\DOMElement $element, ContextInterface $context)
     {
         // If the property creates a new type: Return the element itself
         if ($element->hasAttribute('typeof')) {
@@ -177,5 +182,18 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
     protected function getResourceId(\DOMElement $element)
     {
         return trim($element->getAttribute('resource')) ?: null;
+    }
+
+    /**
+     * Return a vocabulary by prefix with fallback to the default vocabulary
+     *
+     * @param string $prefix Vocabulary prefix
+     * @param ContextInterface $context Context
+     * @return VocabularyInterface Vocabulary
+     */
+    protected function getVocabulary($prefix, ContextInterface $context)
+    {
+        return (empty($prefix) || !($context instanceof RdfaLiteContext)) ?
+            $context->getDefaultVocabulary() : $context->getVocabulary($prefix);
     }
 }

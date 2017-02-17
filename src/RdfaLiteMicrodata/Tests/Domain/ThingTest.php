@@ -64,7 +64,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$schemaOrgVocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        self::$schemaOrgVocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
     }
 
     /**
@@ -113,7 +113,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $thing = new Thing('Person', self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
 
-        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
         $property1 = new Property('test1', $vocabulary, 'value1');
         $property2 = new Property('test1', $vocabulary, 'value2');
         $property3 = new Property('test2', $vocabulary, 'value1');
