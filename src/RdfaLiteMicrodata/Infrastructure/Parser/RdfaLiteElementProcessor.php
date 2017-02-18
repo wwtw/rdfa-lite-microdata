@@ -118,8 +118,19 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
     protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
         if ($element->hasAttribute('property') && !($context->getParentThing() instanceof RootThing)) {
-            list($prefix, $name) = $this->getPrefixName($element->getAttribute('property'));
-            $context = $this->processPropertyPrefixName($prefix, $name, $element, $context);
+            $properties = preg_split('/\s+/', $element->getAttribute('property'));
+            foreach ($properties as $index => $property) {
+                $firstProperty = ($index ? 0 : self::PROPERTY_FIRST);
+                $lastProperty = ($index == (count($properties) - 1)) ? self::PROPERTY_LAST : 0;
+                list($prefix, $name) = $this->getPrefixName($property);
+                $context = $this->processPropertyPrefixName(
+                    $prefix,
+                    $name,
+                    $element,
+                    $context,
+                    $firstProperty | $lastProperty
+                );
+            }
         }
 
         return $context;
@@ -166,15 +177,15 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
     }
 
     /**
-     * Return a property value (type and tag name dependent)
+     * Return a property child value
      *
      * @param \DOMElement $element DOM element
      * @param ContextInterface $context Context
-     * @return ThingInterface|string Property value
+     * @return ThingInterface|null Property child value
      */
-    protected function getPropertyValue(\DOMElement $element, ContextInterface $context)
+    protected function getPropertyChildValue(\DOMElement $element, ContextInterface $context)
     {
-        // If the property creates a new type: Return the element itself
+        // If the property creates a new thing
         if ($element->hasAttribute('typeof')) {
             return $this->getThing(
                 $element->getAttribute('typeof'),
@@ -183,8 +194,7 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
             );
         }
 
-        // Return a string property value
-        return $this->getPropertyStringValue($element);
+        return null;
     }
 
     /**

@@ -37,6 +37,32 @@
                     }
                 ]
             },
+            "producer": {
+                "context": "",
+                "values": [
+                    {
+                        "type": [
+                            "http:\/\/schema.org\/Person"
+                        ],
+                        "id": null,
+                        "properties": {
+                            "name": {
+                                "context": "",
+                                "values": [
+                                    "James Cameron"
+                                ]
+                            },
+                            "birthDate": {
+                                "context": "",
+                                "values": [
+                                    "August 16, 1954"
+                                ]
+                            }
+                        },
+                        "children": []
+                    }
+                ]
+            },
             "genre": {
                 "context": "",
                 "values": [

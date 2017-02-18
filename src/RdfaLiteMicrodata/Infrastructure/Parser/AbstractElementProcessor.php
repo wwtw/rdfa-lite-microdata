@@ -56,6 +56,18 @@ use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
 abstract class AbstractElementProcessor implements ElementProcessorInterface
 {
     /**
+     * First property
+     *
+     * @var int
+     */
+    const PROPERTY_FIRST = 1;
+    /**
+     * Last property
+     *
+     * @var int
+     */
+    const PROPERTY_LAST = 2;
+    /**
      * Tag name / attribute map
      *
      * @var array
@@ -77,6 +89,12 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         'METER' => 'value',
         'TIME' => 'datetime'
     ];
+    /**
+     * Property cache
+     *
+     * @var array
+     */
+    protected static $propertyCache = [];
     /**
      * HTML mode
      *
@@ -132,13 +150,19 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param string $name Property name
      * @param \DOMElement $element DOM element
      * @param ContextInterface $context Inherited Context
+     * @param int $mode Property mode
      * @return ContextInterface Local context for this element
      */
-    protected function processPropertyPrefixName($prefix, $name, \DOMElement $element, ContextInterface $context)
-    {
+    protected function processPropertyPrefixName(
+        $prefix,
+        $name,
+        \DOMElement $element,
+        ContextInterface $context,
+        $mode
+    ) {
         $vocabulary = $this->getVocabulary($prefix, $context);
         if ($vocabulary instanceof VocabularyInterface) {
-            $context = $this->addProperty($element, $context, $name, $vocabulary);
+            $context = $this->addProperty($element, $context, $name, $vocabulary, $mode);
         }
 
         return $context;
@@ -160,13 +184,15 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param ContextInterface $context Inherited Context
      * @param string $name Property name
      * @param VocabularyInterface $vocabulary Property vocabulary
+     * @param int $mode Property mode
      * @return ContextInterface Local context for this element
      */
     protected function addProperty(
         \DOMElement $element,
         ContextInterface $context,
         $name,
-        VocabularyInterface $vocabulary
+        VocabularyInterface $vocabulary,
+        $mode
     ) {
         $resourceId = $this->getResourceId($element);
 
@@ -177,8 +203,8 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         // Add the property to the current parent thing
         $context->getParentThing()->addProperty($property);
 
-        // If the property value is a thing
-        if ($propertyValue instanceof ThingInterface) {
+        // If the property value is a thing and this is the element's last property
+        if (($propertyValue instanceof ThingInterface) && ($mode & self::PROPERTY_LAST)) {
             // Set the thing as parent thing for nested iterations
             $context = $context->setParentThing($propertyValue);
         }
@@ -201,7 +227,79 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param ContextInterface $context Context
      * @return ThingInterface|string Property value
      */
-    abstract protected function getPropertyValue(\DOMElement $element, ContextInterface $context);
+    protected function getPropertyValue(\DOMElement $element, ContextInterface $context)
+    {
+        $value = $this->getPropertyCache($element);
+        if ($value !== null) {
+            return $value;
+        }
+
+        $propertyChild = $this->getPropertyChildValue($element, $context);
+        if ($propertyChild instanceof ThingInterface) {
+            return $this->setPropertyCache($element, $propertyChild);
+        }
+
+        // Return a string property value
+        return $this->setPropertyCache($element, $this->getPropertyStringValue($element));
+    }
+
+    /**
+     * Return a cached property value (if available)
+     *
+     * @param \DOMElement $element Element
+     * @return mixed|null Property value
+     */
+    protected function getPropertyCache(\DOMElement $element)
+    {
+        $elementHash = spl_object_hash($element);
+        return isset(self::$propertyCache[$elementHash]) ? self::$propertyCache[$elementHash] : null;
+    }
+
+    /**
+     * Return a property child value
+     *
+     * @param \DOMElement $element DOM element
+     * @param ContextInterface $context Context
+     * @return ThingInterface|null Property child value
+     */
+    abstract protected function getPropertyChildValue(\DOMElement $element, ContextInterface $context);
+
+    /**
+     * Cache a property value
+     *
+     * @param \DOMElement $element DOM element
+     * @param mixed $value Value
+     * @return mixed $value Value
+     */
+    protected function setPropertyCache(\DOMElement $element, $value)
+    {
+        return self::$propertyCache[spl_object_hash($element)] = $value;
+    }
+
+    /**
+     * Return a property value (type and tag name dependent)
+     *
+     * @param \DOMElement $element DOM element
+     * @return ThingInterface|string Property value
+     */
+    protected function getPropertyStringValue(\DOMElement $element)
+    {
+        // If HTML mode is active
+        if ($this->html) {
+            $tagName = strtoupper($element->tagName);
+
+            // Map to an attribute (if applicable)
+            if (array_key_exists($tagName, self::$tagNameAttributes)) {
+                $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
+                if (($tagName != 'TIME') || !empty($value)) {
+                    return $value;
+                }
+            }
+        }
+
+        // Return the text content
+        return $element->textContent;
+    }
 
     /**
      * Return a thing by typeof value
@@ -259,29 +357,4 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @return array Prefix and name
      */
     abstract protected function getPrefixName($prefixName);
-
-    /**
-     * Return a property value (type and tag name dependent)
-     *
-     * @param \DOMElement $element DOM element
-     * @return ThingInterface|string Property value
-     */
-    protected function getPropertyStringValue(\DOMElement $element)
-    {
-        // If HTML mode is active
-        if ($this->html) {
-            $tagName = strtoupper($element->tagName);
-
-            // Map to an attribute (if applicable)
-            if (array_key_exists($tagName, self::$tagNameAttributes)) {
-                $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
-                if (($tagName != 'TIME') || !empty($value)) {
-                    return $value;
-                }
-            }
-        }
-
-        // Return the text content
-        return $element->textContent;
-    }
 }
