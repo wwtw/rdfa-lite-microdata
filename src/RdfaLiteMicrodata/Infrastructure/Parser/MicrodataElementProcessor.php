@@ -59,10 +59,16 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     public function processElement(\DOMElement $element, ContextInterface $context)
     {
         // Create a property
-        return $this->processProperty($element, $context);
+        $propertyContext = $this->processProperty($element, $context);
+
+        // Process the element in case it's an anonymous thing with no children
+        if (!$element->childNodes->length) {
+            $this->processChild($element, $context);
+        }
+
+        return $propertyContext;
 
         // TODO: itemref
-        // TODO: Anonymous item type
     }
 
     /**
@@ -99,11 +105,9 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function processChild(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('itemtype')
-            && (empty($element->getAttribute('itemprop')) || $context->getParentThing() instanceof RootThing)
-        ) {
+        if ($element->hasAttribute('itemscope') && empty($element->getAttribute('itemprop'))) {
             $thing = $this->getThing(
-                $element->getAttribute('itemtype'),
+                trim($element->getAttribute('itemtype')) ?: null,
                 trim($element->getAttribute('itemid')) ?: null,
                 $context
             );

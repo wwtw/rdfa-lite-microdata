@@ -68,6 +68,17 @@ class MicrodataParserTest extends AbstractTest
     }
 
     /**
+     * Test an anonymous item with property references
+     */
+    public function testAnonymousItemWithPropertyRefs()
+    {
+        $things = Microdata::parseHtmlFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'anonymous-ref-microdata.html'
+        );
+        print_r($things);
+    }
+
+    /**
      * Test an invalid file
      *
      * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException

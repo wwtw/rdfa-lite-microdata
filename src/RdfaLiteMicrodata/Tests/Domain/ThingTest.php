@@ -107,6 +107,16 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the instantiation of an anonymous thing
+     */
+    public function testAnonymousThing()
+    {
+        $thing = new Thing([]);
+        $this->assertInstanceOf(Thing::class, $thing);
+        $this->assertEquals([], $thing->getTypes());
+    }
+
+    /**
      * Test adding a property
      */
     public function testAddProperty()
@@ -125,39 +135,6 @@ class ThingTest extends \PHPUnit_Framework_TestCase
 
         $this->validateProperties($thing, $vocabulary);
         $this->validateProperty($thing, $vocabulary, $property1, $property2);
-    }
-
-    /**
-     * Test getting an invalid property name
-     *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\OutOfBoundsException
-     * @expectedExceptionCode 1486849016
-     */
-    public function testGetInvalidPropertyName()
-    {
-        $type = new Type('Person', self::$schemaOrgVocabulary);
-        $thing = new Thing($type);
-        $this->assertInstanceOf(Thing::class, $thing);
-        $thing->getProperty('invalid', new NullVocabulary());
-    }
-
-    /**
-     * Test adding children
-     */
-    public function testAddChild()
-    {
-        $type = new Type('Person', self::$schemaOrgVocabulary);
-        $thing = new Thing($type);
-        $this->assertInstanceOf(Thing::class, $thing);
-
-        $child1 = new Thing($type);
-        $child2 = new Thing($type);
-        $thing->addChild($child1)->addChild($child2);
-
-        $children = $thing->getChildren();
-        $this->assertTrue(is_array($children));
-        $this->assertEquals(2, count($children));
-        $this->assertEquals([$child1, $child2], $children);
     }
 
     /**
@@ -193,5 +170,38 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($test1Property));
         $this->assertEquals(2, count($test1Property));
         $this->assertEquals([$property1, $property2], $test1Property);
+    }
+
+    /**
+     * Test getting an invalid property name
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\OutOfBoundsException
+     * @expectedExceptionCode 1486849016
+     */
+    public function testGetInvalidPropertyName()
+    {
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type);
+        $this->assertInstanceOf(Thing::class, $thing);
+        $thing->getProperty('invalid', new NullVocabulary());
+    }
+
+    /**
+     * Test adding children
+     */
+    public function testAddChild()
+    {
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type);
+        $this->assertInstanceOf(Thing::class, $thing);
+
+        $child1 = new Thing($type);
+        $child2 = new Thing($type);
+        $thing->addChild($child1)->addChild($child2);
+
+        $children = $thing->getChildren();
+        $this->assertTrue(is_array($children));
+        $this->assertEquals(2, count($children));
+        $this->assertEquals([$child1, $child2], $children);
     }
 }

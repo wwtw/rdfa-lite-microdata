@@ -287,8 +287,8 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
     /**
      * Return a thing by typeof value
      *
-     * @param string $typeof Thing type
-     * @param string $resourceId Resource ID
+     * @param string|null $typeof Thing type
+     * @param string|null $resourceId Resource ID
      * @param ContextInterface $context Context
      * @return Thing Thing
      * @throws RuntimeException If the default vocabulary is empty
@@ -297,8 +297,10 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
     {
         /** @var TypeInterface[] $types */
         $types = [];
-        foreach (preg_split('/\s+/', $typeof) as $prefixedType) {
-            $types[] = $this->getType($prefixedType, $context);
+        if (strlen($typeof)) {
+            foreach (preg_split('/\s+/', $typeof) as $prefixedType) {
+                $types[] = $this->getType($prefixedType, $context);
+            }
         }
 
         return new Thing($types, $resourceId);
