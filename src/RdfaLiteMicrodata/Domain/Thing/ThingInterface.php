@@ -48,11 +48,11 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 interface ThingInterface
 {
     /**
-     * Return the resource type
+     * Return the resource types
      *
-     * @return string Resource type
+     * @return string Resource types
      */
-    public function getType();
+    public function getTypes();
 
     /**
      * Return the vocabulary in use

@@ -61,13 +61,13 @@ class RuntimeException extends \RuntimeException implements RdfaLiteMicrodataDom
      *
      * @var string
      */
-    const INVALID_RESOURCE_TYPE_STR = 'Invalid resource type "%s" (vocabulary %s)';
+    const INVALID_RESOURCE_TYPES_STR = 'Invalid resource types %s (vocabulary %s)';
     /**
      * Invalid vocabulary
      *
      * @var int
      */
-    const INVALID_RESOURCE_TYPE = 1486823588;
+    const INVALID_RESOURCE_TYPES = 1486823588;
     /**
      * Invalid property name
      *

@@ -83,7 +83,7 @@ abstract class ParserIteratorTestBase extends AbstractTest
         $thing = $things[0];
 
         $this->assertInstanceOf(ThingInterface::class, $thing);
-        $this->assertEquals('Person', $thing->getType());
+        $this->assertEquals(['Person'], $thing->getTypes());
         $this->assertEquals($schemaOrgVocabulary, $thing->getVocabulary());
         $this->assertEquals('#joschi', $thing->getResourceId());
 

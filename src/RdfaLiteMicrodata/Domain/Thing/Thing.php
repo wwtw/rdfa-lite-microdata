@@ -51,11 +51,11 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 class Thing implements ThingInterface
 {
     /**
-     * Resource type
+     * Resource types
      *
-     * @var string
+     * @var string[]
      */
-    protected $type;
+    protected $types;
     /**
      * Resource vocabulary
      *
@@ -84,33 +84,39 @@ class Thing implements ThingInterface
     /**
      * Thing constructor
      *
-     * @param string $type Resource type
+     * @param string|array $types Resource type(s)
      * @param VocabularyInterface $vocabulary Vocabulary in use
      * @param null|string $resourceId Resource id
      */
-    public function __construct($type, VocabularyInterface $vocabulary, $resourceId = null)
+    public function __construct($types, VocabularyInterface $vocabulary, $resourceId = null)
     {
-        $type = trim($type);
-        if (!strlen($type)) {
+        $types = array_filter(array_map('trim', (array)$types), function ($t) {
+            return strlen($t) > 0;
+        });
+        if (!count($types)) {
             throw new RuntimeException(
-                sprintf(RuntimeException::INVALID_RESOURCE_TYPE_STR, $type, $vocabulary->getUri()),
-                RuntimeException::INVALID_RESOURCE_TYPE
+                sprintf(
+                    RuntimeException::INVALID_RESOURCE_TYPES_STR,
+                    "['".implode("', '", $types)."']",
+                    $vocabulary->getUri()
+                ),
+                RuntimeException::INVALID_RESOURCE_TYPES
             );
         }
 
         $this->vocabulary = $vocabulary;
-        $this->type = $type;
+        $this->types = $types;
         $this->resourceId = $resourceId;
     }
 
     /**
-     * Return the resource type
+     * Return the resource types
      *
-     * @return string Resource type
+     * @return string Resource types
      */
-    public function getType()
+    public function getTypes()
     {
-        return $this->type;
+        return $this->types;
     }
 
     /**

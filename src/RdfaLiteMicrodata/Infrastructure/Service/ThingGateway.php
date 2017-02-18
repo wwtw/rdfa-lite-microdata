@@ -91,7 +91,7 @@ class ThingGateway
         }
 
         return (object)[
-            'type' => $thing->getType(),
+            'type' => $thing->getTypes(),
             'context' => $thing->getVocabulary()->getUri(),
             'id' => $thing->getResourceId(),
             'properties' => $properties,

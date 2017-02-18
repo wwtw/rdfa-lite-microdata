@@ -1,6 +1,8 @@
 [
     {
-        "type": "\/\/schema.org\/Movie",
+        "type": [
+            "\/\/schema.org\/Movie"
+        ],
         "context": "",
         "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
         "properties": {
@@ -14,7 +16,9 @@
                 "context": "",
                 "values": [
                     {
-                        "type": "\/\/schema.org\/Person",
+                        "type": [
+                            "\/\/schema.org\/Person"
+                        ],
                         "context": "",
                         "id": null,
                         "properties": {

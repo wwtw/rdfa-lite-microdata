@@ -60,6 +60,9 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     {
         // Create a property
         return $this->processProperty($element, $context);
+
+        // TODO: itemref
+        // TODO: Anonymous item type
     }
 
     /**
@@ -71,6 +74,8 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
+        // TODO: Multiple properties, separated by space
+
         if ($element->hasAttribute('itemprop') && !($context->getParentThing() instanceof RootThing)) {
             $context = $this->processPropertyPrefixName(null, $element->getAttribute('itemprop'), $element, $context);
         }
@@ -87,6 +92,7 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function processChild(\DOMElement $element, ContextInterface $context)
     {
+        // TODO: Multiple item types
         if ($element->hasAttribute('itemtype')
             && (empty($element->getAttribute('itemprop')) || $context->getParentThing() instanceof RootThing)
         ) {

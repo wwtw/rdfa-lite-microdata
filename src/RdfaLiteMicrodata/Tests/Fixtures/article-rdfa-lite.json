@@ -1,6 +1,8 @@
 [
     {
-        "type": "NewsArticle",
+        "type": [
+            "NewsArticle"
+        ],
         "context": "http:\/\/schema.org\/",
         "id": null,
         "properties": {
@@ -32,7 +34,9 @@
                 "context": "http:\/\/schema.org\/",
                 "values": [
                     {
-                        "type": "ImageObject",
+                        "type": [
+                            "ImageObject"
+                        ],
                         "context": "http:\/\/schema.org\/",
                         "id": null,
                         "properties": {

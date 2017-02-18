@@ -75,7 +75,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $type = 'Person';
         $thing = new Thing($type, self::$schemaOrgVocabulary);
         $this->assertInstanceOf(Thing::class, $thing);
-        $this->assertEquals($type, $thing->getType());
+        $this->assertEquals([$type], $thing->getTypes());
         $this->assertEquals(self::$schemaOrgVocabulary, $thing->getVocabulary());
         $this->assertNull($thing->getResourceId());
         $this->assertTrue(is_array($thing->getChildren()));
