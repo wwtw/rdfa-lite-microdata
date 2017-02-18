@@ -44,6 +44,7 @@ use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
 
 /**
@@ -123,20 +124,6 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @return ContextInterface Local context for this element
      */
     abstract protected function processProperty(\DOMElement $element, ContextInterface $context);
-
-    /**
-     * Split a property into prefix and name
-     *
-     * @param string $property Prefixed property
-     * @return array Prefix and name
-     */
-    protected function splitProperty($property)
-    {
-        $property = explode(':', $property);
-        $name = strval(array_pop($property));
-        $prefix = strval(array_pop($property));
-        return [$prefix, $name];
-    }
 
     /**
      * Create a property by prefix and name
@@ -230,27 +217,48 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         /** @var TypeInterface[] $types */
         $types = [];
         foreach (preg_split('/\s+/', $typeof) as $prefixedType) {
-            $prefixedType = explode(':', $prefixedType);
-            $typeName = array_pop($prefixedType);
-            $prefix = array_pop($prefixedType);
-
-            $vocabulary = $this->getVocabulary($prefix, $context);
-            if ($vocabulary instanceof VocabularyInterface) {
-                $types[] = new Type($typeName, $vocabulary);
-                continue;
-            }
-
-            // If the default vocabulary is empty
-            if (empty($prefix)) {
-                throw new RuntimeException(
-                    RuntimeException::EMPTY_DEFAULT_VOCABULARY_STR,
-                    RuntimeException::EMPTY_DEFAULT_VOCABULARY
-                );
-            }
+            $types[] = $this->getType($prefixedType, $context);
         }
 
         return new Thing($types, $resourceId);
     }
+
+    /**
+     * Instanciate a type
+     *
+     * @param string $prefixedType Prefixed type
+     * @param ContextInterface $context Context
+     * @return TypeInterface Type
+     */
+    protected function getType($prefixedType, ContextInterface $context)
+    {
+        list($prefix, $typeName) = $this->getPrefixName($prefixedType);
+        $vocabulary = $this->getVocabulary($prefix, $context);
+        if ($vocabulary instanceof VocabularyInterface) {
+            return new Type($typeName, $vocabulary);
+        }
+
+        // If the default vocabulary is empty
+        if (empty($prefix)) {
+            throw new RuntimeException(
+                RuntimeException::EMPTY_DEFAULT_VOCABULARY_STR,
+                RuntimeException::EMPTY_DEFAULT_VOCABULARY
+            );
+        }
+
+        throw new OutOfBoundsException(
+            sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
+            OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
+        );
+    }
+
+    /**
+     * Split a value into a vocabulary prefix and a name
+     *
+     * @param string $prefixName Prefixed name
+     * @return array Prefix and name
+     */
+    abstract protected function getPrefixName($prefixName);
 
     /**
      * Return a property value (type and tag name dependent)

@@ -148,6 +148,18 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function getVocabulary($prefix, ContextInterface $context)
     {
+        $prefix = null;
         return $context->getDefaultVocabulary();
+    }
+
+    /**
+     * Split a value into a vocabulary prefix and a name
+     *
+     * @param string $prefixName Prefixed name
+     * @return array Prefix and name
+     */
+    protected function getPrefixName($prefixName)
+    {
+        return [null, $prefixName];
     }
 }

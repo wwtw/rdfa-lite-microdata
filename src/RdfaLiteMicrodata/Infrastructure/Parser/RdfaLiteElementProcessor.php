@@ -118,11 +118,25 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
     protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
         if ($element->hasAttribute('property') && !($context->getParentThing() instanceof RootThing)) {
-            list($prefix, $name) = $this->splitProperty($element->getAttribute('property'));
+            list($prefix, $name) = $this->getPrefixName($element->getAttribute('property'));
             $context = $this->processPropertyPrefixName($prefix, $name, $element, $context);
         }
 
         return $context;
+    }
+
+    /**
+     * Split a value into a vocabulary prefix and a name
+     *
+     * @param string $prefixName Prefixed name
+     * @return array Prefix and name
+     */
+    protected function getPrefixName($prefixName)
+    {
+        $prefixName = explode(':', $prefixName);
+        $name = array_pop($prefixName);
+        $prefix = array_pop($prefixName);
+        return [$prefix, $name];
     }
 
     /**
