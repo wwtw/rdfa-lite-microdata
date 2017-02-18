@@ -41,6 +41,7 @@ use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
@@ -72,11 +73,10 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public function testMinimumThing()
     {
-        $type = 'Person';
-        $thing = new Thing($type, self::$schemaOrgVocabulary);
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type);
         $this->assertInstanceOf(Thing::class, $thing);
         $this->assertEquals([$type], $thing->getTypes());
-        $this->assertEquals(self::$schemaOrgVocabulary, $thing->getVocabulary());
         $this->assertNull($thing->getResourceId());
         $this->assertTrue(is_array($thing->getChildren()));
         $this->assertEquals(0, count($thing->getChildren()));
@@ -89,7 +89,8 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public function testResourceId()
     {
-        $thing = new Thing('Person', self::$schemaOrgVocabulary, 'bob');
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type, 'bob');
         $this->assertInstanceOf(Thing::class, $thing);
         $this->assertEquals('bob', $thing->getResourceId());
     }
@@ -98,11 +99,11 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      * Test the thing instantiation with an invalid type
      *
      * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException
-     * @expectedExceptionCode 1486823588
+     * @expectedExceptionCode 1487435964
      */
     public function testInvalidTypeThing()
     {
-        new Thing('', self::$schemaOrgVocabulary);
+        new Thing(null);
     }
 
     /**
@@ -110,7 +111,8 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddProperty()
     {
-        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type);
         $this->assertInstanceOf(Thing::class, $thing);
 
         $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
@@ -133,7 +135,8 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInvalidPropertyName()
     {
-        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type);
         $this->assertInstanceOf(Thing::class, $thing);
         $thing->getProperty('invalid', new NullVocabulary());
     }
@@ -143,11 +146,12 @@ class ThingTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddChild()
     {
-        $thing = new Thing('Person', self::$schemaOrgVocabulary);
+        $type = new Type('Person', self::$schemaOrgVocabulary);
+        $thing = new Thing($type);
         $this->assertInstanceOf(Thing::class, $thing);
 
-        $child1 = new Thing('Person', self::$schemaOrgVocabulary);
-        $child2 = new Thing('Person', self::$schemaOrgVocabulary);
+        $child1 = new Thing($type);
+        $child2 = new Thing($type);
         $thing->addChild($child1)->addChild($child2);
 
         $children = $thing->getChildren();

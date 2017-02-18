@@ -38,6 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Tests\Domain\VocabularyTest;
 
@@ -147,7 +148,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $context = new RdfaLiteContext();
         $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
-        $thing = new Thing('Person', $vocabulary);
+        $type = new Type('Person', $vocabulary);
+        $thing = new Thing($type);
         $newContext = $context->setParentThing($thing);
         $this->assertEquals($thing, $newContext->getParentThing());
         $this->assertNotEquals(spl_object_hash($context), spl_object_hash($newContext));
@@ -166,13 +168,14 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(RdfaLiteContext::class, $context);
         $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
 
-        $thing = new Thing('Person', $vocabulary);
+        $type = new Type('Person', $vocabulary);
+        $thing = new Thing($type);
         $context->addChild($thing);
         $this->assertEquals([$thing], $context->getChildren());
         $context->addChild($thing);
         $this->assertEquals([$thing], $context->getChildren());
 
-        $parent = new Thing('Person', $vocabulary);
+        $parent = new Thing($type);
         $newContext = $context->setParentThing($parent);
         $this->assertEquals([], $newContext->getChildren());
         $newContext->addChild($thing);

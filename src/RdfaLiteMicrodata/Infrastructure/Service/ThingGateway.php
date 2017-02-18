@@ -38,6 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Service;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 
 /**
  * Thing gateway
@@ -91,8 +92,12 @@ class ThingGateway
         }
 
         return (object)[
-            'type' => $thing->getTypes(),
-            'context' => $thing->getVocabulary()->getUri(),
+            'type' => array_map(
+                function (TypeInterface $type) {
+                    return $type->getVocabulary()->expand($type->getType());
+                },
+                $thing->getTypes()
+            ),
             'id' => $thing->getResourceId(),
             'properties' => $properties,
             'children' => array_map([$this, 'exportThing'], $thing->getChildren()),

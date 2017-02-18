@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Application
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,27 +34,72 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Type;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
-use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
+use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Root thing
+ * Type
  *
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Application
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-class RootThing extends Thing
+class Type implements TypeInterface
 {
     /**
-     * Root thing constructor
+     * Type
      *
-     * @param VocabularyInterface $vocabulary Vocabulary
+     * @var string
      */
-    public function __construct(VocabularyInterface $vocabulary = null)
+    protected $type;
+    /**
+     * Vocabulary
+     *
+     * @var VocabularyInterface
+     */
+    protected $vocabulary;
+
+    /**
+     * Type constructor
+     *
+     * @param string $type Type
+     * @param VocabularyInterface $vocabulary Vocabulary
+     * @throws RuntimeException If the type is invalid
+     */
+    public function __construct($type, VocabularyInterface $vocabulary)
     {
-        parent::__construct(new Type('Root', $vocabulary ?: new NullVocabulary()), null);
+        $type = trim($type);
+
+        // If the type is invalid
+        if (!strlen($type)) {
+            throw new RuntimeException(
+                sprintf(RuntimeException::INVALID_TYPE_NAME_STR, $type, $vocabulary->getUri()),
+                RuntimeException::INVALID_TYPE_NAME
+            );
+        }
+
+        $this->type = $type;
+        $this->vocabulary = $vocabulary;
+    }
+
+    /**
+     * Return the type
+     *
+     * @return string Type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Return the vocabulary
+     *
+     * @return VocabularyInterface Vocabulary
+     */
+    public function getVocabulary()
+    {
+        return $this->vocabulary;
     }
 }

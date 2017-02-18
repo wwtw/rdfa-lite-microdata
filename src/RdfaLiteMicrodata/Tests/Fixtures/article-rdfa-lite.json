@@ -1,9 +1,8 @@
 [
     {
         "type": [
-            "NewsArticle"
+            "http:\/\/schema.org\/NewsArticle"
         ],
-        "context": "http:\/\/schema.org\/",
         "id": null,
         "properties": {
             "name": {
@@ -35,9 +34,8 @@
                 "values": [
                     {
                         "type": [
-                            "ImageObject"
+                            "http:\/\/schema.org\/ImageObject"
                         ],
-                        "context": "http:\/\/schema.org\/",
                         "id": null,
                         "properties": {
                             "contentURL": {

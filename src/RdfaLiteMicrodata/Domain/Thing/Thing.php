@@ -40,6 +40,7 @@ use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyService;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -53,15 +54,9 @@ class Thing implements ThingInterface
     /**
      * Resource types
      *
-     * @var string[]
+     * @var TypeInterface[]
      */
     protected $types;
-    /**
-     * Resource vocabulary
-     *
-     * @var VocabularyInterface
-     */
-    protected $vocabulary;
     /**
      * Resource ID
      *
@@ -84,27 +79,25 @@ class Thing implements ThingInterface
     /**
      * Thing constructor
      *
-     * @param string|array $types Resource type(s)
-     * @param VocabularyInterface $vocabulary Vocabulary in use
+     * @param TypeInterface|TypeInterface[] $types Type(s)
      * @param null|string $resourceId Resource id
      */
-    public function __construct($types, VocabularyInterface $vocabulary, $resourceId = null)
+    public function __construct($types, $resourceId = null)
     {
-        $types = array_filter(array_map('trim', (array)$types), function ($t) {
-            return strlen($t) > 0;
-        });
-        if (!count($types)) {
-            throw new RuntimeException(
-                sprintf(
-                    RuntimeException::INVALID_RESOURCE_TYPES_STR,
-                    "['".implode("', '", $types)."']",
-                    $vocabulary->getUri()
-                ),
-                RuntimeException::INVALID_RESOURCE_TYPES
-            );
+        if (!is_array($types)) {
+            $types = [$types];
         }
 
-        $this->vocabulary = $vocabulary;
+        // Run through all given types
+        foreach ($types as $type) {
+            if (!($type instanceof TypeInterface)) {
+                throw new RuntimeException(
+                    sprintf(RuntimeException::INVALID_TYPE_STR, gettype($type)),
+                    RuntimeException::INVALID_TYPE
+                );
+            }
+        }
+
         $this->types = $types;
         $this->resourceId = $resourceId;
     }
@@ -112,21 +105,11 @@ class Thing implements ThingInterface
     /**
      * Return the resource types
      *
-     * @return string Resource types
+     * @return TypeInterface[] Resource types
      */
     public function getTypes()
     {
         return $this->types;
-    }
-
-    /**
-     * Return the vocabulary in use
-     *
-     * @return VocabularyInterface Vocabulary
-     */
-    public function getVocabulary()
-    {
-        return $this->vocabulary;
     }
 
     /**

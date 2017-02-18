@@ -41,6 +41,7 @@ use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
@@ -237,20 +238,21 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * Return a thing by prefix and type
      *
      * @param string $prefix Prefix
-     * @param string $type Type
+     * @param string $typeName Type
      * @param string $resourceId Resource ID
      * @param ContextInterface $context Context
      * @return Thing Thing
      * @throws RuntimeException If the default vocabulary is empty
      * @throws OutOfBoundsException If the vocabulary prefix is unknown
      */
-    protected function getThingByPrefixType($prefix, $type, $resourceId, ContextInterface $context)
+    protected function getThingByPrefixType($prefix, $typeName, $resourceId, ContextInterface $context)
     {
         // Determine the vocabulary to use
         try {
             $vocabulary = $this->getVocabulary($prefix, $context);
             if ($vocabulary instanceof VocabularyInterface) {
-                return new Thing($type, $vocabulary, $resourceId);
+                $type = new Type($typeName, $vocabulary);
+                return new Thing($type, $resourceId);
             }
 
             // If the default vocabulary is empty

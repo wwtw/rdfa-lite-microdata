@@ -1,9 +1,8 @@
 [
     {
         "type": [
-            "thing"
+            "http://www.milowski.com/V/thing"
         ],
-        "context": "http:\/\/www.milowski.com\/V\/",
         "id": null,
         "properties": {
             "name": {

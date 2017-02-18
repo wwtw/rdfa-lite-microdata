@@ -3,7 +3,6 @@
         "type": [
             "\/\/schema.org\/Movie"
         ],
-        "context": "",
         "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
         "properties": {
             "name": {
@@ -19,7 +18,6 @@
                         "type": [
                             "\/\/schema.org\/Person"
                         ],
-                        "context": "",
                         "id": null,
                         "properties": {
                             "name": {

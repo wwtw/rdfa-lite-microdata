@@ -57,17 +57,29 @@ class RuntimeException extends \RuntimeException implements RdfaLiteMicrodataDom
      */
     const INVALID_VOCABULARY_URI = 1486823170;
     /**
-     * Invalid resource type
+     * Invalid type name
      *
      * @var string
      */
-    const INVALID_RESOURCE_TYPES_STR = 'Invalid resource types %s (vocabulary %s)';
+    const INVALID_TYPE_NAME_STR = 'Invalid type name "%s" (vocabulary %s)';
     /**
-     * Invalid vocabulary
+     * Invalid type name
      *
      * @var int
      */
-    const INVALID_RESOURCE_TYPES = 1486823588;
+    const INVALID_TYPE_NAME = 1487435276;
+    /**
+     * Invalid type
+     *
+     * @var string
+     */
+    const INVALID_TYPE_STR = 'Invalid type "%s"';
+    /**
+     * Invalid type
+     *
+     * @var int
+     */
+    const INVALID_TYPE = 1487435964;
     /**
      * Invalid property name
      *

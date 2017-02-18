@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Domain\Thing;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -50,16 +51,9 @@ interface ThingInterface
     /**
      * Return the resource types
      *
-     * @return string Resource types
+     * @return TypeInterface[] Resource types
      */
     public function getTypes();
-
-    /**
-     * Return the vocabulary in use
-     *
-     * @return VocabularyInterface Vocabulary
-     */
-    public function getVocabulary();
 
     /**
      * Return the resource ID

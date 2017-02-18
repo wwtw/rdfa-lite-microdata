@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Application
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,27 +34,29 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Type;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
-use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Root thing
+ * Type interface
  *
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Application
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-class RootThing extends Thing
+interface TypeInterface
 {
     /**
-     * Root thing constructor
+     * Return the type
      *
-     * @param VocabularyInterface $vocabulary Vocabulary
+     * @return string Type
      */
-    public function __construct(VocabularyInterface $vocabulary = null)
-    {
-        parent::__construct(new Type('Root', $vocabulary ?: new NullVocabulary()), null);
-    }
+    public function getType();
+
+    /**
+     * Return the vocabulary
+     *
+     * @return VocabularyInterface Vocabulary
+     */
+    public function getVocabulary();
 }

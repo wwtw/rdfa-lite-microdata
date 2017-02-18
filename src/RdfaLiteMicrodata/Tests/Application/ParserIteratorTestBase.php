@@ -39,6 +39,7 @@ namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\RdfaLiteMicrodata\Tests\AbstractTest;
@@ -81,10 +82,10 @@ abstract class ParserIteratorTestBase extends AbstractTest
         $this->assertTrue(is_array($things));
         $this->assertEquals(1, count($things));
         $thing = $things[0];
+        $type = new Type('Person', $schemaOrgVocabulary);
 
         $this->assertInstanceOf(ThingInterface::class, $thing);
-        $this->assertEquals(['Person'], $thing->getTypes());
-        $this->assertEquals($schemaOrgVocabulary, $thing->getVocabulary());
+        $this->assertEquals([$type], $thing->getTypes());
         $this->assertEquals('#joschi', $thing->getResourceId());
 
         $properties = $thing->getProperties();

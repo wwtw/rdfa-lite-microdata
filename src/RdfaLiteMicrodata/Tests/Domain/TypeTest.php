@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Application
+ * @subpackage Jkphl\RdfaLiteMicrodata\Tests
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,27 +34,40 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
+namespace Jkphl\RdfaLiteMicrodata\Tests\Domain;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
-use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 
 /**
- * Root thing
+ * Type tests
  *
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Application
+ * @subpackage Jkphl\RdfaLiteMicrodata\Tests
  */
-class RootThing extends Thing
+class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Root thing constructor
-     *
-     * @param VocabularyInterface $vocabulary Vocabulary
+     * Test the type instantiation
      */
-    public function __construct(VocabularyInterface $vocabulary = null)
+    public function testProperty()
     {
-        parent::__construct(new Type('Root', $vocabulary ?: new NullVocabulary()), null);
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
+        $type = new Type('test', $vocabulary);
+        $this->assertInstanceOf(Type::class, $type);
+        $this->assertEquals('test', $type->getType());
+        $this->assertEquals($vocabulary, $type->getVocabulary());
+    }
+
+    /**
+     * Test invalid type
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException
+     * @expectedExceptionCode 1487435276
+     */
+    public function testInvalidPropertyName()
+    {
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
+        new Type('', $vocabulary);
     }
 }
