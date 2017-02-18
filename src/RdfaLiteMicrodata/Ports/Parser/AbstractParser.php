@@ -48,14 +48,15 @@ use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
 abstract class AbstractParser implements ParserInterface
 {
     /**
-     * Parse a file
+     * Get the contents of a file
      *
      * @param string $file File
      * @return array Extracted things
+     * @throws RuntimeException If the file is not readable
      */
-    public static function parseFile($file)
+    protected static function getFileContents($file)
     {
-        // If the file does not exist
+        // If the file is not readable
         if (!is_readable($file)) {
             throw new RuntimeException(
                 sprintf(RuntimeException::INVALID_FILE_STR, $file),
@@ -63,6 +64,6 @@ abstract class AbstractParser implements ParserInterface
             );
         }
 
-        return static::parseString(file_get_contents($file));
+        return file_get_contents($file);
     }
 }

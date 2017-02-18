@@ -44,19 +44,5 @@ namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
  */
 interface ParserInterface
 {
-    /**
-     * Parse a string
-     *
-     * @param string $string String
-     * @return array Extracted things
-     */
-    public static function parseString($string);
 
-    /**
-     * Parse a file
-     *
-     * @param string $file File
-     * @return array Extracted things
-     */
-    public static function parseFile($file);
 }

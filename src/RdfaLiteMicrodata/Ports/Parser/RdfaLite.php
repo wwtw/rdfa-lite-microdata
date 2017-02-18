@@ -3,12 +3,12 @@
 /**
  * rdfa-lite-microdata
  *
- * @category    Jkphl
- * @package     Jkphl\RdfaLiteMicrodata
- * @subpackage  Jkphl\RdfaLiteMicrodata\Ports
- * @author      Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @copyright   Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @license     http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @category Jkphl
+ * @package Jkphl\RdfaLiteMicrodata
+ * @subpackage Jkphl\RdfaLiteMicrodata\Ports
+ * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
@@ -34,33 +34,78 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
+namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\XmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
-use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
 
 /**
- * HTML parser
+ * RDFa Lite 1.1 parser
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Ports
  * @see https://www.w3.org/TR/rdfa-lite/
  */
-class Html extends AbstractParser
+class RdfaLite extends AbstractParser
 {
     /**
-     * Parse a string
+     * Parse an XML file
      *
-     * @param string $string String
+     * @param string $file XML file path
      * @return array Extracted things
      */
-    public static function parseString($string)
+    public static function parseXmlFile($file)
+    {
+        return self::parseXmlString(self::getFileContents($file));
+    }
+
+    /**
+     * Parse an XML string
+     *
+     * @param string $string XML string
+     * @return array Extracted things
+     */
+    public static function parseXmlString($string)
+    {
+        try {
+            $xmlDocumentFactory = new XmlDocumentFactory();
+            $rdfaElementProcessor = new RdfaLiteElementProcessor(false);
+            $rdfaContext = new RdfaLiteContext();
+            $parser = new Parser($xmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
+            $things = $parser->parse($string);
+            $gateway = new ThingGateway();
+            return $gateway->export($things);
+        } catch (\OutOfBoundsException $e) {
+            throw new OutOfBoundsException($e->getMessage(), $e->getCode());
+        } catch (\RuntimeException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Parse an HTML file
+     *
+     * @param string $file HTML file path
+     * @return array Extracted things
+     */
+    public static function parseHtmlFile($file)
+    {
+        return self::parseHtmlString(self::getFileContents($file));
+    }
+
+    /**
+     * Parse an HTML string
+     *
+     * @param string $string HTML string
+     * @return array Extracted things
+     */
+    public static function parseHtmlString($string)
     {
         try {
             $htmlDocumentFactory = new HtmlDocumentFactory();

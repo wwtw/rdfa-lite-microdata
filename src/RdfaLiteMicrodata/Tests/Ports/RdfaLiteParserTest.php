@@ -36,8 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Ports;
 
-use Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite\Html;
-use Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite\Xml;
+use Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
 use Jkphl\RdfaLiteMicrodata\Tests\AbstractTest;
 
 /**
@@ -53,7 +52,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testRdfaLiteHtmlFile()
     {
-        $things = Html::parseFile(
+        $things = RdfaLite::parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
         );
         $this->assertArrayEquals(
@@ -76,7 +75,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testInvalidFile()
     {
-        Html::parseFile('invalid');
+        RdfaLite::parseHtmlFile('invalid');
     }
 
     /**
@@ -86,7 +85,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testHTMLRuntimeException()
     {
-        Html::parseFile(
+        RdfaLite::parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
         );
     }
@@ -98,7 +97,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testHTMLOutOfBoundsException()
     {
-        Html::parseFile(
+        RdfaLite::parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
         );
     }
@@ -108,7 +107,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testRdfaLiteXmlFile()
     {
-        $things = Xml::parseFile(
+        $things = RdfaLite::parseXmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'typed-property-rdfa-lite.xhtml'
         );
         $this->assertArrayEquals(
@@ -132,7 +131,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testXMLRuntimeException()
     {
-        Xml::parseFile(
+        RdfaLite::parseXmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
         );
     }
@@ -144,7 +143,7 @@ class RdfaLiteParserTest extends AbstractTest
      */
     public function testXMLOutOfBoundsException()
     {
-        Xml::parseFile(
+        RdfaLite::parseXmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
         );
     }

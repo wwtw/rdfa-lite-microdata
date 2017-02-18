@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Ports;
 
-use Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata\Html;
+use Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata;
 use Jkphl\RdfaLiteMicrodata\Tests\AbstractTest;
 
 /**
@@ -52,7 +52,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testMicrodataHtmlFile()
     {
-        $things = Html::parseFile(
+        $things = Microdata::parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
         );
         $this->assertArrayEquals(
@@ -75,7 +75,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testInvalidFile()
     {
-        Html::parseFile('invalid');
+        Microdata::parseHtmlFile('invalid');
     }
 
     /**
@@ -85,7 +85,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testRuntimeException()
     {
-        Html::parseFile(
+        Microdata::parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-property-microdata.html'
         );
     }

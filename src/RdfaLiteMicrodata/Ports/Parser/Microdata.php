@@ -3,12 +3,12 @@
 /**
  * rdfa-lite-microdata
  *
- * @category    Jkphl
- * @package     Jkphl\RdfaLiteMicrodata
- * @subpackage  Jkphl\RdfaLiteMicrodata\Ports
- * @author      Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @copyright   Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @license     http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @category Jkphl
+ * @package Jkphl\RdfaLiteMicrodata
+ * @subpackage Jkphl\RdfaLiteMicrodata\Ports
+ * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
@@ -34,7 +34,7 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata;
+namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\MicrodataContext;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
@@ -42,25 +42,35 @@ use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\MicrodataElementProcessor;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
-use Jkphl\RdfaLiteMicrodata\Ports\Parser\AbstractParser;
 
 /**
- * HTML parser
+ * RDFa Lite 1.1 parser
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Ports
  * @see https://www.w3.org/TR/microdata/
  * @see https://www.w3.org/TR/microdata/#json
  */
-class Html extends AbstractParser
+class Microdata extends AbstractParser
 {
     /**
-     * Parse a string
+     * Parse an HTML file
      *
-     * @param string $string String
+     * @param string $file HTML file path
      * @return array Extracted things
      */
-    public static function parseString($string)
+    public static function parseHtmlFile($file)
+    {
+        return self::parseHtmlString(self::getFileContents($file));
+    }
+
+    /**
+     * Parse an HTML string
+     *
+     * @param string $string HTML string
+     * @return array Extracted things
+     */
+    public static function parseHtmlString($string)
     {
         try {
             $htmlDocumentFactory = new HtmlDocumentFactory();
