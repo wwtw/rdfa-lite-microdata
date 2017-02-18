@@ -59,15 +59,20 @@ abstract class ParserIteratorTestBase extends AbstractTest
      * @var string
      */
     protected static $personRdfa;
+    /**
+     * Fixture directory
+     *
+     * @var string
+     */
+    protected static $fixtures;
 
     /**
      * Setup all tests
      */
     public static function setUpBeforeClass()
     {
-        self::$personRdfa = file_get_contents(
-            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'person-rdfa-lite.html'
-        );
+        self::$fixtures = dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR;
+        self::$personRdfa = file_get_contents(self::$fixtures.'person-rdfa-lite.html');
     }
 
     /**
@@ -78,14 +83,16 @@ abstract class ParserIteratorTestBase extends AbstractTest
     protected function validatePersonResult(array $things)
     {
         $schemaOrgVocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
+        $foafVocabulary = new Vocabulary('http://xmlns.com/foaf/0.1/');
 
         $this->assertTrue(is_array($things));
         $this->assertEquals(1, count($things));
         $thing = $things[0];
         $type = new Type('Person', $schemaOrgVocabulary);
+        $foafType = new Type('Person', $foafVocabulary);
 
         $this->assertInstanceOf(ThingInterface::class, $thing);
-        $this->assertEquals([$type], $thing->getTypes());
+        $this->assertEquals([$type, $foafType], $thing->getTypes());
         $this->assertEquals('#joschi', $thing->getResourceId());
 
         $properties = $thing->getProperties();

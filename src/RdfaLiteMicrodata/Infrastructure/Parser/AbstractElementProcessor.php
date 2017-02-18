@@ -42,8 +42,8 @@ use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
 
 /**
@@ -224,35 +224,21 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param string $resourceId Resource ID
      * @param ContextInterface $context Context
      * @return Thing Thing
+     * @throws RuntimeException If the default vocabulary is empty
      */
     protected function getThing($typeof, $resourceId, ContextInterface $context)
     {
-        $typeof = explode(':', $typeof);
-        $type = array_pop($typeof);
-        $prefix = array_pop($typeof);
+        /** @var TypeInterface[] $types */
+        $types = [];
+        foreach (preg_split('/\s+/', $typeof) as $prefixedType) {
+            $prefixedType = explode(':', $prefixedType);
+            $typeName = array_pop($prefixedType);
+            $prefix = array_pop($prefixedType);
 
-        return $this->getThingByPrefixType($prefix, $type, $resourceId, $context);
-    }
-
-    /**
-     * Return a thing by prefix and type
-     *
-     * @param string $prefix Prefix
-     * @param string $typeName Type
-     * @param string $resourceId Resource ID
-     * @param ContextInterface $context Context
-     * @return Thing Thing
-     * @throws RuntimeException If the default vocabulary is empty
-     * @throws OutOfBoundsException If the vocabulary prefix is unknown
-     */
-    protected function getThingByPrefixType($prefix, $typeName, $resourceId, ContextInterface $context)
-    {
-        // Determine the vocabulary to use
-        try {
             $vocabulary = $this->getVocabulary($prefix, $context);
             if ($vocabulary instanceof VocabularyInterface) {
-                $type = new Type($typeName, $vocabulary);
-                return new Thing($type, $resourceId);
+                $types[] = new Type($typeName, $vocabulary);
+                continue;
             }
 
             // If the default vocabulary is empty
@@ -262,14 +248,9 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
                     RuntimeException::EMPTY_DEFAULT_VOCABULARY
                 );
             }
-        } catch (\Jkphl\RdfaLiteMicrodata\Application\Exceptions\OutOfBoundsException $e) {
-            // Promote to client level exception
         }
 
-        throw new OutOfBoundsException(
-            sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
-            OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
-        );
+        return new Thing($types, $resourceId);
     }
 
     /**

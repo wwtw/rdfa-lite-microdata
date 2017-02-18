@@ -42,7 +42,7 @@ namespace Jkphl\RdfaLiteMicrodata\Application\Exceptions;
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Application
  */
-class OutOfBoundsException extends \RuntimeException implements RdfaLiteMicrodataApplicationExceptionInterface
+class OutOfBoundsException extends \OutOfBoundsException implements RdfaLiteMicrodataApplicationExceptionInterface
 {
     /**
      * Unknown vocabulary prefix

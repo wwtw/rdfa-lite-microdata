@@ -78,17 +78,11 @@ class ParserTest extends ParserIteratorTestBase
 
         $things = $parser->parse(
             file_get_contents(
-                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
+                self::$fixtures.'article-rdfa-lite.html'
             )
         );
         $this->assertArrayEquals(
-            $this->castArray(
-                json_decode(
-                    file_get_contents(
-                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
-                    )
-                )
-            ),
+            $this->castArray(json_decode(file_get_contents(self::$fixtures.'article-rdfa-lite.json'))),
             $this->castArray((new ThingGateway())->export($things))
         );
     }
@@ -107,17 +101,13 @@ class ParserTest extends ParserIteratorTestBase
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
 
-        $parser->parse(
-            file_get_contents(
-                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-default-vocab-rdfa-lite.html'
-            )
-        );
+        $parser->parse(file_get_contents(self::$fixtures.'empty-default-vocab-rdfa-lite.html'));
     }
 
     /**
      * Test unknown vocabulary prefix parsing
      *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\OutOfBoundsException
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Application\Exceptions\OutOfBoundsException
      * @expectedExceptionCode 1486928423
      */
     public function testUnknownVocabularyPrefix()
@@ -128,12 +118,6 @@ class ParserTest extends ParserIteratorTestBase
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
 
-        $parser->parse(
-            file_get_contents(
-                dirname(
-                    __DIR__
-                ).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'unknown-vocab-prefix-rdfa-lite.html'
-            )
-        );
+        $parser->parse(file_get_contents(self::$fixtures.'unknown-vocab-prefix-rdfa-lite.html'));
     }
 }
