@@ -77,14 +77,12 @@ class MicrodataElementProcessor extends AbstractElementProcessor
         if ($element->hasAttribute('itemprop') && !($context->getParentThing() instanceof RootThing)) {
             $properties = preg_split('/\s+/', $element->getAttribute('itemprop'));
             foreach ($properties as $index => $property) {
-                $firstProperty = ($index ? 0 : self::PROPERTY_FIRST);
-                $lastProperty = ($index == (count($properties) - 1)) ? self::PROPERTY_LAST : 0;
                 $context = $this->processPropertyPrefixName(
                     null,
                     $property,
                     $element,
                     $context,
-                    $firstProperty | $lastProperty
+                    $index == (count($properties) - 1)
                 );
             }
         }
@@ -155,8 +153,9 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function getVocabulary($prefix, ContextInterface $context)
     {
-        $prefix = null;
-        return $context->getDefaultVocabulary();
+        /** @var VocabularyInterface $vocabulary */
+        $vocabulary = $prefix ?: $context->getDefaultVocabulary();
+        return $vocabulary;
     }
 
     /**

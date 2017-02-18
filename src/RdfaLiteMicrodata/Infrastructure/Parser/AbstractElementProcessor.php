@@ -56,18 +56,6 @@ use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
 abstract class AbstractElementProcessor implements ElementProcessorInterface
 {
     /**
-     * First property
-     *
-     * @var int
-     */
-    const PROPERTY_FIRST = 1;
-    /**
-     * Last property
-     *
-     * @var int
-     */
-    const PROPERTY_LAST = 2;
-    /**
      * Tag name / attribute map
      *
      * @var array
@@ -150,19 +138,14 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param string $name Property name
      * @param \DOMElement $element DOM element
      * @param ContextInterface $context Inherited Context
-     * @param int $mode Property mode
+     * @param boolean $last Last property
      * @return ContextInterface Local context for this element
      */
-    protected function processPropertyPrefixName(
-        $prefix,
-        $name,
-        \DOMElement $element,
-        ContextInterface $context,
-        $mode
-    ) {
+    protected function processPropertyPrefixName($prefix, $name, \DOMElement $element, ContextInterface $context, $last)
+    {
         $vocabulary = $this->getVocabulary($prefix, $context);
         if ($vocabulary instanceof VocabularyInterface) {
-            $context = $this->addProperty($element, $context, $name, $vocabulary, $mode);
+            $context = $this->addProperty($element, $context, $name, $vocabulary, $last);
         }
 
         return $context;
@@ -184,7 +167,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @param ContextInterface $context Inherited Context
      * @param string $name Property name
      * @param VocabularyInterface $vocabulary Property vocabulary
-     * @param int $mode Property mode
+     * @param boolean $last Last property
      * @return ContextInterface Local context for this element
      */
     protected function addProperty(
@@ -192,7 +175,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         ContextInterface $context,
         $name,
         VocabularyInterface $vocabulary,
-        $mode
+        $last
     ) {
         $resourceId = $this->getResourceId($element);
 
@@ -204,7 +187,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         $context->getParentThing()->addProperty($property);
 
         // If the property value is a thing and this is the element's last property
-        if (($propertyValue instanceof ThingInterface) && ($mode & self::PROPERTY_LAST)) {
+        if (($propertyValue instanceof ThingInterface) && $last) {
             // Set the thing as parent thing for nested iterations
             $context = $context->setParentThing($propertyValue);
         }

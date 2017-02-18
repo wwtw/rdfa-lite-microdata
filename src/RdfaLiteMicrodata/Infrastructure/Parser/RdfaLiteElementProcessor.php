@@ -120,15 +120,13 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
         if ($element->hasAttribute('property') && !($context->getParentThing() instanceof RootThing)) {
             $properties = preg_split('/\s+/', $element->getAttribute('property'));
             foreach ($properties as $index => $property) {
-                $firstProperty = ($index ? 0 : self::PROPERTY_FIRST);
-                $lastProperty = ($index == (count($properties) - 1)) ? self::PROPERTY_LAST : 0;
                 list($prefix, $name) = $this->getPrefixName($property);
                 $context = $this->processPropertyPrefixName(
                     $prefix,
                     $name,
                     $element,
                     $context,
-                    $firstProperty | $lastProperty
+                    $index == (count($properties) - 1)
                 );
             }
         }
