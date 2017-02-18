@@ -157,7 +157,6 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         return $context;
     }
 
-
     /**
      * Return a vocabulary by prefix with fallback to the default vocabulary
      *

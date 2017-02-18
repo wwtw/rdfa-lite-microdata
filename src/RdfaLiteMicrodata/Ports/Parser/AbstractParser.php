@@ -36,7 +36,13 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
 
+use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\ParserInterface;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
+use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
 
 /**
@@ -65,5 +71,32 @@ abstract class AbstractParser implements ParserInterface
         }
 
         return file_get_contents($file);
+    }
+
+    /**
+     * Parse a string
+     *
+     * @param string $string String
+     * @param DocumentFactoryInterface $documentFactory Document factory
+     * @param ElementProcessorInterface $elementProcessor Element processor
+     * @param ContextInterface $context Context
+     * @return array Extracted things
+     */
+    protected static function parseString(
+        $string,
+        DocumentFactoryInterface $documentFactory,
+        ElementProcessorInterface $elementProcessor,
+        ContextInterface $context
+    ) {
+        try {
+            $parser = new Parser($documentFactory, $elementProcessor, $context);
+            $things = $parser->parse($string);
+            $gateway = new ThingGateway();
+            return $gateway->export($things);
+        } catch (\OutOfBoundsException $e) {
+            throw new OutOfBoundsException($e->getMessage(), $e->getCode());
+        } catch (\RuntimeException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode());
+        }
     }
 }

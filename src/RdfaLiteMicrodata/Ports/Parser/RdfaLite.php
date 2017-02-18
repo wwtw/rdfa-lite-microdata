@@ -37,13 +37,9 @@
 namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
-use Jkphl\RdfaLiteMicrodata\Application\Parser\Parser;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\XmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Service\ThingGateway;
-use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\OutOfBoundsException;
-use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
 
 /**
  * RDFa Lite 1.1 parser
@@ -73,19 +69,12 @@ class RdfaLite extends AbstractParser
      */
     public static function parseXmlString($string)
     {
-        try {
-            $xmlDocumentFactory = new XmlDocumentFactory();
-            $rdfaElementProcessor = new RdfaLiteElementProcessor(false);
-            $rdfaContext = new RdfaLiteContext();
-            $parser = new Parser($xmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
-            $things = $parser->parse($string);
-            $gateway = new ThingGateway();
-            return $gateway->export($things);
-        } catch (\OutOfBoundsException $e) {
-            throw new OutOfBoundsException($e->getMessage(), $e->getCode());
-        } catch (\RuntimeException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode());
-        }
+        return self::parseString(
+            $string,
+            new XmlDocumentFactory(),
+            new RdfaLiteElementProcessor(false),
+            new RdfaLiteContext()
+        );
     }
 
     /**
@@ -107,18 +96,11 @@ class RdfaLite extends AbstractParser
      */
     public static function parseHtmlString($string)
     {
-        try {
-            $htmlDocumentFactory = new HtmlDocumentFactory();
-            $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
-            $rdfaContext = new RdfaLiteContext();
-            $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
-            $things = $parser->parse($string);
-            $gateway = new ThingGateway();
-            return $gateway->export($things);
-        } catch (\OutOfBoundsException $e) {
-            throw new OutOfBoundsException($e->getMessage(), $e->getCode());
-        } catch (\RuntimeException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode());
-        }
+        return self::parseString(
+            $string,
+            new HtmlDocumentFactory(),
+            new RdfaLiteElementProcessor(true),
+            new RdfaLiteContext()
+        );
     }
 }
