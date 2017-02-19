@@ -84,8 +84,11 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
      * @param RdfaLiteContext $context RdfaLiteContext
      * @param ElementProcessorInterface $elementProcessor Element processor
      */
-    protected function iterateDom(\DOMDocument $dom, RdfaLiteContext $context, ElementProcessorInterface $elementProcessor)
-    {
+    protected function iterateDom(
+        \DOMDocument $dom,
+        RdfaLiteContext $context,
+        ElementProcessorInterface $elementProcessor
+    ) {
         $domNodeIterator = new DOMIterator($dom->childNodes, $context, $elementProcessor);
         $this->assertInstanceOf(DOMIterator::class, $domNodeIterator);
 
@@ -115,5 +118,19 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
         $context = new RdfaLiteContext();
         $this->iterateDom($dom, $context, new RdfaLiteElementProcessor(true));
         $this->validatePersonResult($context->getChildren());
+    }
+
+    /**
+     * Test an invalid node list
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Application\Exceptions\RuntimeException
+     * @expectedExceptionCode 1487461118
+     */
+    public function testInvalidNodeList()
+    {
+        $context = new RdfaLiteContext();
+        /** @var ElementProcessorInterface $elementProcessor */
+        $elementProcessor = $this->getMock(ElementProcessorInterface::class);
+        new DOMIterator(null, $context, $elementProcessor);
     }
 }

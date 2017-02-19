@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Parser\DOMIterator;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
@@ -67,8 +68,6 @@ class MicrodataElementProcessor extends AbstractElementProcessor
         }
 
         return $propertyContext;
-
-        // TODO: itemref
     }
 
     /**
@@ -81,14 +80,15 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
         if ($element->hasAttribute('itemprop') && !($context->getParentThing() instanceof RootThing)) {
-            $properties = preg_split('/\s+/', $element->getAttribute('itemprop'));
-            foreach ($properties as $index => $property) {
+            $itemprops = trim($element->getAttribute('itemprop'));
+            $itemprops = strlen($itemprops) ? preg_split('/\s+/', $itemprops) : [];
+            foreach ($itemprops as $index => $itemprop) {
                 $context = $this->processPropertyPrefixName(
                     null,
-                    $property,
+                    $itemprop,
                     $element,
                     $context,
-                    $index == (count($properties) - 1)
+                    $index == (count($itemprops) - 1)
                 );
             }
         }
@@ -112,12 +112,65 @@ class MicrodataElementProcessor extends AbstractElementProcessor
                 $context
             );
 
+            // Process item references
+            $this->processItemReferences($element, $context, $thing);
+
             // Add the new thing as a child to the current context
             // and set the thing as parent thing for nested iterations
             $context = $context->addChild($thing)->setParentThing($thing);
         }
 
         return $context;
+    }
+
+    /**
+     * Process item references
+     *
+     * @param \DOMElement $element DOM element
+     * @param ContextInterface $context Context
+     * @param ThingInterface $thing Thing
+     * @return ThingInterface Thing
+     */
+    protected function processItemReferences(\DOMElement $element, ContextInterface $context, ThingInterface $thing)
+    {
+        // If the element has item references
+        if ($element->hasAttribute('itemref')) {
+            $itemrefElements = $this->getItemReferenceElements($element);
+            if (count($itemrefElements)) {
+                $iterator = new DOMIterator(
+                    $itemrefElements,
+                    $context->setParentThing($thing),
+                    new MicrodataElementProcessor()
+                );
+
+                // Iterate through all $node
+                foreach ($iterator->getRecursiveIterator() as $node) {
+                    $node || true;
+                }
+            }
+        }
+
+        return $thing;
+    }
+
+    /**
+     * Find all reference elements
+     *
+     * @param \DOMElement $element DOM element
+     * @return \DOMElement[] Reference elements
+     */
+    protected function getItemReferenceElements(\DOMElement $element)
+    {
+        $itemrefElements = [];
+        $itemrefs = trim($element->getAttribute('itemref'));
+        $itemrefs = strlen($itemrefs) ? preg_split('/\s+/', $itemrefs) : [];
+        foreach ($itemrefs as $itemref) {
+            $itemrefElement = $element->ownerDocument->getElementById($itemref);
+            if ($itemrefElement instanceof \DOMElement) {
+                $itemrefElements[] = $itemrefElement;
+            }
+        }
+        return $itemrefElements;
     }
 
     /**
@@ -141,8 +194,9 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     protected function getPropertyChildValue(\DOMElement $element, ContextInterface $context)
     {
         // If the property creates a new type: Return the element itself
-        if ($element->hasAttribute('itemscope') && $element->hasAttribute('itemtype')) {
-            return $this->getThing($element->getAttribute('itemtype'), null, $context);
+        if ($element->hasAttribute('itemscope')) {
+            $thing = $this->getThing($element->getAttribute('itemtype'), null, $context);
+            return $this->processItemReferences($element, $context, $thing);
         }
 
         return null;

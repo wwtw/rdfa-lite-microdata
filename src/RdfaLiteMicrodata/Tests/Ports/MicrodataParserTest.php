@@ -75,7 +75,18 @@ class MicrodataParserTest extends AbstractTest
         $things = Microdata::parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'anonymous-ref-microdata.html'
         );
-        print_r($things);
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(
+                            __DIR__
+                        ).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'anonymous-ref-microdata.json'
+                    )
+                )
+            ),
+            $this->castArray($things)
+        );
     }
 
     /**

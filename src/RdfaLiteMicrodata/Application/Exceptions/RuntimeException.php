@@ -56,4 +56,16 @@ class RuntimeException extends \RuntimeException implements RdfaLiteMicrodataApp
      * @var int
      */
     const INVALID_VOCABULARY_PREFIX = 1486927326;
+    /**
+     * Invalid node list
+     *
+     * @var string
+     */
+    const INVALID_NODE_LIST_STR = 'Invalid node list';
+    /**
+     * Invalid node list
+     *
+     * @var int
+     */
+    const INVALID_NODE_LIST = 1487461118;
 }

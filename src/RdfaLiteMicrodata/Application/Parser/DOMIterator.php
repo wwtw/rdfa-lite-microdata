@@ -38,6 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
+use Jkphl\RdfaLiteMicrodata\Application\Exceptions\RuntimeException;
 
 /**
  * Recursive DOM node iterator
@@ -75,15 +76,21 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
     /**
      * Recursive DOM node iterator constructor
      *
-     * @param \DOMNodeList $nodeList Node list
+     * @param \DOMNodeList|array $nodeList Node list
      * @param ContextInterface $initialContext Initial parser context
      * @param ElementProcessorInterface $elementProcessor Element processor
+     * @throws RuntimeException If the node list is invalid
      */
     public function __construct(
-        \DOMNodeList $nodeList,
+        $nodeList,
         ContextInterface $initialContext,
         ElementProcessorInterface $elementProcessor
     ) {
+        // If the node list is invalid
+        if (!is_array($nodeList) && !($nodeList instanceof \DOMNodeList)) {
+            throw new RuntimeException(RuntimeException::INVALID_NODE_LIST_STR, RuntimeException::INVALID_NODE_LIST);
+        }
+
         $this->elementProcessor = $elementProcessor;
         $this->initialContext = $initialContext;
 
