@@ -57,11 +57,13 @@ class RdfaLiteParserTest extends AbstractTest
         );
         $this->assertArrayEquals(
             $this->castArray(
-                json_decode(
-                    file_get_contents(
-                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
+                [
+                    'items' => json_decode(
+                        file_get_contents(
+                            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
+                        )
                     )
-                )
+                ]
             ),
             $this->castArray($things)
         );
