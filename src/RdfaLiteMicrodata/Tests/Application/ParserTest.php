@@ -56,7 +56,7 @@ class ParserTest extends ParserIteratorTestBase
     public function testPerson()
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
-        $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
+        $rdfaElementProcessor = (new RdfaLiteElementProcessor)->setHtml(true);
         $rdfaContext = new RdfaLiteContext();
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
@@ -71,7 +71,7 @@ class ParserTest extends ParserIteratorTestBase
     public function testArticle()
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
-        $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
+        $rdfaElementProcessor = (new RdfaLiteElementProcessor)->setHtml(true);
         $rdfaContext = new RdfaLiteContext();
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
@@ -96,7 +96,7 @@ class ParserTest extends ParserIteratorTestBase
     public function testEmptyDefaultVocabulary()
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
-        $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
+        $rdfaElementProcessor = (new RdfaLiteElementProcessor)->setHtml(true);
         $rdfaContext = new RdfaLiteContext();
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);
@@ -113,7 +113,7 @@ class ParserTest extends ParserIteratorTestBase
     public function testUnknownVocabularyPrefix()
     {
         $htmlDocumentFactory = new HtmlDocumentFactory();
-        $rdfaElementProcessor = new RdfaLiteElementProcessor(true);
+        $rdfaElementProcessor = (new RdfaLiteElementProcessor)->setHtml(true);
         $rdfaContext = new RdfaLiteContext();
         $parser = new Parser($htmlDocumentFactory, $rdfaElementProcessor, $rdfaContext);
         $this->assertInstanceOf(Parser::class, $parser);

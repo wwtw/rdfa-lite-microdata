@@ -44,7 +44,6 @@ use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
 
 /**
@@ -91,13 +90,15 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
     protected $html;
 
     /**
-     * Element processor constructor
+     * Enable / disable HTML element value resolution
      *
-     * @param bool $html HTML mode
+     * @param bool $html Enable HTML element value resolution
+     * @return ElementProcessorInterface Self reference
      */
-    public function __construct($html = false)
+    public function setHtml($html)
     {
         $this->html = boolval($html);
+        return $this;
     }
 
     /**
@@ -322,16 +323,9 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         }
 
         // If the default vocabulary is empty
-        if (empty($prefix)) {
-            throw new RuntimeException(
-                RuntimeException::EMPTY_DEFAULT_VOCABULARY_STR,
-                RuntimeException::EMPTY_DEFAULT_VOCABULARY
-            );
-        }
-
-        throw new OutOfBoundsException(
-            sprintf(OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX_STR, $prefix),
-            OutOfBoundsException::UNKNOWN_VOCABULARY_PREFIX
+        throw new RuntimeException(
+            RuntimeException::EMPTY_DEFAULT_VOCABULARY_STR,
+            RuntimeException::EMPTY_DEFAULT_VOCABULARY
         );
     }
 

@@ -51,6 +51,14 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 class MicrodataElementProcessor extends AbstractElementProcessor
 {
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->setHtml(true);
+    }
+
+    /**
      * Process a DOM element
      *
      * @param \DOMElement $element DOM element

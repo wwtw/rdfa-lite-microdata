@@ -72,7 +72,7 @@ class RdfaLite extends AbstractParser
         return self::parseString(
             $string,
             new XmlDocumentFactory(),
-            new RdfaLiteElementProcessor(false),
+            new RdfaLiteElementProcessor(),
             new RdfaLiteContext()
         );
     }
@@ -99,7 +99,7 @@ class RdfaLite extends AbstractParser
         return self::parseString(
             $string,
             new HtmlDocumentFactory(),
-            new RdfaLiteElementProcessor(true),
+            (new RdfaLiteElementProcessor(true))->setHtml(true),
             new RdfaLiteContext()
         );
     }

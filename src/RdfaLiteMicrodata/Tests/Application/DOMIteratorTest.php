@@ -116,7 +116,7 @@ class DOMNodeIteratorTest extends ParserIteratorTestBase
         $dom = new \DOMDocument();
         $dom->loadHTML(self::$personRdfa);
         $context = new RdfaLiteContext();
-        $this->iterateDom($dom, $context, new RdfaLiteElementProcessor(true));
+        $this->iterateDom($dom, $context, (new RdfaLiteElementProcessor)->setHtml(true));
         $this->validatePersonResult($context->getChildren());
     }
 

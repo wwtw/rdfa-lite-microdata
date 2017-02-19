@@ -72,7 +72,7 @@ class Microdata extends AbstractParser
         return self::parseString(
             $string,
             new HtmlDocumentFactory(),
-            new MicrodataElementProcessor(true),
+            new MicrodataElementProcessor(),
             new MicrodataContext()
         );
     }

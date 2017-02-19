@@ -116,16 +116,6 @@ abstract class AbstractContext implements ContextInterface
     }
 
     /**
-     * Return the root thing
-     *
-     * @return ThingInterface
-     */
-    public function getRootThing()
-    {
-        return $this->rootThing;
-    }
-
-    /**
      * Add a child thing to the current parent thing
      *
      * @param ThingInterface $thing Child thing
