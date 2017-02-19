@@ -95,6 +95,17 @@ abstract class ParserIteratorTestBase extends AbstractTest
         $this->assertEquals([$type, $foafType], $thing->getTypes());
         $this->assertEquals('#joschi', $thing->getResourceId());
 
+        $this->validateProperties($thing, $schemaOrgVocabulary);
+    }
+
+    /**
+     * Validate properties
+     *
+     * @param ThingInterface $thing Thing
+     * @param VocabularyInterface $schemaOrgVocabulary schema.org vocabulary
+     */
+    protected function validateProperties(ThingInterface $thing, VocabularyInterface $schemaOrgVocabulary)
+    {
         $properties = $thing->getProperties();
         $this->assertTrue(is_array($properties));
         $this->assertEquals(4, count($properties));

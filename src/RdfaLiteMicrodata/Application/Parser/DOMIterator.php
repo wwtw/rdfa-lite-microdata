@@ -79,20 +79,31 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      * @param \DOMNodeList|array $nodeList Node list
      * @param ContextInterface $initialContext Initial parser context
      * @param ElementProcessorInterface $elementProcessor Element processor
-     * @throws RuntimeException If the node list is invalid
      */
     public function __construct(
         $nodeList,
         ContextInterface $initialContext,
         ElementProcessorInterface $elementProcessor
     ) {
+        $this->elementProcessor = $elementProcessor;
+        $this->initialContext = $initialContext;
+
+        parent::__construct($this->registerNodes($nodeList));
+    }
+
+    /**
+     * Recursive DOM node iterator constructor
+     *
+     * @param \DOMNodeList|array $nodeList Node list
+     * @throws RuntimeException If the node list is invalid
+     * @return array Nodes
+     */
+    protected function registerNodes($nodeList)
+    {
         // If the node list is invalid
         if (!is_array($nodeList) && !($nodeList instanceof \DOMNodeList)) {
             throw new RuntimeException(RuntimeException::INVALID_NODE_LIST_STR, RuntimeException::INVALID_NODE_LIST);
         }
-
-        $this->elementProcessor = $elementProcessor;
-        $this->initialContext = $initialContext;
 
         $nodes = [];
 
@@ -102,7 +113,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
             $nodes[spl_object_hash($node)] = $this->registerNode($node);
         }
 
-        parent::__construct($nodes);
+        return $nodes;
     }
 
     /**

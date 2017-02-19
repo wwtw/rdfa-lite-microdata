@@ -54,7 +54,7 @@ class Microdata extends AbstractParser
      * Parse an HTML file
      *
      * @param string $file HTML file path
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     public function parseHtmlFile($file)
     {
@@ -65,7 +65,7 @@ class Microdata extends AbstractParser
      * Parse an HTML string
      *
      * @param string $string HTML string
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     public function parseHtmlString($string)
     {

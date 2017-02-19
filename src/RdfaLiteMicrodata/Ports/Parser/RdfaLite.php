@@ -54,7 +54,7 @@ class RdfaLite extends AbstractParser
      * Parse an XML file
      *
      * @param string $file XML file path
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     public function parseXmlFile($file)
     {
@@ -65,7 +65,7 @@ class RdfaLite extends AbstractParser
      * Parse an XML string
      *
      * @param string $string XML string
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     public function parseXmlString($string)
     {
@@ -81,7 +81,7 @@ class RdfaLite extends AbstractParser
      * Parse an HTML file
      *
      * @param string $file HTML file path
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     public function parseHtmlFile($file)
     {
@@ -92,14 +92,14 @@ class RdfaLite extends AbstractParser
      * Parse an HTML string
      *
      * @param string $string HTML string
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     public function parseHtmlString($string)
     {
         return $this->parseString(
             $string,
             new HtmlDocumentFactory(),
-            (new RdfaLiteElementProcessor(true))->setHtml(true),
+            (new RdfaLiteElementProcessor())->setHtml(true),
             new RdfaLiteContext()
         );
     }

@@ -187,13 +187,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
         // Add the property to the current parent thing
         $context->getParentThing()->addProperty($property);
 
-        // If the property value is a thing and this is the element's last property
-        if (($propertyValue instanceof ThingInterface) && $last) {
-            // Set the thing as parent thing for nested iterations
-            $context = $context->setParentThing($propertyValue);
-        }
-
-        return $context;
+        return $this->addPropertyChild($propertyValue, $context, $last);
     }
 
     /**
@@ -264,25 +258,60 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * Return a property value (type and tag name dependent)
      *
      * @param \DOMElement $element DOM element
-     * @return ThingInterface|string Property value
+     * @return string Property value
      */
     protected function getPropertyStringValue(\DOMElement $element)
     {
         // If HTML mode is active
         if ($this->html) {
-            $tagName = strtoupper($element->tagName);
-
-            // Map to an attribute (if applicable)
-            if (array_key_exists($tagName, self::$tagNameAttributes)) {
-                $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
-                if (($tagName != 'TIME') || !empty($value)) {
-                    return $value;
-                }
+            $value = $this->getPropertyHtmlValue($element);
+            if ($value !== null) {
+                return $value;
             }
         }
 
         // Return the text content
         return $element->textContent;
+    }
+
+    /**
+     * Return a property value (type and tag name dependent)
+     *
+     * @param \DOMElement $element DOM element
+     * @return string|null Property value
+     */
+    protected function getPropertyHtmlValue(\DOMElement $element)
+    {
+        $tagName = strtoupper($element->tagName);
+
+        // Map to an attribute (if applicable)
+        if (array_key_exists($tagName, self::$tagNameAttributes)) {
+            $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
+            if (($tagName != 'TIME') || strlen($value)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Add a property child
+     *
+     * @param string|ThingInterface Property value
+     * @param ContextInterface $context Inherited Context
+     * @param boolean $last Last property
+     * @return ContextInterface Local context for this element
+     */
+    protected function addPropertyChild($propertyValue, ContextInterface $context, $last)
+    {
+        // If the property value is a thing and this is the element's last property
+        if (($propertyValue instanceof ThingInterface) && $last) {
+            // Set the thing as parent thing for nested iterations
+            $context = $context->setParentThing($propertyValue);
+        }
+
+        return $context;
     }
 
     /**

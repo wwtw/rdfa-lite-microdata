@@ -90,15 +90,30 @@ class MicrodataElementProcessor extends AbstractElementProcessor
         if ($element->hasAttribute('itemprop') && !($context->getParentThing() instanceof RootThing)) {
             $itemprops = trim($element->getAttribute('itemprop'));
             $itemprops = strlen($itemprops) ? preg_split('/\s+/', $itemprops) : [];
-            foreach ($itemprops as $index => $itemprop) {
-                $context = $this->processPropertyPrefixName(
-                    null,
-                    $itemprop,
-                    $element,
-                    $context,
-                    $index == (count($itemprops) - 1)
-                );
-            }
+            $context = $this->processProperties($itemprops, $element, $context);
+        }
+
+        return $context;
+    }
+
+    /**
+     * Process properties
+     *
+     * @param array $itemprops Properties
+     * @param \DOMElement $element DOM element
+     * @param ContextInterface $context Inherited Context
+     * @return ContextInterface Local context for this element
+     */
+    protected function processProperties(array $itemprops, \DOMElement $element, ContextInterface $context)
+    {
+        foreach ($itemprops as $index => $itemprop) {
+            $context = $this->processPropertyPrefixName(
+                null,
+                $itemprop,
+                $element,
+                $context,
+                $index == (count($itemprops) - 1)
+            );
         }
 
         return $context;
@@ -114,21 +129,33 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     protected function processChild(\DOMElement $element, ContextInterface $context)
     {
         if ($element->hasAttribute('itemscope') && empty($element->getAttribute('itemprop'))) {
-            $thing = $this->getThing(
-                trim($element->getAttribute('itemtype')) ?: null,
-                trim($element->getAttribute('itemid')) ?: null,
-                $context
-            );
-
-            // Process item references
-            $this->processItemReferences($element, $context, $thing);
-
-            // Add the new thing as a child to the current context
-            // and set the thing as parent thing for nested iterations
-            $context = $context->addChild($thing)->setParentThing($thing);
+            $context = $this->createAndAddChild($element, $context);
         }
 
         return $context;
+    }
+
+    /**
+     * Create and add a nested child
+     *
+     * @param \DOMElement $element DOM element
+     * @param ContextInterface $context Context
+     * @return ContextInterface Context for children
+     */
+    protected function createAndAddChild(\DOMElement $element, ContextInterface $context)
+    {
+        $thing = $this->getThing(
+            trim($element->getAttribute('itemtype')) ?: null,
+            trim($element->getAttribute('itemid')) ?: null,
+            $context
+        );
+
+        // Process item references
+        $this->processItemReferences($element, $context, $thing);
+
+        // Add the new thing as a child to the current context
+        // and set the thing as parent thing for nested iterations
+        return $context->addChild($thing)->setParentThing($thing);
     }
 
     /**
@@ -145,16 +172,7 @@ class MicrodataElementProcessor extends AbstractElementProcessor
         if ($element->hasAttribute('itemref')) {
             $itemrefElements = $this->getItemReferenceElements($element);
             if (count($itemrefElements)) {
-                $iterator = new DOMIterator(
-                    $itemrefElements,
-                    $context->setParentThing($thing),
-                    new MicrodataElementProcessor()
-                );
-
-                // Iterate through all $node
-                foreach ($iterator->getRecursiveIterator() as $node) {
-                    $node || true;
-                }
+                $this->processItemReferenceElements($itemrefElements, $context, $thing);
             }
         }
 
@@ -179,6 +197,31 @@ class MicrodataElementProcessor extends AbstractElementProcessor
             }
         }
         return $itemrefElements;
+    }
+
+    /**
+     * Process item reference elements
+     *
+     * @param \DOMElement[] $itemrefElements Item reference DOM elements
+     * @param ContextInterface $context Context
+     * @param ThingInterface $thing Thing
+     * @return void
+     */
+    protected function processItemReferenceElements(
+        array $itemrefElements,
+        ContextInterface $context,
+        ThingInterface $thing
+    ) {
+        $iterator = new DOMIterator(
+            $itemrefElements,
+            $context->setParentThing($thing),
+            new MicrodataElementProcessor()
+        );
+
+        // Iterate through all $node
+        foreach ($iterator->getRecursiveIterator() as $node) {
+            $node || true;
+        }
     }
 
     /**

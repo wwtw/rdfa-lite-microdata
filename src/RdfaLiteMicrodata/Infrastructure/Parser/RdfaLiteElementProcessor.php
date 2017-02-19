@@ -160,19 +160,32 @@ class RdfaLiteElementProcessor extends AbstractElementProcessor
         if ($element->hasAttribute('typeof')
             && (empty($element->getAttribute('property')) || $context->getParentThing() instanceof RootThing)
         ) {
-            $thing = $this->getThing(
-                $element->getAttribute('typeof'),
-                trim($element->getAttribute('resource')) ?: null,
-                $context
-            );
-
-            // Add the new thing as a child to the current context
-            // and set the thing as parent thing for nested iterations
-            $context = $context->addChild($thing)->setParentThing($thing);
+            $context = $this->createAndAddChild($element, $context);
         }
 
         return $context;
     }
+
+    /**
+     * Create and add a nested child
+     *
+     * @param \DOMElement $element DOM element
+     * @param ContextInterface $context Context
+     * @return ContextInterface Context for children
+     */
+    protected function createAndAddChild(\DOMElement $element, ContextInterface $context)
+    {
+        $thing = $this->getThing(
+            $element->getAttribute('typeof'),
+            trim($element->getAttribute('resource')) ?: null,
+            $context
+        );
+
+        // Add the new thing as a child to the current context
+        // and set the thing as parent thing for nested iterations
+        return $context->addChild($thing)->setParentThing($thing);
+    }
+
 
     /**
      * Return a property child value
