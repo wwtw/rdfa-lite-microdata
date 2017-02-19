@@ -92,6 +92,7 @@ abstract class AbstractParser implements ParserInterface
             $parser = new Parser($documentFactory, $elementProcessor, $context);
             $things = $parser->parse($string);
             $gateway = new ThingGateway();
+//            return (object)['items' => $gateway->export($things)];
             return $gateway->export($things);
         } catch (\OutOfBoundsException $e) {
             throw new OutOfBoundsException($e->getMessage(), $e->getCode());

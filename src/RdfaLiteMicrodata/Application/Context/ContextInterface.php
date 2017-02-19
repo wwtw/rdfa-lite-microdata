@@ -70,12 +70,20 @@ interface ContextInterface
     public function setParentThing(ThingInterface $parentThing);
 
     /**
-     * Add a child thing
+     * Add a child thing to the current parent thing
      *
      * @param ThingInterface $thing Child thing
      * @return ContextInterface Self reference
      */
     public function addChild(ThingInterface $thing);
+
+    /**
+     * Add a child thing to the root thing
+     *
+     * @param ThingInterface $thing Child thing
+     * @return ContextInterface Self reference
+     */
+    public function addRootChild(ThingInterface $thing);
 
     /**
      * Return the current default vocabulary

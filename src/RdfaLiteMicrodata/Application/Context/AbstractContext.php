@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
+use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
@@ -62,6 +63,21 @@ abstract class AbstractContext implements ContextInterface
     protected $parentThing;
 
     /**
+     * Root thing
+     *
+     * @var ThingInterface
+     */
+    protected $rootThing;
+
+    /**
+     * Context constructor
+     */
+    public function __construct()
+    {
+        $this->parentThing = $this->rootThing = new RootThing();
+    }
+
+    /**
      * Return the registered child things
      *
      * @return ThingInterface[] Child things
@@ -72,7 +88,7 @@ abstract class AbstractContext implements ContextInterface
     }
 
     /**
-     * Get the current parent thing
+     * Return the current parent thing
      *
      * @return ThingInterface|null Parent thing
      */
@@ -100,7 +116,17 @@ abstract class AbstractContext implements ContextInterface
     }
 
     /**
-     * Add a child thing
+     * Return the root thing
+     *
+     * @return ThingInterface
+     */
+    public function getRootThing()
+    {
+        return $this->rootThing;
+    }
+
+    /**
+     * Add a child thing to the current parent thing
      *
      * @param ThingInterface $thing Child thing
      * @return ContextInterface Self reference
@@ -108,6 +134,17 @@ abstract class AbstractContext implements ContextInterface
     public function addChild(ThingInterface $thing)
     {
         $this->parentThing->addChild($thing);
+        return $this;
+    }
+
+    /**
+     * Add a child thing to the root thing
+     *
+     * @param ThingInterface $thing Child thing
+     * @return ContextInterface Self reference
+     */
+    public function addRootChild(ThingInterface $thing) {
+        $this->rootThing->addChild($thing);
         return $this;
     }
 

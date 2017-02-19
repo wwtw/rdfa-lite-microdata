@@ -117,7 +117,7 @@ class MicrodataElementProcessor extends AbstractElementProcessor
 
             // Add the new thing as a child to the current context
             // and set the thing as parent thing for nested iterations
-            $context = $context->addChild($thing)->setParentThing($thing);
+            $context = $context->addRootChild($thing)->setParentThing($thing);
         }
 
         return $context;

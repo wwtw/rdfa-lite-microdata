@@ -38,7 +38,6 @@ namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Application\Exceptions\RuntimeException;
-use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyService;
@@ -117,7 +116,7 @@ class RdfaLiteContext extends AbstractContext
      */
     public function __construct()
     {
-        $this->parentThing = new RootThing();
+        parent::__construct();
         $this->vocabularies = self::$defaultVocabularies;
     }
 

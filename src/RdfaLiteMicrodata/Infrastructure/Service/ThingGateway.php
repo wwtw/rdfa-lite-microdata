@@ -102,5 +102,17 @@ class ThingGateway
             'properties' => $properties,
             'children' => array_map([$this, 'exportThing'], $thing->getChildren()),
         ];
+
+//        return (object)[
+//            'type' => array_map(
+//                function (TypeInterface $type) {
+//                    return $type->getVocabulary()->expand($type->getType());
+//                },
+//                $thing->getTypes()
+//            ),
+//            'id' => $thing->getResourceId(),
+//            'properties' => $thing->getProperties(),
+//            'children' => array_map([$this, 'exportThing'], $thing->getChildren()),
+//        ];
     }
 }
