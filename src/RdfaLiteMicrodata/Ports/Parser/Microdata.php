@@ -56,9 +56,9 @@ class Microdata extends AbstractParser
      * @param string $file HTML file path
      * @return array Extracted things
      */
-    public static function parseHtmlFile($file)
+    public function parseHtmlFile($file)
     {
-        return self::parseHtmlString(self::getFileContents($file));
+        return $this->parseHtmlString($this->getFileContents($file));
     }
 
     /**
@@ -67,9 +67,9 @@ class Microdata extends AbstractParser
      * @param string $string HTML string
      * @return array Extracted things
      */
-    public static function parseHtmlString($string)
+    public function parseHtmlString($string)
     {
-        return self::parseString(
+        return $this->parseString(
             $string,
             new HtmlDocumentFactory(),
             new MicrodataElementProcessor(),

@@ -52,7 +52,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testMicrodataHtmlFile()
     {
-        $things = Microdata::parseHtmlFile(
+        $things = (new Microdata())->parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
         );
         $this->assertArrayEquals(
@@ -72,7 +72,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testAnonymousItemWithPropertyRefs()
     {
-        $things = Microdata::parseHtmlFile(
+        $things = (new Microdata())->parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'anonymous-ref-microdata.html'
         );
         $this->assertArrayEquals(
@@ -97,7 +97,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testInvalidFile()
     {
-        Microdata::parseHtmlFile('invalid');
+        (new Microdata())->parseHtmlFile('invalid');
     }
 
     /**
@@ -107,7 +107,7 @@ class MicrodataParserTest extends AbstractTest
      */
     public function testRuntimeException()
     {
-        Microdata::parseHtmlFile(
+        (new Microdata())->parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-property-microdata.html'
         );
     }

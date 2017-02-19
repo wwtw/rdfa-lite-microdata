@@ -60,7 +60,7 @@ abstract class AbstractParser implements ParserInterface
      * @return array Extracted things
      * @throws RuntimeException If the file is not readable
      */
-    protected static function getFileContents($file)
+    protected function getFileContents($file)
     {
         // If the file is not readable
         if (!is_readable($file)) {
@@ -82,7 +82,7 @@ abstract class AbstractParser implements ParserInterface
      * @param ContextInterface $context Context
      * @return array Extracted things
      */
-    protected static function parseString(
+    protected function parseString(
         $string,
         DocumentFactoryInterface $documentFactory,
         ElementProcessorInterface $elementProcessor,
