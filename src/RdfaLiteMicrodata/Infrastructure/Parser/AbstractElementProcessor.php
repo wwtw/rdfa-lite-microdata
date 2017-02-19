@@ -38,9 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
@@ -54,6 +52,11 @@ use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException;
  */
 abstract class AbstractElementProcessor implements ElementProcessorInterface
 {
+    /**
+     * Use the property processor methods
+     */
+    use PropertyProcessorTrait;
+
     /**
      * Tag name / attribute map
      *
@@ -124,195 +127,12 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
     abstract protected function processChild(\DOMElement $element, ContextInterface $context);
 
     /**
-     * Create a property
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Inherited Context
-     * @return ContextInterface Local context for this element
-     */
-    abstract protected function processProperty(\DOMElement $element, ContextInterface $context);
-
-    /**
-     * Create a property by prefix and name
-     *
-     * @param string $prefix Property prefix
-     * @param string $name Property name
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Inherited Context
-     * @param boolean $last Last property
-     * @return ContextInterface Local context for this element
-     */
-    protected function processPropertyPrefixName($prefix, $name, \DOMElement $element, ContextInterface $context, $last)
-    {
-        $vocabulary = $this->getVocabulary($prefix, $context);
-        if ($vocabulary instanceof VocabularyInterface) {
-            $context = $this->addProperty($element, $context, $name, $vocabulary, $last);
-        }
-
-        return $context;
-    }
-
-    /**
-     * Return a vocabulary by prefix with fallback to the default vocabulary
-     *
-     * @param string $prefix Vocabulary prefix
-     * @param ContextInterface $context Context
-     * @return VocabularyInterface Vocabulary
-     */
-    abstract protected function getVocabulary($prefix, ContextInterface $context);
-
-    /**
-     * Add a single property
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Inherited Context
-     * @param string $name Property name
-     * @param VocabularyInterface $vocabulary Property vocabulary
-     * @param boolean $last Last property
-     * @return ContextInterface Local context for this element
-     */
-    protected function addProperty(
-        \DOMElement $element,
-        ContextInterface $context,
-        $name,
-        VocabularyInterface $vocabulary,
-        $last
-    ) {
-        $resourceId = $this->getResourceId($element);
-
-        // Get the property value
-        $propertyValue = $this->getPropertyValue($element, $context);
-        $property = new Property($name, $vocabulary, $propertyValue, $resourceId);
-
-        // Add the property to the current parent thing
-        $context->getParentThing()->addProperty($property);
-
-        return $this->addPropertyChild($propertyValue, $context, $last);
-    }
-
-    /**
      * Return the resource ID
      *
      * @param \DOMElement $element DOM element
      * @return string|null Resource ID
      */
     abstract protected function getResourceId(\DOMElement $element);
-
-    /**
-     * Return a property value (type and tag name dependent)
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Context
-     * @return ThingInterface|string Property value
-     */
-    protected function getPropertyValue(\DOMElement $element, ContextInterface $context)
-    {
-        $value = $this->getPropertyCache($element);
-        if ($value !== null) {
-            return $value;
-        }
-
-        $propertyChild = $this->getPropertyChildValue($element, $context);
-        if ($propertyChild instanceof ThingInterface) {
-            return $this->setPropertyCache($element, $propertyChild);
-        }
-
-        // Return a string property value
-        return $this->setPropertyCache($element, $this->getPropertyStringValue($element));
-    }
-
-    /**
-     * Return a cached property value (if available)
-     *
-     * @param \DOMElement $element Element
-     * @return mixed|null Property value
-     */
-    protected function getPropertyCache(\DOMElement $element)
-    {
-        $elementHash = spl_object_hash($element);
-        return isset(self::$propertyCache[$elementHash]) ? self::$propertyCache[$elementHash] : null;
-    }
-
-    /**
-     * Return a property child value
-     *
-     * @param \DOMElement $element DOM element
-     * @param ContextInterface $context Context
-     * @return ThingInterface|null Property child value
-     */
-    abstract protected function getPropertyChildValue(\DOMElement $element, ContextInterface $context);
-
-    /**
-     * Cache a property value
-     *
-     * @param \DOMElement $element DOM element
-     * @param mixed $value Value
-     * @return mixed $value Value
-     */
-    protected function setPropertyCache(\DOMElement $element, $value)
-    {
-        return self::$propertyCache[spl_object_hash($element)] = $value;
-    }
-
-    /**
-     * Return a property value (type and tag name dependent)
-     *
-     * @param \DOMElement $element DOM element
-     * @return string Property value
-     */
-    protected function getPropertyStringValue(\DOMElement $element)
-    {
-        // If HTML mode is active
-        if ($this->html) {
-            $value = $this->getPropertyHtmlValue($element);
-            if ($value !== null) {
-                return $value;
-            }
-        }
-
-        // Return the text content
-        return $element->textContent;
-    }
-
-    /**
-     * Return a property value (type and tag name dependent)
-     *
-     * @param \DOMElement $element DOM element
-     * @return string|null Property value
-     */
-    protected function getPropertyHtmlValue(\DOMElement $element)
-    {
-        $tagName = strtoupper($element->tagName);
-
-        // Map to an attribute (if applicable)
-        if (array_key_exists($tagName, self::$tagNameAttributes)) {
-            $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
-            if (($tagName != 'TIME') || strlen($value)) {
-                return $value;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Add a property child
-     *
-     * @param string|ThingInterface Property value
-     * @param ContextInterface $context Inherited Context
-     * @param boolean $last Last property
-     * @return ContextInterface Local context for this element
-     */
-    protected function addPropertyChild($propertyValue, ContextInterface $context, $last)
-    {
-        // If the property value is a thing and this is the element's last property
-        if (($propertyValue instanceof ThingInterface) && $last) {
-            // Set the thing as parent thing for nested iterations
-            $context = $context->setParentThing($propertyValue);
-        }
-
-        return $context;
-    }
 
     /**
      * Return a thing by typeof value
@@ -365,4 +185,13 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @return array Prefix and name
      */
     abstract protected function getPrefixName($prefixName);
+
+    /**
+     * Return a vocabulary by prefix with fallback to the default vocabulary
+     *
+     * @param string $prefix Vocabulary prefix
+     * @param ContextInterface $context Context
+     * @return VocabularyInterface Vocabulary
+     */
+    abstract protected function getVocabulary($prefix, ContextInterface $context);
 }
