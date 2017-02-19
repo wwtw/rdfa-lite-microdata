@@ -64,12 +64,6 @@ class Thing implements ThingInterface
      */
     protected $resourceId = null;
     /**
-     * Child things
-     *
-     * @var ThingInterface[]
-     */
-    protected $children = [];
-    /**
      * Property
      *
      * @var array[]
@@ -174,27 +168,5 @@ class Thing implements ThingInterface
         }
 
         return $this->properties[$name];
-    }
-
-    /**
-     * Add a child
-     *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
-     */
-    public function addChild(ThingInterface $child)
-    {
-        $this->children[spl_object_hash($child)] = $child;
-        return $this;
-    }
-
-    /**
-     * Return all children
-     *
-     * @return ThingInterface[] Children
-     */
-    public function getChildren()
-    {
-        return array_values($this->children);
     }
 }

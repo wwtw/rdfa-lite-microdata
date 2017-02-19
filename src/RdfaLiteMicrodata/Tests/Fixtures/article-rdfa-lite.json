@@ -5,57 +5,34 @@
         ],
         "id": null,
         "properties": {
-            "name": {
-                "context": "http:\/\/schema.org\/",
-                "values": [
-                    "Nam dictum eros at libero tempor semper"
-                ]
-            },
-            "description": {
-                "context": "http:\/\/schema.org\/",
-                "values": [
-                    "Nullam in convallis metus, quis hendrerit velit. Nam mollis congue orci, a\n                lobortis nibh feugiat id."
-                ]
-            },
-            "articleBody": {
-                "context": "http:\/\/schema.org\/",
-                "values": [
-                    "\n                Lorem ipsum dolor.News article content here.\n            "
-                ]
-            },
-            "datePublished": {
-                "context": "http:\/\/schema.org\/",
-                "values": [
-                    "2014-03-04T09:00:00+00:00"
-                ]
-            },
-            "associatedMedia": {
-                "context": "http:\/\/schema.org\/",
-                "values": [
-                    {
-                        "type": [
-                            "http:\/\/schema.org\/ImageObject"
+            "http:\/\/schema.org\/name": [
+                "Nam dictum eros at libero tempor semper"
+            ],
+            "http:\/\/schema.org\/description": [
+                "Nullam in convallis metus, quis hendrerit velit. Nam mollis congue orci, a\n                lobortis nibh feugiat id."
+            ],
+            "http:\/\/schema.org\/articleBody": [
+                "\n                Lorem ipsum dolor.News article content here.\n            "
+            ],
+            "http:\/\/schema.org\/datePublished": [
+                "2014-03-04T09:00:00+00:00"
+            ],
+            "http:\/\/schema.org\/associatedMedia": [
+                {
+                    "type": [
+                        "http:\/\/schema.org\/ImageObject"
+                    ],
+                    "id": null,
+                    "properties": {
+                        "http:\/\/schema.org\/contentURL": [
+                            "image.jpg"
                         ],
-                        "id": null,
-                        "properties": {
-                            "contentURL": {
-                                "context": "http:\/\/schema.org\/",
-                                "values": [
-                                    "image.jpg"
-                                ]
-                            },
-                            "caption": {
-                                "context": "http:\/\/schema.org\/",
-                                "values": [
-                                    "Lorem ipsum dolor."
-                                ]
-                            }
-                        },
-                        "children": []
+                        "http:\/\/schema.org\/caption": [
+                            "Lorem ipsum dolor."
+                        ]
                     }
-                ]
-            }
-        },
-        "children": []
+                }
+            ]
+        }
     }
 ]

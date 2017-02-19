@@ -177,7 +177,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $parent = new Thing($type);
         $newContext = $context->setParentThing($parent);
-        $this->assertEquals([], $newContext->getChildren());
+        $this->assertEquals([$thing], $newContext->getChildren());
         $newContext->addChild($thing);
         $this->assertEquals([$thing], $newContext->getChildren());
         $newContext->addChild($thing);

@@ -1,17 +1,13 @@
 [
     {
         "type": [
-            "http://www.milowski.com/V/thing"
+            "http:\/\/www.milowski.com\/V\/thing"
         ],
         "id": null,
         "properties": {
-            "name": {
-                "context": "http:\/\/www.milowski.com\/V\/",
-                "values": [
-                    "Fizzbit"
-                ]
-            }
-        },
-        "children": []
+            "http:\/\/www.milowski.com\/V\/name": [
+                "Fizzbit"
+            ]
+        }
     }
 ]

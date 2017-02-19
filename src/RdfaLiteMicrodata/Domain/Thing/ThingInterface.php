@@ -85,19 +85,4 @@ interface ThingInterface
      * @return array Property values
      */
     public function getProperty($name, VocabularyInterface $vocabulary);
-
-    /**
-     * Add a child
-     *
-     * @param ThingInterface $child Child
-     * @return Thing Self reference
-     */
-    public function addChild(ThingInterface $child);
-
-    /**
-     * Return all children
-     *
-     * @return ThingInterface[] Children
-     */
-    public function getChildren();
 }

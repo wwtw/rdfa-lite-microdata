@@ -65,7 +65,7 @@ abstract class AbstractContext implements ContextInterface
     /**
      * Root thing
      *
-     * @var ThingInterface
+     * @var RootThing
      */
     protected $rootThing;
 
@@ -84,7 +84,7 @@ abstract class AbstractContext implements ContextInterface
      */
     public function getChildren()
     {
-        return $this->parentThing->getChildren();
+        return $this->rootThing->getChildren();
     }
 
     /**
@@ -133,17 +133,6 @@ abstract class AbstractContext implements ContextInterface
      */
     public function addChild(ThingInterface $thing)
     {
-        $this->parentThing->addChild($thing);
-        return $this;
-    }
-
-    /**
-     * Add a child thing to the root thing
-     *
-     * @param ThingInterface $thing Child thing
-     * @return ContextInterface Self reference
-     */
-    public function addRootChild(ThingInterface $thing) {
         $this->rootThing->addChild($thing);
         return $this;
     }

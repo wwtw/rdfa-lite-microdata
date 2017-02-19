@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
+use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
@@ -49,6 +50,13 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 class RootThing extends Thing
 {
     /**
+     * Child things
+     *
+     * @var ThingInterface[]
+     */
+    protected $children = [];
+
+    /**
      * Root thing constructor
      *
      * @param VocabularyInterface $vocabulary Vocabulary
@@ -56,5 +64,27 @@ class RootThing extends Thing
     public function __construct(VocabularyInterface $vocabulary = null)
     {
         parent::__construct(new Type('Root', $vocabulary ?: new NullVocabulary()), null);
+    }
+
+    /**
+     * Add a child
+     *
+     * @param ThingInterface $child Child
+     * @return Thing Self reference
+     */
+    public function addChild(ThingInterface $child)
+    {
+        $this->children[spl_object_hash($child)] = $child;
+        return $this;
+    }
+
+    /**
+     * Return all children
+     *
+     * @return ThingInterface[] Children
+     */
+    public function getChildren()
+    {
+        return array_values($this->children);
     }
 }

@@ -84,10 +84,8 @@ class ThingGateway
             if (count($values)) {
                 /** @var PropertyInterface $firstProperty */
                 $firstProperty = $values[0];
-                $properties[$firstProperty->getName()] = (object)[
-                    'context' => $firstProperty->getVocabulary()->getUri(),
-                    'values' => array_map([$this, 'exportProperty'], $values)
-                ];
+                $property = $firstProperty->getVocabulary()->expand($firstProperty->getName());
+                $properties[$property] = array_map([$this, 'exportProperty'], $values);
             }
         }
 
@@ -100,19 +98,6 @@ class ThingGateway
             ),
             'id' => $thing->getResourceId(),
             'properties' => $properties,
-            'children' => array_map([$this, 'exportThing'], $thing->getChildren()),
         ];
-
-//        return (object)[
-//            'type' => array_map(
-//                function (TypeInterface $type) {
-//                    return $type->getVocabulary()->expand($type->getType());
-//                },
-//                $thing->getTypes()
-//            ),
-//            'id' => $thing->getResourceId(),
-//            'properties' => $thing->getProperties(),
-//            'children' => array_map([$this, 'exportThing'], $thing->getChildren()),
-//        ];
     }
 }

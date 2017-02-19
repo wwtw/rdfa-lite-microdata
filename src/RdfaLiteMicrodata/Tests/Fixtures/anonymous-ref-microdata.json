@@ -3,37 +3,23 @@
         "type": [],
         "id": null,
         "properties": {
-            "band": {
-                "context": "",
-                "values": [
-                    {
-                        "type": [],
-                        "id": null,
-                        "properties": {
-                            "name": {
-                                "context": "",
-                                "values": [
-                                    "Jazz Band"
-                                ]
-                            },
-                            "size": {
-                                "context": "",
-                                "values": [
-                                    "12"
-                                ]
-                            }
-                        },
-                        "children": []
+            "band": [
+                {
+                    "type": [],
+                    "id": null,
+                    "properties": {
+                        "name": [
+                            "Jazz Band"
+                        ],
+                        "size": [
+                            "12"
+                        ]
                     }
-                ]
-            },
-            "name": {
-                "context": "",
-                "values": [
-                    "Amanda"
-                ]
-            }
-        },
-        "children": []
+                }
+            ],
+            "name": [
+                "Amanda"
+            ]
+        }
     }
 ]

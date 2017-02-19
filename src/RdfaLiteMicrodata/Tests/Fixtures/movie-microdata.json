@@ -5,77 +5,58 @@
         ],
         "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
         "properties": {
-            "name": {
-                "context": "",
-                "values": [
-                    "Avatar"
-                ]
-            },
-            "director": {
-                "context": "",
-                "values": [
-                    {
-                        "type": [
-                            "http:\/\/schema.org\/Person"
+            "name": [
+                "Avatar"
+            ],
+            "director": [
+                {
+                    "type": [
+                        "http:\/\/schema.org\/Person"
+                    ],
+                    "id": null,
+                    "properties": {
+                        "name": [
+                            "James Cameron"
                         ],
-                        "id": null,
-                        "properties": {
-                            "name": {
-                                "context": "",
-                                "values": [
-                                    "James Cameron"
-                                ]
-                            },
-                            "birthDate": {
-                                "context": "",
-                                "values": [
-                                    "August 16, 1954"
-                                ]
-                            }
-                        },
-                        "children": []
+                        "birthDate": [
+                            "August 16, 1954"
+                        ]
                     }
-                ]
-            },
-            "producer": {
-                "context": "",
-                "values": [
-                    {
-                        "type": [
-                            "http:\/\/schema.org\/Person"
+                }
+            ],
+            "producer": [
+                {
+                    "type": [
+                        "http:\/\/schema.org\/Person"
+                    ],
+                    "id": null,
+                    "properties": {
+                        "name": [
+                            "James Cameron"
                         ],
-                        "id": null,
-                        "properties": {
-                            "name": {
-                                "context": "",
-                                "values": [
-                                    "James Cameron"
-                                ]
-                            },
-                            "birthDate": {
-                                "context": "",
-                                "values": [
-                                    "August 16, 1954"
-                                ]
-                            }
-                        },
-                        "children": []
+                        "birthDate": [
+                            "August 16, 1954"
+                        ]
                     }
-                ]
-            },
-            "genre": {
-                "context": "",
-                "values": [
-                    "Science fiction"
-                ]
-            },
-            "trailer": {
-                "context": "",
-                "values": [
-                    "..\/movies\/avatar-theatrical-trailer.html"
-                ]
-            }
-        },
-        "children": []
+                }
+            ],
+            "genre": [
+                "Science fiction"
+            ],
+            "trailer": [
+                "..\/movies\/avatar-theatrical-trailer.html"
+            ]
+        }
+    },
+    {
+        "type": [
+            "https:\/\/schema.org\/Country"
+        ],
+        "id": null,
+        "properties": {
+            "name": [
+                "Canada"
+            ]
+        }
     }
 ]
