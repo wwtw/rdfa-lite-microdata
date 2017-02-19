@@ -127,14 +127,6 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
     abstract protected function processChild(\DOMElement $element, ContextInterface $context);
 
     /**
-     * Return the resource ID
-     *
-     * @param \DOMElement $element DOM element
-     * @return string|null Resource ID
-     */
-    abstract protected function getResourceId(\DOMElement $element);
-
-    /**
      * Return a thing by typeof value
      *
      * @param string|null $typeof Thing type
@@ -185,13 +177,4 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      * @return array Prefix and name
      */
     abstract protected function getPrefixName($prefixName);
-
-    /**
-     * Return a vocabulary by prefix with fallback to the default vocabulary
-     *
-     * @param string $prefix Vocabulary prefix
-     * @param ContextInterface $context Context
-     * @return VocabularyInterface Vocabulary
-     */
-    abstract protected function getVocabulary($prefix, ContextInterface $context);
 }

@@ -46,6 +46,7 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
  *
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
+ * @property boolean $html HTML mode
  */
 trait PropertyProcessorTrait
 {
@@ -68,6 +69,15 @@ trait PropertyProcessorTrait
 
         return $context;
     }
+
+    /**
+     * Return a vocabulary by prefix with fallback to the default vocabulary
+     *
+     * @param string $prefix Vocabulary prefix
+     * @param ContextInterface $context Context
+     * @return VocabularyInterface Vocabulary
+     */
+    abstract protected function getVocabulary($prefix, ContextInterface $context);
 
     /**
      * Add a single property
@@ -97,6 +107,14 @@ trait PropertyProcessorTrait
 
         return $this->addPropertyChild($propertyValue, $context, $last);
     }
+
+    /**
+     * Return the resource ID
+     *
+     * @param \DOMElement $element DOM element
+     * @return string|null Resource ID
+     */
+    abstract protected function getResourceId(\DOMElement $element);
 
     /**
      * Return a property value (type and tag name dependent)
