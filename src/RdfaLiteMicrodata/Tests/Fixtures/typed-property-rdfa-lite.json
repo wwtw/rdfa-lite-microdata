@@ -1,13 +1,15 @@
-[
-    {
-        "type": [
-            "http:\/\/www.milowski.com\/V\/thing"
-        ],
-        "id": null,
-        "properties": {
-            "http:\/\/www.milowski.com\/V\/name": [
-                "Fizzbit"
-            ]
+{
+    "items": [
+        {
+            "type": [
+                "http:\/\/www.milowski.com\/V\/thing"
+            ],
+            "id": null,
+            "properties": {
+                "http:\/\/www.milowski.com\/V\/name": [
+                    "Fizzbit"
+                ]
+            }
         }
-    }
-]
+    ]
+}

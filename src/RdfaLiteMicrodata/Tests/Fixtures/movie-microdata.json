@@ -1,62 +1,64 @@
-[
-    {
-        "type": [
-            "http:\/\/schema.org\/Movie"
-        ],
-        "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
-        "properties": {
-            "name": [
-                "Avatar"
+{
+    "items": [
+        {
+            "type": [
+                "http:\/\/schema.org\/Movie"
             ],
-            "director": [
-                {
-                    "type": [
-                        "http:\/\/schema.org\/Person"
-                    ],
-                    "id": null,
-                    "properties": {
-                        "name": [
-                            "James Cameron"
+            "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
+            "properties": {
+                "name": [
+                    "Avatar"
+                ],
+                "director": [
+                    {
+                        "type": [
+                            "http:\/\/schema.org\/Person"
                         ],
-                        "birthDate": [
-                            "August 16, 1954"
-                        ]
+                        "id": null,
+                        "properties": {
+                            "name": [
+                                "James Cameron"
+                            ],
+                            "birthDate": [
+                                "August 16, 1954"
+                            ]
+                        }
                     }
-                }
-            ],
-            "producer": [
-                {
-                    "type": [
-                        "http:\/\/schema.org\/Person"
-                    ],
-                    "id": null,
-                    "properties": {
-                        "name": [
-                            "James Cameron"
+                ],
+                "producer": [
+                    {
+                        "type": [
+                            "http:\/\/schema.org\/Person"
                         ],
-                        "birthDate": [
-                            "August 16, 1954"
-                        ]
+                        "id": null,
+                        "properties": {
+                            "name": [
+                                "James Cameron"
+                            ],
+                            "birthDate": [
+                                "August 16, 1954"
+                            ]
+                        }
                     }
-                }
+                ],
+                "genre": [
+                    "Science fiction"
+                ],
+                "trailer": [
+                    "..\/movies\/avatar-theatrical-trailer.html"
+                ]
+            }
+        },
+        {
+            "type": [
+                "https:\/\/schema.org\/Country"
             ],
-            "genre": [
-                "Science fiction"
-            ],
-            "trailer": [
-                "..\/movies\/avatar-theatrical-trailer.html"
-            ]
+            "id": null,
+            "properties": {
+                "name": [
+                    "Canada"
+                ]
+            }
         }
-    },
-    {
-        "type": [
-            "https:\/\/schema.org\/Country"
-        ],
-        "id": null,
-        "properties": {
-            "name": [
-                "Canada"
-            ]
-        }
-    }
-]
+    ]
+}

@@ -1,25 +1,27 @@
-[
-    {
-        "type": [],
-        "id": null,
-        "properties": {
-            "band": [
-                {
-                    "type": [],
-                    "id": null,
-                    "properties": {
-                        "name": [
-                            "Jazz Band"
-                        ],
-                        "size": [
-                            "12"
-                        ]
+{
+    "items": [
+        {
+            "type": [],
+            "id": null,
+            "properties": {
+                "band": [
+                    {
+                        "type": [],
+                        "id": null,
+                        "properties": {
+                            "name": [
+                                "Jazz Band"
+                            ],
+                            "size": [
+                                "12"
+                            ]
+                        }
                     }
-                }
-            ],
-            "name": [
-                "Amanda"
-            ]
+                ],
+                "name": [
+                    "Amanda"
+                ]
+            }
         }
-    }
-]
+    ]
+}

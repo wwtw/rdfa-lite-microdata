@@ -80,7 +80,7 @@ abstract class AbstractParser implements ParserInterface
      * @param DocumentFactoryInterface $documentFactory Document factory
      * @param ElementProcessorInterface $elementProcessor Element processor
      * @param ContextInterface $context Context
-     * @return array Extracted things
+     * @return \stdClass Extracted things
      */
     protected function parseString(
         $string,
@@ -92,8 +92,7 @@ abstract class AbstractParser implements ParserInterface
             $parser = new Parser($documentFactory, $elementProcessor, $context);
             $things = $parser->parse($string);
             $gateway = new ThingGateway();
-//            return (object)['items' => $gateway->export($things)];
-            return $gateway->export($things);
+            return (object)['items' => $gateway->export($things)];
         } catch (\OutOfBoundsException $e) {
             throw new OutOfBoundsException($e->getMessage(), $e->getCode());
         } catch (\RuntimeException $e) {
