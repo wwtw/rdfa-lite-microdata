@@ -58,7 +58,7 @@ class Microdata extends AbstractParser
      */
     public function parseHtmlFile($file)
     {
-        return $this->parseHtmlString($this->getFileContents($file));
+        return $this->parseHtml($this->getFileContents($file));
     }
 
     /**
@@ -67,7 +67,7 @@ class Microdata extends AbstractParser
      * @param string $string HTML string
      * @return \stdClass Extracted things
      */
-    public function parseHtmlString($string)
+    public function parseHtml($string)
     {
         return $this->parseString(
             $string,

@@ -1,8 +1,8 @@
 # jkphl/rdfa-lite-microdata
 
-> RDFa Lite 1.1 and HTML Microdata parser for web documents (HTML, SVG, XML)
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Code climate][codeclimate-image]][codeclimate-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
+> RDFa Lite 1.1 and HTML Microdata parser for web documents (HTML, SVG, XML)
 
 ## Documentation
 
@@ -10,9 +10,7 @@ Please find the [project documentation](doc/index.md) in the `doc` directory. We
 
 ## Installation
 
-This library requires PHP >=5.5 or later. I recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
-
-It is installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/rdfa-lite-microdata](https://packagist.org/packages/jkphl/rdfa-lite-microdata).
+This library requires PHP >=5.5 or later. I recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/rdfa-lite-microdata](https://packagist.org/packages/jkphl/rdfa-lite-microdata).
 
 ```bash
 composer require jkphl/rdfa-lite-microdata
@@ -55,8 +53,10 @@ Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed und
 [coveralls-url]: https://coveralls.io/github/jkphl/rdfa-lite-microdata?branch=master
 [scrutinizer-image]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite-microdata/badges/quality-score.png?b=master
 [scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/rdfa-lite-microdata/?branch=master
-[readthedocs-image]: https://readthedocs.org/projects/jkphl-rdfa-lite-microdata/badge/?version=latest
-[readthedocs-url]: http://jkphl-rdfa-lite-microdata.readthedocs.io/en/latest/?badge=latest
+[codeclimate-image]: https://lima.codeclimate.com/github/jkphl/rdfa-lite-microdata/badges/gpa.svg
+[codeclimate-url]: https://lima.codeclimate.com/github/jkphl/rdfa-lite-microdata
+[readthedocs-image]: https://readthedocs.org/projects/jkphlrdfa-lite-microdata/badge/?version=latest
+[readthedocs-url]: http://jkphlrdfa-lite-microdata.readthedocs.io/en/latest/
 [clear-architecture-image]: https://img.shields.io/badge/Clear%20Architecture-%E2%9C%94-brightgreen.svg
 [clear-architecture-url]: https://github.com/jkphl/clear-architecture
 [author-url]: https://jkphl.is
