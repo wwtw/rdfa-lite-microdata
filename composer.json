@@ -1,6 +1,6 @@
 {
     "name": "jkphl/rdfa-lite-microdata",
-    "description": "Simple and lightweight RDFa Lite 1.1 and HTML microdata parser for web documents (HTML, SVG, XML)",
+    "description": "RDFa Lite 1.1 and HTML Microdata parser for web documents (HTML, SVG, XML)",
     "homepage": "https://github.com/jkphl/rdfa-lite-microdata",
     "minimum-stability": "stable",
     "license": "MIT",

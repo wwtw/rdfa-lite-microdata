@@ -33,11 +33,34 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-error_reporting(E_ALL);
-$autoloader = __DIR__.'/vendor/autoload.php';
-if (!file_exists($autoloader)) {
-    echo "Composer autoloader not found: $autoloader".PHP_EOL;
-    echo "Please issue 'composer install' and try again.".PHP_EOL;
-    exit(1);
-}
-require $autoloader;
+/**
+ * Register a minimal PSR-4 compatible autoloader
+ *
+ * @see http://www.php-fig.org/psr/psr-4/
+ */
+spl_autoload_register(
+    function ($class) {
+        $namespace = 'Jkphl';
+        $prefixes = [
+            "{$namespace}\\" => [
+                __DIR__.'/src',
+            ],
+        ];
+        foreach ($prefixes as $prefix => $dirs) {
+            $prefixLength = strlen($prefix);
+            if (substr($class, 0, $prefixLength) !== $prefix) {
+                continue;
+            }
+            $class = substr($class, $prefixLength);
+            $part = str_replace('\\', DIRECTORY_SEPARATOR, $class).'.php';
+            foreach ($dirs as $dir) {
+                $dir = str_replace('/', DIRECTORY_SEPARATOR, $dir);
+                $file = $dir.DIRECTORY_SEPARATOR.$part;
+                if (is_readable($file)) {
+                    require $file;
+                    return;
+                }
+            }
+        }
+    }
+);

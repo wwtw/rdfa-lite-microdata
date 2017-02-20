@@ -1,8 +1,8 @@
 # jkphl/rdfa-lite-microdata
 
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
+> RDFa Lite 1.1 and HTML Microdata parser for web documents (HTML, SVG, XML)
 
-> Simple and lightweight RDFa Lite 1.1 and HTML Microdata parser for web documents (HTML, SVG, XML)
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url]  [![Documentation Status][readthedocs-image]][readthedocs-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
 ## Documentation
 
@@ -11,6 +11,15 @@ Please find the [project documentation](doc/index.md) in the `doc` directory. We
 ## Installation
 
 This library requires PHP >=5.5 or later. I recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
+
+It is installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/rdfa-lite-microdata](https://packagist.org/packages/jkphl/rdfa-lite-microdata).
+
+```bash
+composer require jkphl/rdfa-lite-microdata
+```
+
+Alternatively, [download a release](https://github.com/jkphl/rdfa-lite-microdata/releases) or clone this repository, then require or include its [`autoload.php`](autoload.php) file.
+
 
 ## Dependencies
 
