@@ -1,22 +1,8 @@
 # Changelog
 
-All Notable changes to *jkphl/rdfa-lite-microdata* will be documented in this file.
+All Notable changes to *jkphl/rdfa-lite-microdata* will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
-Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## NEXT - YYYY-MM-DD
+## [0.1.0] - 2017-02-20
 
-### Added
-- Nothing
-
-### Deprecated
-- Nothing
-
-### Fixed
-- Nothing
-
-### Removed
-- Nothing
-
-### Security
-- Nothing
+Initial release
