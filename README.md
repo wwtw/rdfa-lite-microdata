@@ -6,7 +6,7 @@
 
 ## Documentation
 
-Please find the [project documentation](doc/index.md) in the `doc` directory. We recommend [reading it](http://jkphl-rdfa-lite-microdata.readthedocs.io/) via *Read the Docs*.
+Please find the [project documentation](doc/index.md) in the `doc` directory. We recommend [reading it](http://jkphlrdfa-lite-microdata.readthedocs.io/) via *Read the Docs*.
 
 ## Installation
 
@@ -56,7 +56,7 @@ Copyright © 2017 [Joschi Kuphal][author-url] / joschi@tollwerk.de. Licensed und
 [codeclimate-image]: https://lima.codeclimate.com/github/jkphl/rdfa-lite-microdata/badges/gpa.svg
 [codeclimate-url]: https://lima.codeclimate.com/github/jkphl/rdfa-lite-microdata
 [readthedocs-image]: https://readthedocs.org/projects/jkphlrdfa-lite-microdata/badge/?version=latest
-[readthedocs-url]: http://jkphlrdfa-lite-microdata.readthedocs.io/en/latest/
+[readthedocs-url]: http://jkphlrdfa-lite-microdata.readthedocs.io/
 [clear-architecture-image]: https://img.shields.io/badge/Clear%20Architecture-%E2%9C%94-brightgreen.svg
 [clear-architecture-url]: https://github.com/jkphl/clear-architecture
 [author-url]: https://jkphl.is

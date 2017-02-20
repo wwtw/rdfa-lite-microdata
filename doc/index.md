@@ -32,18 +32,18 @@ The resulting JSON serialization will look something like this:
 
 ```json
 {
-    "items": [ // List of all embedded items
+    "items": [
         {
-            "type": [ // Item type(s)
+            "type": [
                 "http:\/\/schema.org\/Movie"
             ],
-            "id": "http:\/\/www.imdb.com\/title\/tt0499549\/", // Item resource ID
-            "properties": { // Item properties
-                "name": [ // List of all property values
+            "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
+            "properties": {
+                "name": [
                     "Avatar"
                 ],
                 "director": [
-                    { // Nested item as property value
+                    {
                         "type": [
                             "http:\/\/schema.org\/Person"
                         ],
