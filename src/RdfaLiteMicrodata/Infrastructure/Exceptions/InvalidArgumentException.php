@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Ports
+ * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,62 +34,15 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
-
-use Jkphl\RdfaLiteMicrodata\Application\Context\MicrodataContext;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\DomDocumentFactory;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\MicrodataElementProcessor;
+namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions;
 
 /**
- * RDFa Lite 1.1 parser
+ * Invalid arguments exception
  *
  * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Ports
- * @see https://www.w3.org/TR/microdata/
- * @see https://www.w3.org/TR/microdata/#json
+ * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  */
-class Microdata extends AbstractParser
+class InvalidArgumentException extends \InvalidArgumentException implements RdfaLiteMicrodataInfrastructureExceptionInterface
 {
-    /**
-     * Parse an HTML file
-     *
-     * @param string $file HTML file path
-     * @return \stdClass Extracted things
-     */
-    public function parseHtmlFile($file)
-    {
-        return $this->parseHtml($this->getFileContents($file));
-    }
 
-    /**
-     * Parse an HTML string
-     *
-     * @param string $string HTML string
-     * @return \stdClass Extracted things
-     */
-    public function parseHtml($string)
-    {
-        return $this->parseSource(
-            $string,
-            new HtmlDocumentFactory(),
-            new MicrodataElementProcessor(),
-            new MicrodataContext()
-        );
-    }
-
-    /**
-     * Parse a DOM document
-     *
-     * @param \DOMDocument $dom DOM document
-     * @return \stdClass Extracted things
-     */
-    public function parseDom(\DOMDocument $dom) {
-        return $this->parseSource(
-            $dom,
-            new DomDocumentFactory(),
-            new MicrodataElementProcessor(),
-            new MicrodataContext()
-        );
-    }
 }

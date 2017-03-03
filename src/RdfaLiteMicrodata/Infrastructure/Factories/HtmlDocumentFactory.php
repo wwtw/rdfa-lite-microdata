@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Factories;
 
 use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\InvalidArgumentException;
 
 /**
  * HTML document factory
@@ -47,17 +48,176 @@ use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
 class HtmlDocumentFactory implements DocumentFactoryInterface
 {
     /**
-     * Create a DOM document from a string
+     * HTML5 elements
      *
-     * @param string $string String
+     * @var array
+     */
+    protected static $html5 = [
+        'a',
+        'abbr',
+        'acronym',
+        'address',
+        'applet',
+        'area',
+        'article',
+        'aside',
+        'audio',
+        'b',
+        'base',
+        'basefont',
+        'bdi',
+        'bdo',
+        'bgsound',
+        'big',
+        'blink',
+        'blockquote',
+        'body',
+        'br',
+        'button',
+        'canvas',
+        'caption',
+        'center',
+        'cite',
+        'code',
+        'col',
+        'colgroup',
+        'content',
+        'data',
+        'datalist',
+        'dd',
+        'decorator',
+        'del',
+        'details',
+        'dfn',
+        'dir',
+        'div',
+        'dl',
+        'dt',
+        'element',
+        'em',
+        'embed',
+        'fieldset',
+        'figcaption',
+        'figure',
+        'font',
+        'footer',
+        'form',
+        'frame',
+        'frameset',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'head',
+        'header',
+        'hgroup',
+        'hr',
+        'html',
+        'i',
+        'iframe',
+        'img',
+        'input',
+        'ins',
+        'isindex',
+        'kbd',
+        'keygen',
+        'label',
+        'legend',
+        'li',
+        'link',
+        'listing',
+        'main',
+        'map',
+        'mark',
+        'marquee',
+        'menu',
+        'menuitem',
+        'meta',
+        'meter',
+        'nav',
+        'nobr',
+        'noframes',
+        'noscript',
+        'object',
+        'ol',
+        'optgroup',
+        'option',
+        'output',
+        'p',
+        'param',
+        'plaintext',
+        'pre',
+        'progress',
+        'q',
+        'rp',
+        'rt',
+        'ruby',
+        's',
+        'samp',
+        'script',
+        'section',
+        'select',
+        'shadow',
+        'small',
+        'source',
+        'spacer',
+        'span',
+        'strike',
+        'strong',
+        'style',
+        'sub',
+        'summary',
+        'sup',
+        'table',
+        'tbody',
+        'td',
+        'template',
+        'textarea',
+        'tfoot',
+        'th',
+        'thead',
+        'time',
+        'title',
+        'tr',
+        'track',
+        'tt',
+        'u',
+        'ul',
+        'var',
+        'video',
+        'wbr',
+        'xmp'
+    ];
+
+    /**
+     * Create a DOM document from a source
+     *
+     * @param mixed $source Source
      * @return \DOMDocument DOM document
      */
-    public function createDocumentFromString($string)
+    public function createDocumentFromSource($source)
     {
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true);
-        $dom->loadHTML($string);
-        libxml_clear_errors();
+        $dom->loadHTML($source, LIBXML_NOWARNING);
+        $errors = libxml_get_errors();
+        libxml_use_internal_errors(false);
+
+        // Run through all errors
+        /** @var \LibXMLError $error */
+        foreach ($errors as $error) {
+            if (($error->code != 801) ||
+                (
+                    preg_match('/^tag\s+(\S+)\s+invalid$/', strtolower($error->message), $tag) &&
+                    !in_array($tag[1], self::$html5)
+                )
+            ) {
+                throw new InvalidArgumentException($error->message, $error->code);
+            }
+        }
+
         return $dom;
     }
 }

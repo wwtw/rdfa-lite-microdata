@@ -87,14 +87,14 @@ class Parser implements ParserInterface
     }
 
     /**
-     * Parse a string
+     * Parse a source
      *
-     * @param string $string Parseable string
-     * @return ThingInterface[] Parsed things
+     * @param mixed $source Parsable source
+     * @return ThingInterface[] Parsed source
      */
-    public function parse($string)
+    public function parse($source)
     {
-        $document = $this->documentFactory->createDocumentFromString($string);
+        $document = $this->documentFactory->createDocumentFromSource($source);
         $context = clone $this->context;
         $iterator = new DOMIterator($document->childNodes, $context, $this->elementProcessor);
 

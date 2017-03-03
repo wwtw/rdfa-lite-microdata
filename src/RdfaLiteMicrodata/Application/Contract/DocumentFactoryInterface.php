@@ -45,10 +45,10 @@ namespace Jkphl\RdfaLiteMicrodata\Application\Contract;
 interface DocumentFactoryInterface
 {
     /**
-     * Create a DOM document from a string
+     * Create a DOM document from a source
      *
-     * @param string $string String
+     * @param mixed $source Source
      * @return \DOMDocument DOM document
      */
-    public function createDocumentFromString($string);
+    public function createDocumentFromSource($source);
 }

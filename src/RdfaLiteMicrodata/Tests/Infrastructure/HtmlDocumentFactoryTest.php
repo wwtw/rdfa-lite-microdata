@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite-microdata
+ * rdfa-lite
  *
  * @category Jkphl
- * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @package Jkphl\Micrometa
+ * @subpackage Infrastructure
+ * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,38 +34,37 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions;
+namespace Jkphl\RdfaLiteMicrodata\Tests\Infrastructure;
+
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\DomDocumentFactory;
 
 /**
- * Out of bounds exception
+ * HTML document factory tests
  *
- * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
+ * @package Jkphl\Micrometa
+ * @subpackage Jkphl\RdfaLiteMicrodata\Tests
  */
-class RuntimeException extends \RuntimeException implements RdfaLiteMicrodataInfrastructureExceptionInterface
+class HtmlDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Empty default vocabulary
-     *
-     * @var string
+     * Test the HTML document factory
      */
-    const EMPTY_DEFAULT_VOCABULARY_STR = 'Empty default vocabulary';
+    public function testHtmlDocument()
+    {
+        $dom = new \DOMDocument();
+        $domDocumentFactory = new DomDocumentFactory();
+        $this->assertInstanceOf(\DOMDocument::class, $domDocumentFactory->createDocumentFromSource($dom));
+    }
+
     /**
-     * Empty default vocabulary
+     * Test the DOM document factory with an invalid source
      *
-     * @var int
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException
+     * @expectedExceptionCode 1488579793
      */
-    const EMPTY_DEFAULT_VOCABULARY = 1487030264;
-    /**
-     * Source is no DOM document
-     *
-     * @var string
-     */
-    const INVALID_DOM_SOURCE_STR = 'Source is no DOM document';
-    /**
-     * Source is no DOM document
-     *
-     * @var int
-     */
-    const INVALID_DOM_SOURCE = 1488579793;
+    public function testDomDocumentInvalidSource()
+    {
+        $domDocumentFactory = new DomDocumentFactory();
+        $domDocumentFactory->createDocumentFromSource(false);
+    }
 }

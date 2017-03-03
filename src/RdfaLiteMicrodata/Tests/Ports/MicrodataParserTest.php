@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Ports;
 
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata;
 use Jkphl\RdfaLiteMicrodata\Tests\AbstractTest;
 
@@ -55,6 +56,30 @@ class MicrodataParserTest extends AbstractTest
         $things = (new Microdata())->parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
         );
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.json'
+                    )
+                )
+            ),
+            $this->castArray($things)
+        );
+    }
+
+    /**
+     * Test parsing a Microdata HTML DOM
+     */
+    public function testMicrodataHtmlDom()
+    {
+        $htmlDomFactory = new HtmlDocumentFactory();
+        $dom = $htmlDomFactory->createDocumentFromSource(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
+            )
+        );
+        $things = (new Microdata())->parseDom($dom);
         $this->assertArrayEquals(
             $this->castArray(
                 json_decode(

@@ -19,6 +19,11 @@ $rdfaItems = $rdfaParser->parseHtmlFile('/path/to/file.html');
 // Parse an HTML string
 $rdfaItems = $rdfaParser->parseHtml('<html><head>...</head><body vocab="http://schema.org/">...</body>');
 
+// Parse a DOM document (here: created from an HTML string)
+$rdfaDom = new \DOMDocument();
+$rdfaDom->loadHTML('<html><head>...</head><body vocab="http://schema.org/">...</body>');
+$rdfaItems = $rdfaParser->parseDom($rdfaDom);
+
 // Parse an XML file (e.g. SVG)
 $rdfaItems = $rdfaParser->parseXmlFile('/path/to/file.svg');
 
@@ -83,6 +88,11 @@ $microdataItems = $microdataParser->parseHtmlFile('/path/to/file.html');
 
 // Parse an HTML string
 $microdataItems = $microdataParser->parseHtml('<html><head>...</head><body itemscope itemtype="http://schema.org/Movie">...</body>');
+
+// Parse a DOM document created from an HTML string
+$microdataDom = new \DOMDocument();
+$microdataDom->loadHTML('<html><head>...</head><body itemscope itemtype="http://schema.org/Movie">...</body>');
+$microdataItems = $microdataParser->parseDom($microdataDom);
 ```
 
 ## Installation

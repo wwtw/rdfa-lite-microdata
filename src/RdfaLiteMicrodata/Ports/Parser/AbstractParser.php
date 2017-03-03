@@ -74,23 +74,23 @@ abstract class AbstractParser implements ParserInterface
     }
 
     /**
-     * Parse a string
+     * Parse a source
      *
-     * @param string $string String
+     * @param mixed $source Source
      * @param DocumentFactoryInterface $documentFactory Document factory
      * @param ElementProcessorInterface $elementProcessor Element processor
      * @param ContextInterface $context Context
      * @return \stdClass Extracted things
      */
-    protected function parseString(
-        $string,
+    protected function parseSource(
+        $source,
         DocumentFactoryInterface $documentFactory,
         ElementProcessorInterface $elementProcessor,
         ContextInterface $context
     ) {
         try {
             $parser = new Parser($documentFactory, $elementProcessor, $context);
-            $things = $parser->parse($string);
+            $things = $parser->parse($source);
             $gateway = new ThingGateway();
             return (object)['items' => $gateway->export($things)];
         } catch (\OutOfBoundsException $e) {

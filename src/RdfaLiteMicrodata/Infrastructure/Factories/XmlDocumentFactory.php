@@ -47,15 +47,15 @@ use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
 class XmlDocumentFactory implements DocumentFactoryInterface
 {
     /**
-     * Create a DOM document from a string
+     * Create a DOM document from a source
      *
-     * @param string $string String
+     * @param mixed $source Source
      * @return \DOMDocument DOM document
      */
-    public function createDocumentFromString($string)
+    public function createDocumentFromSource($source)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML($string);
+        $dom->loadXML($source);
         return $dom;
     }
 }

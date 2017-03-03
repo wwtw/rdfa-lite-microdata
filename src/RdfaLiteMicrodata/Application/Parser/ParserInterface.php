@@ -36,6 +36,8 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 
+use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+
 /**
  * Parser interface
  *
@@ -45,10 +47,10 @@ namespace Jkphl\RdfaLiteMicrodata\Application\Parser;
 interface ParserInterface
 {
     /**
-     * Parse a string
+     * Parse a source
      *
-     * @param string $string String
-     * @return mixed
+     * @param mixed $source Parsable source
+     * @return ThingInterface[] Parsed source
      */
-    public function parse($string);
+    public function parse($source);
 }

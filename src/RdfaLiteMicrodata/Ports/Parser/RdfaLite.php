@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Ports\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\RdfaLiteContext;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\DomDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\XmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Parser\RdfaLiteElementProcessor;
@@ -69,7 +70,7 @@ class RdfaLite extends AbstractParser
      */
     public function parseXml($string)
     {
-        return $this->parseString(
+        return $this->parseSource(
             $string,
             new XmlDocumentFactory(),
             new RdfaLiteElementProcessor(),
@@ -96,9 +97,24 @@ class RdfaLite extends AbstractParser
      */
     public function parseHtml($string)
     {
-        return $this->parseString(
+        return $this->parseSource(
             $string,
             new HtmlDocumentFactory(),
+            (new RdfaLiteElementProcessor())->setHtml(true),
+            new RdfaLiteContext()
+        );
+    }
+
+    /**
+     * Parse a DOM document
+     *
+     * @param \DOMDocument $dom DOM document
+     * @return \stdClass Extracted things
+     */
+    public function parseDom(\DOMDocument $dom) {
+        return $this->parseSource(
+            $dom,
+            new DomDocumentFactory(),
             (new RdfaLiteElementProcessor())->setHtml(true),
             new RdfaLiteContext()
         );

@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Ports;
 
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 use Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite;
 use Jkphl\RdfaLiteMicrodata\Tests\AbstractTest;
 
@@ -55,6 +56,32 @@ class RdfaLiteParserTest extends AbstractTest
         $things = (new RdfaLite())->parseHtmlFile(
             dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
         );
+        $this->assertArrayEquals(
+            $this->castArray(
+                [
+                    'items' => json_decode(
+                        file_get_contents(
+                            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
+                        )
+                    )
+                ]
+            ),
+            $this->castArray($things)
+        );
+    }
+
+    /**
+     * Test parsing an RDFa Lite DOM
+     */
+    public function testRdfaLiteDom()
+    {
+        $htmlDomFactory = new HtmlDocumentFactory();
+        $dom = $htmlDomFactory->createDocumentFromSource(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
+            )
+        );
+        $things = (new RdfaLite())->parseDom($dom);
         $this->assertArrayEquals(
             $this->castArray(
                 [
