@@ -217,14 +217,24 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
     protected function processParsingErrors(array $errors)
     {
         foreach ($errors as $error) {
-            if (($error->code != 801) ||
-                (
-                    preg_match('/^tag\s+(\S+)\s+invalid$/', strtolower($error->message), $tag) &&
-                    !in_array($tag[1], self::$html5)
-                )
-            ) {
+            if ($this->isNotInvalidHtml5TagError($error)) {
                 throw new InvalidArgumentException($error->message, $error->code);
             }
         }
+    }
+
+    /**
+     * Test if a parsing error is not because of an "invalid" HTML5 tag
+     *
+     * @param \LibXMLError $error Parsing error
+     * @return bool Error is not because of an "invalid" HTML5 tag
+     */
+    protected function isNotInvalidHtml5TagError(\LibXMLError $error)
+    {
+        return ($error->code != 801) ||
+            (
+                preg_match('/^tag\s+(\S+)\s+invalid$/', strtolower($error->message), $tag) &&
+                !in_array($tag[1], self::$html5)
+            );
     }
 }
