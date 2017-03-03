@@ -204,9 +204,18 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
         $dom->loadHTML($source, LIBXML_NOWARNING);
         $errors = libxml_get_errors();
         libxml_use_internal_errors(false);
+        $this->processParsingErrors($errors);
+        return $dom;
+    }
 
-        // Run through all errors
-        /** @var \LibXMLError $error */
+    /**
+     * Process parsing errors
+     *
+     * @param \LibXMLError[] $errors Parsing errors
+     * @throws InvalidArgumentException If it's not a HTML5 error
+     */
+    protected function processParsingErrors(array $errors)
+    {
         foreach ($errors as $error) {
             if (($error->code != 801) ||
                 (
@@ -217,7 +226,5 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
                 throw new InvalidArgumentException($error->message, $error->code);
             }
         }
-
-        return $dom;
     }
 }
