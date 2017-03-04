@@ -201,7 +201,7 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
     {
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true);
-        $dom->loadHTML($source, LIBXML_NOWARNING);
+        $dom->loadHTML($source);
         $errors = libxml_get_errors();
         libxml_use_internal_errors(false);
         $this->processParsingErrors($errors);
