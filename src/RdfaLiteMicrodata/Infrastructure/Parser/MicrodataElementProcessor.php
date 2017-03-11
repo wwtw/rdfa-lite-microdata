@@ -40,6 +40,7 @@ use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\DOMIterator;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\RootThing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -276,5 +277,21 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     protected function getPrefixName($prefixName)
     {
         return [null, $prefixName];
+    }
+
+    /**
+     * Instanciate a type
+     *
+     * @param string $prefixedType Prefixed type
+     * @param ContextInterface $context Context
+     * @return TypeInterface Type
+     */
+    protected function getType($prefixedType, ContextInterface $context)
+    {
+        $defaultVocabulary = $context->getDefaultVocabulary();
+        if ($defaultVocabulary && strpos($prefixedType, $defaultVocabulary->getUri()) === 0) {
+            $prefixedType = substr($prefixedType, strlen($defaultVocabulary->getUri()));
+        }
+        return parent::getType($prefixedType, $context);
     }
 }

@@ -80,6 +80,7 @@ class MicrodataParserTest extends AbstractTest
             )
         );
         $things = (new Microdata())->parseDom($dom);
+        print_r($things);
         $this->assertArrayEquals(
             $this->castArray(
                 json_decode(

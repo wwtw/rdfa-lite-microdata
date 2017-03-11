@@ -6,56 +6,56 @@
             ],
             "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
             "properties": {
-                "name": [
+                "http:\/\/schema.org\/name": [
                     "Avatar"
                 ],
-                "director": [
+                "http:\/\/schema.org\/director": [
                     {
                         "type": [
                             "http:\/\/schema.org\/Person"
                         ],
                         "id": null,
                         "properties": {
-                            "name": [
+                            "http:\/\/schema.org\/name": [
                                 "James Cameron"
                             ],
-                            "birthDate": [
+                            "http:\/\/schema.org\/birthDate": [
                                 "August 16, 1954"
                             ]
                         }
                     }
                 ],
-                "producer": [
+                "http:\/\/schema.org\/producer": [
                     {
                         "type": [
                             "http:\/\/schema.org\/Person"
                         ],
                         "id": null,
                         "properties": {
-                            "name": [
+                            "http:\/\/schema.org\/name": [
                                 "James Cameron"
                             ],
-                            "birthDate": [
+                            "http:\/\/schema.org\/birthDate": [
                                 "August 16, 1954"
                             ]
                         }
                     }
                 ],
-                "genre": [
+                "http:\/\/schema.org\/genre": [
                     "Science fiction"
                 ],
-                "trailer": [
+                "http:\/\/schema.org\/trailer": [
                     "..\/movies\/avatar-theatrical-trailer.html"
                 ]
             }
         },
         {
             "type": [
-                "https:\/\/schema.org\/Country"
+                "http:\/\/schema.org\/Country"
             ],
             "id": null,
             "properties": {
-                "name": [
+                "http:\/\/schema.org\/name": [
                     "Canada"
                 ]
             }

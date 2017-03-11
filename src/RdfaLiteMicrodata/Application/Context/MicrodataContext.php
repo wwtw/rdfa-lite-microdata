@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Application\Context;
 
-use Jkphl\RdfaLiteMicrodata\Application\Parser\NullVocabulary;
+use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 
 /**
  * Microdata parsing context
@@ -52,6 +52,6 @@ class MicrodataContext extends AbstractContext
     public function __construct()
     {
         parent::__construct();
-        $this->defaultVocabulary = new NullVocabulary();
+        $this->defaultVocabulary = new Vocabulary('http://schema.org/');
     }
 }

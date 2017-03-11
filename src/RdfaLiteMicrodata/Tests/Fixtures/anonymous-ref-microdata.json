@@ -4,21 +4,21 @@
             "type": [],
             "id": null,
             "properties": {
-                "band": [
+                "http://schema.org/band": [
                     {
                         "type": [],
                         "id": null,
                         "properties": {
-                            "name": [
+                            "http://schema.org/name": [
                                 "Jazz Band"
                             ],
-                            "size": [
+                            "http://schema.org/size": [
                                 "12"
                             ]
                         }
                     }
                 ],
-                "name": [
+                "http://schema.org/name": [
                     "Amanda"
                 ]
             }

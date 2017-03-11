@@ -149,7 +149,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
     }
 
     /**
-     * Instanciate a type
+     * Instantiate a type
      *
      * @param string $prefixedType Prefixed type
      * @param ContextInterface $context Context
