@@ -148,7 +148,7 @@ trait PropertyProcessorTrait
     protected function getPropertyCache(\DOMElement $element)
     {
         $elementHash = spl_object_hash($element);
-        return isset(self::$propertyCache[$elementHash]) ? self::$propertyCache[$elementHash] : null;
+        return isset($this->propertyCache[$elementHash]) ? $this->propertyCache[$elementHash] : null;
     }
 
     /**
@@ -169,7 +169,7 @@ trait PropertyProcessorTrait
      */
     protected function setPropertyCache(\DOMElement $element, $value)
     {
-        return self::$propertyCache[spl_object_hash($element)] = $value;
+        return $this->propertyCache[spl_object_hash($element)] = $value;
     }
 
     /**

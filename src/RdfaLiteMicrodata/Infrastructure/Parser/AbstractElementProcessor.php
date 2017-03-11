@@ -84,7 +84,7 @@ abstract class AbstractElementProcessor implements ElementProcessorInterface
      *
      * @var array
      */
-    protected static $propertyCache = [];
+    protected $propertyCache = [];
     /**
      * HTML mode
      *
