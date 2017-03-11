@@ -47,6 +47,7 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  * @property boolean $html HTML mode
+ * @property array $propertyCache Property cache
  */
 trait PropertyProcessorTrait
 {
@@ -205,9 +206,7 @@ trait PropertyProcessorTrait
         // Map to an attribute (if applicable)
         if (array_key_exists($tagName, self::$tagNameAttributes)) {
             $value = strval($element->getAttribute(self::$tagNameAttributes[$tagName]));
-            if (($tagName != 'TIME') || strlen($value)) {
-                return $value;
-            }
+            return (($tagName != 'TIME') || strlen($value)) ? $value : null;
         }
 
         return null;
