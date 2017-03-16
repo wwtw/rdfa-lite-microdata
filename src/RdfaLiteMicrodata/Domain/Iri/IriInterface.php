@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite-microdata
+ * rdfa-lite
  *
  * @category Jkphl
- * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @package Jkphl\Micrometa
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain\Iri
+ * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,38 +34,34 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Domain\Property;
-
-use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriAwareInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Iri;
 
 /**
- * Property interface
+ * IRI interface
  *
- * @package Jkphl\RdfaLiteMicrodata
+ * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-interface PropertyInterface extends IriAwareInterface
+interface IriInterface
 {
     /**
-     * Return the property name
+     * Return the name
      *
-     * @return string Property name
+     * @return string Name
      */
     public function getName();
 
     /**
-     * Return the property vocabulary
+     * Return the base IRI
      *
-     * @return VocabularyInterface Property vocabulary
+     * @return string Base IRI
      */
-    public function getVocabulary();
+    public function getBase();
 
     /**
-     * Return the property value
+     * Return a string serialization
      *
-     * @return string|ThingInterface Property value
+     * @return string String serialization
      */
-    public function getValue();
+    public function __toString();
 }

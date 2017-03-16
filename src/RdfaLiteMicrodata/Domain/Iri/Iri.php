@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite-microdata
+ * rdfa-lite
  *
  * @category Jkphl
- * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @package Jkphl\Micrometa
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain\Iri
+ * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,38 +34,70 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Domain\Property;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Iri;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriAwareInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
- * Property interface
+ * IRI
  *
- * @package Jkphl\RdfaLiteMicrodata
+ * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-interface PropertyInterface extends IriAwareInterface
+class Iri implements IriInterface
 {
     /**
-     * Return the property name
+     * Name
      *
-     * @return string Property name
+     * @var string
      */
-    public function getName();
+    protected $name;
+    /**
+     * Base IRI
+     *
+     * @var string
+     */
+    protected $base;
 
     /**
-     * Return the property vocabulary
+     * IRI constructor
      *
-     * @return VocabularyInterface Property vocabulary
+     * @param string $name Name
+     * @param VocabularyInterface $vocabulary Vocabulary
      */
-    public function getVocabulary();
+    public function __construct($name, VocabularyInterface $vocabulary)
+    {
+        $this->name = $name;
+        $this->base = $vocabulary->getUri();
+    }
 
     /**
-     * Return the property value
+     * Return the name
      *
-     * @return string|ThingInterface Property value
+     * @return string Name
      */
-    public function getValue();
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Return the base IRI
+     *
+     * @return string Base IRI
+     */
+    public function getBase()
+    {
+        return $this->base;
+    }
+
+    /**
+     * Return a string serialization
+     *
+     * @return string String serialization
+     */
+    public function __toString()
+    {
+        return $this->base.$this->name;
+    }
 }

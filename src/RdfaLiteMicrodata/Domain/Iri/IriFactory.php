@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite-microdata
+ * rdfa-lite
  *
  * @category Jkphl
- * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @package Jkphl\Micrometa
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain\Iri
+ * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,38 +34,38 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Domain\Property;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Iri;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriAwareInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 
 /**
- * Property interface
+ * IRI factory
  *
- * @package Jkphl\RdfaLiteMicrodata
+ * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-interface PropertyInterface extends IriAwareInterface
+class IriFactory
 {
     /**
-     * Return the property name
+     * Create a type IRI
      *
-     * @return string Property name
+     * @param TypeInterface $type Type
+     * @return Iri Type IRI
      */
-    public function getName();
+    public static function createFromType(TypeInterface $type)
+    {
+        return new Iri($type->getType(), $type->getVocabulary());
+    }
 
     /**
-     * Return the property vocabulary
+     * Create a property IRI
      *
-     * @return VocabularyInterface Property vocabulary
+     * @param PropertyInterface $property
+     * @return Iri Property IRI
      */
-    public function getVocabulary();
-
-    /**
-     * Return the property value
-     *
-     * @return string|ThingInterface Property value
-     */
-    public function getValue();
+    public static function createFromProperty(PropertyInterface $property)
+    {
+        return new Iri($property->getName(), $property->getVocabulary());
+    }
 }

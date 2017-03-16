@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Domain;
 
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\Iri;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 
@@ -57,6 +58,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Type::class, $type);
         $this->assertEquals('test', $type->getType());
         $this->assertEquals($vocabulary, $type->getVocabulary());
+
+        $typeIri = $type->toIri();
+        $this->assertInstanceOf(Iri::class, $typeIri);
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI, $typeIri->getBase());
+        $this->assertEquals('test', $typeIri->getName());
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI.'test', strval($typeIri));
     }
 
     /**

@@ -37,6 +37,8 @@
 namespace Jkphl\RdfaLiteMicrodata\Domain\Type;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException;
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\Iri;
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriFactory;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -101,5 +103,15 @@ class Type implements TypeInterface
     public function getVocabulary()
     {
         return $this->vocabulary;
+    }
+
+    /**
+     * Return as IRI
+     *
+     * @return Iri Type IRI
+     */
+    public function toIri()
+    {
+        return IriFactory::createFromType($this);
     }
 }

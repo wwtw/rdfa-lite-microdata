@@ -36,6 +36,8 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Domain\Property;
 
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\Iri;
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriFactory;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
@@ -125,5 +127,15 @@ class Property implements PropertyInterface
     public function getResourceId()
     {
         return $this->resourceId;
+    }
+
+    /**
+     * Return as IRI
+     *
+     * @return Iri Property IRI
+     */
+    public function toIri()
+    {
+        return IriFactory::createFromProperty($this);
     }
 }

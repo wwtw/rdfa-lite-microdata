@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Domain\Type;
 
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriAwareInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
 
 /**
@@ -44,7 +45,7 @@ use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-interface TypeInterface
+interface TypeInterface extends IriAwareInterface
 {
     /**
      * Return the type

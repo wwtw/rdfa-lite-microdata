@@ -36,6 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Domain;
 
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\Iri;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 
@@ -59,6 +60,12 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value', $property->getValue());
         $this->assertEquals($vocabulary, $property->getVocabulary());
         $this->assertEquals('resource', $property->getResourceId());
+
+        $propertyIri = $property->toIri();
+        $this->assertInstanceOf(Iri::class, $propertyIri);
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI, $propertyIri->getBase());
+        $this->assertEquals('test', $propertyIri->getName());
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI.'test', strval($propertyIri));
     }
 
     /**
