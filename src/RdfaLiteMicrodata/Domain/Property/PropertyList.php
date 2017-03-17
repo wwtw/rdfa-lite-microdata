@@ -49,6 +49,11 @@ use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriInterface;
 class PropertyList implements PropertyListInterface
 {
     /**
+     * Use iterator methods
+     */
+    use PropertyListIteratorTrait;
+
+    /**
      * Property values
      *
      * @var array[]
@@ -72,52 +77,6 @@ class PropertyList implements PropertyListInterface
      * @var int
      */
     protected $cursor = 0;
-
-    /**
-     * Return the current property values
-     *
-     * @return array Property values
-     */
-    public function current()
-    {
-        return $this->values[$this->cursor];
-    }
-
-    /**
-     * Move forward to next element
-     */
-    public function next()
-    {
-        ++$this->cursor;
-    }
-
-    /**
-     * Return the current IRI key
-     *
-     * @return IriInterface IRI key
-     */
-    public function key()
-    {
-        return $this->names[$this->cursor];
-    }
-
-    /**
-     * Checks if current position is valid
-     *
-     * @return boolean The current position is valid
-     */
-    public function valid()
-    {
-        return isset($this->values[$this->cursor]);
-    }
-
-    /**
-     * Rewind the Iterator to the first element
-     */
-    public function rewind()
-    {
-        $this->cursor = 0;
-    }
 
     /**
      * Unset a property
