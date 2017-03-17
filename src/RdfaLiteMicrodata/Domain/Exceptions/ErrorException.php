@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite-microdata
+ * rdfa-lite
  *
  * @category Jkphl
- * @package Jkphl\RdfaLiteMicrodata
+ * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,56 +34,26 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Domain\Thing;
-
-use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyList;
-use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Exceptions;
 
 /**
- * Thing interface
+ * Error exception
  *
- * @package Jkphl\RdfaLiteMicrodata
+ * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-interface ThingInterface
+class ErrorException extends \ErrorException
 {
     /**
-     * Return the resource types
+     * Property cannot be unset
      *
-     * @return TypeInterface[] Resource types
+     * @var string
      */
-    public function getTypes();
-
+    const CANNOT_UNSET_PROPERTY_STR = 'Property "%s" cannot be unset';
     /**
-     * Return the resource ID
+     * Property cannot be unset
      *
-     * @return null|string Resource ID
+     * @var string
      */
-    public function getResourceId();
-
-    /**
-     * Add a property value
-     *
-     * @param PropertyInterface $property Property
-     * @return Thing Self reference
-     */
-    public function addProperty(PropertyInterface $property);
-
-    /**
-     * Return all properties
-     *
-     * @return PropertyList Properties
-     */
-    public function getProperties();
-
-    /**
-     * Return the values of a single property
-     *
-     * @param string $name Property name
-     * @param VocabularyInterface $vocabulary Vocabulary
-     * @return array Property values
-     */
-    public function getProperty($name, VocabularyInterface $vocabulary);
+    const CANNOT_UNSET_PROPERTY = 1489784392;
 }

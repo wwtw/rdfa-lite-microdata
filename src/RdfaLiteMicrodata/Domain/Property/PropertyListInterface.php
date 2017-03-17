@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite-microdata
+ * rdfa-lite
  *
  * @category Jkphl
- * @package Jkphl\RdfaLiteMicrodata
- * @subpackage Jkphl\RdfaLiteMicrodata\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @package Jkphl\Micrometa
+ * @subpackage Jkphl\RdfaLiteMicrodata\Domain\Property
+ * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,56 +34,60 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Domain\Thing;
+namespace Jkphl\RdfaLiteMicrodata\Domain\Property;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyList;
-use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
-use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Iri\IriInterface;
 
 /**
- * Thing interface
+ * Property list interface
  *
- * @package Jkphl\RdfaLiteMicrodata
+ * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Domain
  */
-interface ThingInterface
+interface PropertyListInterface extends \ArrayAccess, \Iterator, \Countable
 {
     /**
-     * Return the resource types
+     * Return whether a property exists
      *
-     * @return TypeInterface[] Resource types
+     * @param IriInterface|string $iri IRI
+     * @return boolean Property exists
      */
-    public function getTypes();
+    public function offsetExists($iri);
 
     /**
-     * Return the resource ID
+     * Get a particular property
      *
-     * @return null|string Resource ID
-     */
-    public function getResourceId();
-
-    /**
-     * Add a property value
-     *
-     * @param PropertyInterface $property Property
-     * @return Thing Self reference
-     */
-    public function addProperty(PropertyInterface $property);
-
-    /**
-     * Return all properties
-     *
-     * @return PropertyList Properties
-     */
-    public function getProperties();
-
-    /**
-     * Return the values of a single property
-     *
-     * @param string $name Property name
-     * @param VocabularyInterface $vocabulary Vocabulary
+     * @param IriInterface|string $iri IRI
      * @return array Property values
      */
-    public function getProperty($name, VocabularyInterface $vocabulary);
+    public function &offsetGet($iri);
+
+    /**
+     * Set a particular property
+     *
+     * @param IriInterface|string $iri IRI
+     * @param array $value Property values
+     */
+    public function offsetSet($iri, $value);
+
+    /**
+     * Unset a property
+     *
+     * @param IriInterface|string $iri IRI
+     */
+    public function offsetUnset($iri);
+
+    /**
+     * Return an array form
+     *
+     * @return array Array form
+     */
+    public function toArray();
+
+    /**
+     * Add a property
+     *
+     * @param PropertyInterface $property Property
+     */
+    public function add(PropertyInterface $property);
 }

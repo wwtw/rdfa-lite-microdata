@@ -38,6 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Tests\Application;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyListInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
@@ -107,7 +108,7 @@ abstract class ParserIteratorTestBase extends AbstractTest
     protected function validateProperties(ThingInterface $thing, VocabularyInterface $schemaOrgVocabulary)
     {
         $properties = $thing->getProperties();
-        $this->assertTrue(is_array($properties));
+        $this->assertInstanceOf(PropertyListInterface::class, $properties);
         $this->assertEquals(4, count($properties));
 
         $this->validateProperty($thing, 'name', $schemaOrgVocabulary, 'Joschi Kuphal');

@@ -38,6 +38,7 @@ namespace Jkphl\RdfaLiteMicrodata\Tests\Domain;
 
 use Jkphl\RdfaLiteMicrodata\Domain\Iri\Iri;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
+use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyList;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\Vocabulary;
 
 /**
@@ -78,5 +79,36 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
     {
         $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
         new Property('', $vocabulary, 'value');
+    }
+
+    /**
+     * Test the property list
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\ErrorException
+     * @expectedExceptionCode 1489784392
+     */
+    public function testPropertyList()
+    {
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
+        $property1 = new Property('test', $vocabulary, 'value 1', 'resource');
+        $property2 = new Property('test', $vocabulary, 'value 2', 'resource');
+
+        $propertyList = new PropertyList();
+        $propertyList->add($property1);
+        $this->assertEquals(1, count($propertyList));
+        $this->assertTrue($propertyList->offsetExists($property1->toIri()));
+
+        $propertyList->add($property2);
+        $this->assertEquals(
+            [VocabularyTest::SCHEMA_ORG_URI.'test' => [$property1, $property2]],
+            $propertyList->toArray()
+        );
+
+        foreach ($propertyList as $propertyIri => $propertyValues) {
+            $this->assertInstanceOf(Iri::class, $propertyIri);
+            $this->assertEquals([$property1, $property2], $propertyValues);
+        }
+
+        $propertyList->offsetUnset($property1->toIri());
     }
 }

@@ -39,6 +39,7 @@ namespace Jkphl\RdfaLiteMicrodata\Tests\Domain;
 use Jkphl\RdfaLiteMicrodata\Application\Parser\NullVocabulary;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyListInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\Thing;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\Type;
@@ -78,7 +79,7 @@ class ThingTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Thing::class, $thing);
         $this->assertEquals([$type], $thing->getTypes());
         $this->assertNull($thing->getResourceId());
-        $this->assertTrue(is_array($thing->getProperties()));
+        $this->assertInstanceOf(PropertyListInterface::class, $thing->getProperties());
         $this->assertEquals(0, count($thing->getProperties()));
     }
 
@@ -144,9 +145,9 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     protected function validateProperties(ThingInterface $thing, VocabularyInterface $vocabulary)
     {
         $properties = $thing->getProperties();
-        $this->assertTrue(is_array($properties));
-        $this->assertTrue(array_key_exists($vocabulary->expand('test1'), $properties));
-        $this->assertTrue(array_key_exists($vocabulary->expand('test2'), $properties));
+        $this->assertInstanceOf(PropertyListInterface::class, $properties);
+        $this->assertTrue(isset($properties[$vocabulary->expand('test1')]));
+        $this->assertTrue(isset($properties[$vocabulary->expand('test2')]));
         $this->assertEquals(2, count($properties));
     }
 

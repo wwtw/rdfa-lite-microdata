@@ -36,9 +36,9 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Domain\Thing;
 
-use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\OutOfBoundsException;
 use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyList;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\PropertyService;
 use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
@@ -66,9 +66,9 @@ class Thing implements ThingInterface
     /**
      * Property
      *
-     * @var array[]
+     * @var PropertyList
      */
-    protected $properties = [];
+    protected $properties;
 
     /**
      * Thing constructor
@@ -94,6 +94,7 @@ class Thing implements ThingInterface
 
         $this->types = $types;
         $this->resourceId = $resourceId;
+        $this->properties = new PropertyList();
     }
 
     /**
@@ -124,23 +125,14 @@ class Thing implements ThingInterface
      */
     public function addProperty(PropertyInterface $property)
     {
-        $name = $property->getVocabulary()->expand($property->getName());
-
-        // Create the property values list if necessary
-        if (!array_key_exists($name, $this->properties)) {
-            $this->properties[$name] = [];
-        }
-
-        // Register the property value
-        $this->properties[$name][] = $property;
-
+        $this->properties->add($property);
         return $this;
     }
 
     /**
      * Return all properties
      *
-     * @return array[] Properties
+     * @return PropertyList Properties
      */
     public function getProperties()
     {
@@ -157,16 +149,6 @@ class Thing implements ThingInterface
     public function getProperty($name, VocabularyInterface $vocabulary)
     {
         $name = (new PropertyService())->validatePropertyName($name);
-        $name = $vocabulary->expand($name);
-
-        // If the property name is unknown
-        if (!array_key_exists($name, $this->properties)) {
-            throw new OutOfBoundsException(
-                sprintf(OutOfBoundsException::UNKNOWN_PROPERTY_NAME_STR, $name),
-                OutOfBoundsException::UNKNOWN_PROPERTY_NAME
-            );
-        }
-
-        return $this->properties[$name];
+        return $this->properties[$vocabulary->expand($name)];
     }
 }
