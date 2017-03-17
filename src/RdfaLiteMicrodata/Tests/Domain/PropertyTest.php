@@ -83,9 +83,6 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the property list
-     *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\ErrorException
-     * @expectedExceptionCode 1489784392
      */
     public function testPropertyList()
     {
@@ -103,6 +100,23 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
             [VocabularyTest::SCHEMA_ORG_URI.'test' => [$property1, $property2]],
             $propertyList->toArray()
         );
+    }
+
+    /**
+     * Test the property list iteration / deletion
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\ErrorException
+     * @expectedExceptionCode 1489784392
+     */
+    public function testPropertyListIterationDeletion()
+    {
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
+        $property1 = new Property('test', $vocabulary, 'value 1', 'resource');
+        $property2 = new Property('test', $vocabulary, 'value 2', 'resource');
+
+        $propertyList = new PropertyList();
+        $propertyList->add($property1);
+        $propertyList->add($property2);
 
         foreach ($propertyList as $propertyIri => $propertyValues) {
             $this->assertInstanceOf(Iri::class, $propertyIri);

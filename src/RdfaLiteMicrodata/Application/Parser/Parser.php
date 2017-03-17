@@ -41,7 +41,6 @@ use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
 use Jkphl\RdfaLiteMicrodata\Application\Contract\ElementProcessorInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 
-
 /**
  * Parser
  *
@@ -106,4 +105,3 @@ class Parser implements ParserInterface
         return $context->getChildren();
     }
 }
-

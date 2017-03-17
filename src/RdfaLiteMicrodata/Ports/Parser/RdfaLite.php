@@ -111,7 +111,8 @@ class RdfaLite extends AbstractParser
      * @param \DOMDocument $dom DOM document
      * @return \stdClass Extracted things
      */
-    public function parseDom(\DOMDocument $dom) {
+    public function parseDom(\DOMDocument $dom)
+    {
         return $this->parseSource(
             $dom,
             new DomDocumentFactory(),
