@@ -1,0 +1,74 @@
+{
+    "items": [
+        {
+            "type": [
+                {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "NewsArticle"
+                }
+            ],
+            "id": null,
+            "properties": {
+                "http:\/\/schema.org\/name": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "name",
+                    "values": [
+                        "Nam dictum eros at libero tempor semper"
+                    ]
+                },
+                "http:\/\/schema.org\/description": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "description",
+                    "values": [
+                        "Nullam in convallis metus, quis hendrerit velit. Nam mollis congue orci, a\n                lobortis nibh feugiat id."
+                    ]
+                },
+                "http:\/\/schema.org\/articleBody": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "articleBody",
+                    "values": [
+                        "\n                Lorem ipsum dolor.News article content here.\n            "
+                    ]
+                },
+                "http:\/\/schema.org\/datePublished": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "datePublished",
+                    "values": [
+                        "2014-03-04T09:00:00+00:00"
+                    ]
+                },
+                "http:\/\/schema.org\/associatedMedia": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "associatedMedia",
+                    "values": [
+                        {
+                            "type": [
+                                {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "ImageObject"
+                                }
+                            ],
+                            "id": null,
+                            "properties": {
+                                "http:\/\/schema.org\/contentURL": {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "contentURL",
+                                    "values": [
+                                        "image.jpg"
+                                    ]
+                                },
+                                "http:\/\/schema.org\/caption": {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "caption",
+                                    "values": [
+                                        "Lorem ipsum dolor."
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

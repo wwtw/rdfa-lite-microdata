@@ -49,6 +49,23 @@ use Jkphl\RdfaLiteMicrodata\Domain\Type\TypeInterface;
 class ThingGateway
 {
     /**
+     * Treat types & property names as IRIs
+     *
+     * @var boolean
+     */
+    protected $iri;
+
+    /**
+     * Abstract parser constructor
+     *
+     * @param boolean $iri Treat types & property names as IRIs
+     */
+    public function __construct($iri = false)
+    {
+        $this->iri = $iri;
+    }
+
+    /**
      * Export things
      *
      * @param ThingInterface[] $things Things
@@ -79,25 +96,47 @@ class ThingGateway
      */
     protected function exportThing(ThingInterface $thing)
     {
-        $properties = [];
-        foreach ($thing->getProperties() as $values) {
-            if (count($values)) {
-                /** @var PropertyInterface $firstProperty */
-                $firstProperty = $values[0];
-                $property = $firstProperty->getVocabulary()->expand($firstProperty->getName());
-                $properties[$property] = array_map([$this, 'exportProperty'], $values);
-            }
-        }
+        $iri = $this->iri;
 
         return (object)[
             'type' => array_map(
-                function (TypeInterface $type) {
-                    return $type->getVocabulary()->expand($type->getType());
+                function (TypeInterface $type) use ($iri) {
+                    return $iri ?
+                        (object)[
+                            'profile' => $type->getVocabulary()->getUri(),
+                            'name' => $type->getType(),
+                        ] :
+                        $type->getVocabulary()->expand($type->getType());
                 },
                 $thing->getTypes()
             ),
             'id' => $thing->getResourceId(),
-            'properties' => $properties,
+            'properties' => $this->exportProperties($thing),
         ];
+    }
+
+    /**
+     * Export the properties list
+     *
+     * @param ThingInterface $thing Thing
+     * @return array Properties list
+     */
+    protected function exportProperties(ThingInterface $thing)
+    {
+        $properties = [];
+        foreach ($thing->getProperties() as $propertyIri => $propertyValues) {
+            if (count($propertyValues)) {
+                $propertyValues = array_map([$this, 'exportProperty'], $propertyValues);
+                $properties[strval($propertyIri)] = $this->iri ?
+                    (object)[
+                        'profile' => $propertyIri->getProfile(),
+                        'name' => $propertyIri->getName(),
+                        'values' => $propertyValues,
+                    ] :
+                    $propertyValues;
+            }
+        }
+
+        return $properties;
     }
 }

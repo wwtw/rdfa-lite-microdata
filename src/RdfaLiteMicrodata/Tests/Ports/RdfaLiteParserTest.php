@@ -58,13 +58,32 @@ class RdfaLiteParserTest extends AbstractTest
         );
         $this->assertArrayEquals(
             $this->castArray(
-                [
-                    'items' => json_decode(
-                        file_get_contents(
-                            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
-                        )
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
                     )
-                ]
+                )
+            ),
+            $this->castArray($things)
+        );
+    }
+
+    /**
+     * Test parsing an RDFa Lite HTML file with types / properties as IRIs
+     */
+    public function testRdfaLiteHtmlFileWithIris()
+    {
+        $things = (new RdfaLite(true))->parseHtmlFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.html'
+        );
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR
+                        .'article-rdfa-lite-iri.json'
+                    )
+                )
             ),
             $this->castArray($things)
         );
@@ -84,13 +103,11 @@ class RdfaLiteParserTest extends AbstractTest
         $things = (new RdfaLite())->parseDom($dom);
         $this->assertArrayEquals(
             $this->castArray(
-                [
-                    'items' => json_decode(
-                        file_get_contents(
-                            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
-                        )
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'article-rdfa-lite.json'
                     )
-                ]
+                )
             ),
             $this->castArray($things)
         );

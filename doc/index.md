@@ -33,42 +33,121 @@ $rdfaItems = $rdfaParser->parseXml('<svg viewBox="0 0 100 100" vocab="http://sch
 echo json_encode($rdfaItems, JSON_PRETTY_PRINT);
 ```
 
-The resulting JSON serialization will look something like this:
+The resulting JSON serialization will look something like this (JSON serialization):
 
 ```json
 {
     "items": [
         {
             "type": [
-                "http:\/\/schema.org\/Movie"
+                "http://schema.org/Movie"
             ],
-            "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
+            "id": "http://www.imdb.com/title/tt0499549/",
             "properties": {
-                "name": [
+                "http://schema.org/name": [
                     "Avatar"
                 ],
-                "director": [
+                "http://schema.org/director": [
                     {
                         "type": [
-                            "http:\/\/schema.org\/Person"
+                            "http://schema.org/Person"
                         ],
                         "id": null,
                         "properties": {
-                            "name": [
+                            "http://schema.org/name": [
                                 "James Cameron"
                             ],
-                            "birthDate": [
+                            "http://schema.org/birthDate": [
                                 "August 16, 1954"
                             ]
                         }
                     }
                 ],
-                "genre": [
+                "http://schema.org/genre": [
                     "Science fiction"
                 ],
-                "trailer": [
-                    "..\/movies\/avatar-theatrical-trailer.html"
+                "http://schema.org/trailer": [
+                    "../movies/avatar-theatrical-trailer.html"
                 ]
+            }
+        }
+    ]
+}
+```
+
+Item types and property names can be treated as references consisting of a profile IRI and a separate name. To enable IRI mode, instantiate the parser with `true` as argument:
+
+```php
+$rdfaParser = new \Jkphl\RdfaLiteMicrodata\Ports\Parser\RdfaLite(true);
+$rdfaItems = $rdfaParser->parseHtmlFile('/path/to/file.html');
+```
+
+With IRI mode enabled, the result will look like more verbose (JSON serialization):
+
+```json
+{
+    "items": [
+        {
+            "type": [
+                {
+                    "profile": "http://schema.org/",
+                    "name": "Movie"
+                }
+            ],
+            "id": "http://www.imdb.com/title/tt0499549/",
+            "properties": {
+                "http://schema.org/name": {
+                    "profile": "http://schema.org/",
+                    "name": "name",
+                    "values": [
+                        "Avatar"
+                    ]
+                },
+                "http://schema.org/director": {
+                    "profile": "http://schema.org/",
+                    "name": "director",
+                    "values": [
+                        {
+                            "type": [
+                                {
+                                    "profile": "http://schema.org/",
+                                    "name": "Person"
+                                }
+                            ],
+                            "id": null,
+                            "properties": {
+                                "http://schema.org/name": {
+                                    "profile": "http://schema.org/",
+                                    "name": "name",
+                                    "values": [
+                                        "James Cameron"
+                                    ]
+                                },
+                                "http://schema.org/birthDate": {
+                                    "profile": "http://schema.org/",
+                                    "name": "birthDate",
+                                    "values": [
+                                        "August 16, 1954"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "http://schema.org/genre": {
+                    "profile": "http://schema.org/",
+                    "name": "genre",
+                    "values": [
+                        "Science fiction"
+                    ]
+                },
+                "http://schema.org/trailer": {
+                    "profile": "http://schema.org/",
+                    "name": "trailer",
+                    "values": [
+                        "../movies/avatar-theatrical-trailer.html"
+                    ]
+                }
             }
         }
     ]
@@ -93,6 +172,10 @@ $microdataItems = $microdataParser->parseHtml('<html><head>...</head><body items
 $microdataDom = new \DOMDocument();
 $microdataDom->loadHTML('<html><head>...</head><body itemscope itemtype="http://schema.org/Movie">...</body>');
 $microdataItems = $microdataParser->parseDom($microdataDom);
+
+// Parse an HTML string with types / property names treated as IRIs
+$microdataParserIri = new \Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata(true);
+$microdataItems = $microdataParser->parseHtmlFile('/path/to/file.html');
 ```
 
 ## Installation

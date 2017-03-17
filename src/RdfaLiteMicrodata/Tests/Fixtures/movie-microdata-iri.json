@@ -1,0 +1,116 @@
+{
+    "items": [
+        {
+            "type": [
+                {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "Movie"
+                }
+            ],
+            "id": "http:\/\/www.imdb.com\/title\/tt0499549\/",
+            "properties": {
+                "http:\/\/schema.org\/name": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "name",
+                    "values": [
+                        "Avatar"
+                    ]
+                },
+                "http:\/\/schema.org\/director": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "director",
+                    "values": [
+                        {
+                            "type": [
+                                {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "Person"
+                                }
+                            ],
+                            "id": null,
+                            "properties": {
+                                "http:\/\/schema.org\/name": {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "name",
+                                    "values": [
+                                        "James Cameron"
+                                    ]
+                                },
+                                "http:\/\/schema.org\/birthDate": {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "birthDate",
+                                    "values": [
+                                        "August 16, 1954"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "http:\/\/schema.org\/producer": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "producer",
+                    "values": [
+                        {
+                            "type": [
+                                {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "Person"
+                                }
+                            ],
+                            "id": null,
+                            "properties": {
+                                "http:\/\/schema.org\/name": {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "name",
+                                    "values": [
+                                        "James Cameron"
+                                    ]
+                                },
+                                "http:\/\/schema.org\/birthDate": {
+                                    "profile": "http:\/\/schema.org\/",
+                                    "name": "birthDate",
+                                    "values": [
+                                        "August 16, 1954"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "http:\/\/schema.org\/genre": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "genre",
+                    "values": [
+                        "Science fiction"
+                    ]
+                },
+                "http:\/\/schema.org\/trailer": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "trailer",
+                    "values": [
+                        "..\/movies\/avatar-theatrical-trailer.html"
+                    ]
+                }
+            }
+        },
+        {
+            "type": [
+                {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "Country"
+                }
+            ],
+            "id": null,
+            "properties": {
+                "http:\/\/schema.org\/name": {
+                    "profile": "http:\/\/schema.org\/",
+                    "name": "name",
+                    "values": [
+                        "Canada"
+                    ]
+                }
+            }
+        }
+    ]
+}

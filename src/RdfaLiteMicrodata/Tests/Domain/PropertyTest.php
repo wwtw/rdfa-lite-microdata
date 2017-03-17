@@ -64,7 +64,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
 
         $propertyIri = $property->toIri();
         $this->assertInstanceOf(Iri::class, $propertyIri);
-        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI, $propertyIri->getBase());
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI, $propertyIri->getProfile());
         $this->assertEquals('test', $propertyIri->getName());
         $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI.'test', strval($propertyIri));
     }

@@ -42,7 +42,8 @@ namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions;
  * @package Jkphl\RdfaLiteMicrodata
  * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  */
-class InvalidArgumentException extends \InvalidArgumentException implements RdfaLiteMicrodataInfrastructureExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements
+    RdfaLiteMicrodataInfrastructureExceptionInterface
 {
 
 }

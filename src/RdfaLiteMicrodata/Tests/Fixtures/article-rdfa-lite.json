@@ -1,38 +1,40 @@
-[
-    {
-        "type": [
-            "http:\/\/schema.org\/NewsArticle"
-        ],
-        "id": null,
-        "properties": {
-            "http:\/\/schema.org\/name": [
-                "Nam dictum eros at libero tempor semper"
+{
+    "items": [
+        {
+            "type": [
+                "http:\/\/schema.org\/NewsArticle"
             ],
-            "http:\/\/schema.org\/description": [
-                "Nullam in convallis metus, quis hendrerit velit. Nam mollis congue orci, a\n                lobortis nibh feugiat id."
-            ],
-            "http:\/\/schema.org\/articleBody": [
-                "\n                Lorem ipsum dolor.News article content here.\n            "
-            ],
-            "http:\/\/schema.org\/datePublished": [
-                "2014-03-04T09:00:00+00:00"
-            ],
-            "http:\/\/schema.org\/associatedMedia": [
-                {
-                    "type": [
-                        "http:\/\/schema.org\/ImageObject"
-                    ],
-                    "id": null,
-                    "properties": {
-                        "http:\/\/schema.org\/contentURL": [
-                            "image.jpg"
+            "id": null,
+            "properties": {
+                "http:\/\/schema.org\/name": [
+                    "Nam dictum eros at libero tempor semper"
+                ],
+                "http:\/\/schema.org\/description": [
+                    "Nullam in convallis metus, quis hendrerit velit. Nam mollis congue orci, a\n                lobortis nibh feugiat id."
+                ],
+                "http:\/\/schema.org\/articleBody": [
+                    "\n                Lorem ipsum dolor.News article content here.\n            "
+                ],
+                "http:\/\/schema.org\/datePublished": [
+                    "2014-03-04T09:00:00+00:00"
+                ],
+                "http:\/\/schema.org\/associatedMedia": [
+                    {
+                        "type": [
+                            "http:\/\/schema.org\/ImageObject"
                         ],
-                        "http:\/\/schema.org\/caption": [
-                            "Lorem ipsum dolor."
-                        ]
+                        "id": null,
+                        "properties": {
+                            "http:\/\/schema.org\/contentURL": [
+                                "image.jpg"
+                            ],
+                            "http:\/\/schema.org\/caption": [
+                                "Lorem ipsum dolor."
+                            ]
+                        }
                     }
-                }
-            ]
+                ]
+            }
         }
-    }
-]
+    ]
+}

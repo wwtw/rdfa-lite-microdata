@@ -52,11 +52,11 @@ interface IriInterface
     public function getName();
 
     /**
-     * Return the base IRI
+     * Return the profile
      *
-     * @return string Base IRI
+     * @return string Profile
      */
-    public function getBase();
+    public function getProfile();
 
     /**
      * Return a string serialization

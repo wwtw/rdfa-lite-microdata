@@ -69,6 +69,26 @@ class MicrodataParserTest extends AbstractTest
     }
 
     /**
+     * Test parsing a Microdata HTML file with types / properties as IRIs
+     */
+    public function testMicrodataHtmlFileWithIris()
+    {
+        $things = (new Microdata(true))->parseHtmlFile(
+            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata.html'
+        );
+        $this->assertArrayEquals(
+            $this->castArray(
+                json_decode(
+                    file_get_contents(
+                        dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'movie-microdata-iri.json'
+                    )
+                )
+            ),
+            $this->castArray($things)
+        );
+    }
+
+    /**
      * Test parsing a Microdata HTML DOM
      */
     public function testMicrodataHtmlDom()

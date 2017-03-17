@@ -53,11 +53,11 @@ class Iri implements IriInterface
      */
     protected $name;
     /**
-     * Base IRI
+     * Profile
      *
      * @var string
      */
-    protected $base;
+    protected $profile;
 
     /**
      * IRI constructor
@@ -68,7 +68,7 @@ class Iri implements IriInterface
     public function __construct($name, VocabularyInterface $vocabulary)
     {
         $this->name = $name;
-        $this->base = $vocabulary->getUri();
+        $this->profile = $vocabulary->getUri();
     }
 
     /**
@@ -82,13 +82,13 @@ class Iri implements IriInterface
     }
 
     /**
-     * Return the base IRI
+     * Return the profile
      *
-     * @return string Base IRI
+     * @return string Profile
      */
-    public function getBase()
+    public function getProfile()
     {
-        return $this->base;
+        return $this->profile;
     }
 
     /**
@@ -98,6 +98,6 @@ class Iri implements IriInterface
      */
     public function __toString()
     {
-        return $this->base.$this->name;
+        return $this->profile.$this->name;
     }
 }

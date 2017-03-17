@@ -61,7 +61,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $typeIri = $type->toIri();
         $this->assertInstanceOf(Iri::class, $typeIri);
-        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI, $typeIri->getBase());
+        $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI, $typeIri->getProfile());
         $this->assertEquals('test', $typeIri->getName());
         $this->assertEquals(VocabularyTest::SCHEMA_ORG_URI.'test', strval($typeIri));
     }

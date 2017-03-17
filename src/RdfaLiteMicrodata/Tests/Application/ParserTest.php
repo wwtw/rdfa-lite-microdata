@@ -83,7 +83,7 @@ class ParserTest extends ParserIteratorTestBase
         );
         $this->assertArrayEquals(
             $this->castArray(json_decode(file_get_contents(self::$fixtures.'article-rdfa-lite.json'))),
-            $this->castArray((new ThingGateway())->export($things))
+            $this->castArray(['items' => (new ThingGateway())->export($things)])
         );
     }
 

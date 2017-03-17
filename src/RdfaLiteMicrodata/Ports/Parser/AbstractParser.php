@@ -54,6 +54,23 @@ use Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException;
 abstract class AbstractParser implements ParserInterface
 {
     /**
+     * Treat types & property names as IRIs
+     *
+     * @var boolean
+     */
+    protected $iri;
+
+    /**
+     * Abstract parser constructor
+     *
+     * @param boolean $iri Treat types & property names as IRIs
+     */
+    public function __construct($iri = false)
+    {
+        $this->iri = $iri;
+    }
+
+    /**
      * Get the contents of a file
      *
      * @param string $file File
@@ -91,7 +108,7 @@ abstract class AbstractParser implements ParserInterface
         try {
             $parser = new Parser($documentFactory, $elementProcessor, $context);
             $things = $parser->parse($source);
-            $gateway = new ThingGateway();
+            $gateway = new ThingGateway($this->iri);
             return (object)['items' => $gateway->export($things)];
         } catch (\OutOfBoundsException $e) {
             throw new OutOfBoundsException($e->getMessage(), $e->getCode());
