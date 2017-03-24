@@ -191,6 +191,22 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
         'wbr',
         'xmp'
     ];
+    /**
+     * Custom HTML parsing error handler
+     *
+     * @var callable|null
+     */
+    protected $errorHandler;
+
+    /**
+     * Constructor
+     *
+     * @param callable|null $errorHandler Custom HTML parsing error handler
+     */
+    public function __construct(callable $errorHandler = null)
+    {
+        $this->errorHandler = $errorHandler;
+    }
 
     /**
      * Create a DOM document from a source
@@ -219,14 +235,14 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
     {
         /** @var \LibXMLError $error */
         foreach ($errors as $error) {
-            if ($this->isNotInvalidHtml5TagError($error)) {
+            if ($this->isNotInvalidHtml5TagError($error) && $this->isNotAllowedError($error)) {
                 throw new HtmlParsingException($error);
             }
         }
     }
 
     /**
-     * Test if a parsing error is not because of an "invalid" HTML5 tag
+     * Test whether a parsing error is not because of an "invalid" HTML5 tag
      *
      * @param \LibXMLError $error Parsing error
      * @return bool Error is not because of an "invalid" HTML5 tag
@@ -238,5 +254,16 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
                 preg_match('/^tag\s+(\S+)\s+invalid$/', strtolower($error->message), $tag) &&
                 !in_array($tag[1], self::$html5)
             );
+    }
+
+    /**
+     * Test whether a parsing error is allowed per custom HTML parser error handler
+     *
+     * @param \LibXMLError $error Parsing error
+     * @return bool Error is not allowed
+     */
+    protected function isNotAllowedError(\LibXMLError $error)
+    {
+        return !(is_callable($this->errorHandler) && call_user_func($this->errorHandler, $error));
     }
 }
