@@ -92,7 +92,7 @@ class HtmlDocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testHtmlDocumentCustomErrorHandler()
     {
-        $customErrorHandler = function(\LibXMLError $error) {
+        $customErrorHandler = function (\LibXMLError $error) {
             return ($error->level == 2) && ($error->code == 801) && (trim($error->message) == 'Tag invalid invalid');
         };
         $htmlDocumentFactory = new HtmlDocumentFactory($customErrorHandler);
