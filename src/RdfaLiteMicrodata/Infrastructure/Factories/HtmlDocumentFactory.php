@@ -220,7 +220,7 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
         /** @var \LibXMLError $error */
         foreach ($errors as $error) {
             if ($this->isNotInvalidHtml5TagError($error)) {
-                throw new HtmlParsingException($error->message, $error->code, $error);
+                throw new HtmlParsingException($error);
             }
         }
     }

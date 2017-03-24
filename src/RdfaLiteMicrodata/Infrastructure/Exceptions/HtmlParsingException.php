@@ -56,14 +56,12 @@ class HtmlParsingException extends InvalidArgumentException
     /**
      * Constructor
      *
-     * @param string $message Message
-     * @param int $code Code
      * @param LibXMLError $error HTML parsing error
      */
-    public function __construct($message = '', $code = 0, LibXMLError $error)
+    public function __construct(LibXMLError $error)
     {
-        parent::__construct($message, $code);
         $this->error = $error;
+        parent::__construct($error->message, $error->code);
     }
 
     /**
