@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Factories;
 
 use Jkphl\RdfaLiteMicrodata\Application\Contract\DocumentFactoryInterface;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\HtmlParsingException;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\InvalidArgumentException;
 
 /**
@@ -216,9 +217,10 @@ class HtmlDocumentFactory implements DocumentFactoryInterface
      */
     protected function processParsingErrors(array $errors)
     {
+        /** @var \LibXMLError $error */
         foreach ($errors as $error) {
             if ($this->isNotInvalidHtml5TagError($error)) {
-                throw new InvalidArgumentException($error->message, $error->code);
+                throw new HtmlParsingException($error->message, $error->code, $error);
             }
         }
     }

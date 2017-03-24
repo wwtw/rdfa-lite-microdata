@@ -1,13 +1,13 @@
 <?php
 
 /**
- * rdfa-lite
+ * rdfa-lite-microdata
  *
  * @category Jkphl
- * @package Jkphl\Micrometa
- * @subpackage Infrastructure
- * @author Joschi Kuphal <joschi@kuphal.net> / @jkphl
- * @copyright Copyright © 2017 Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ * @package Jkphl\RdfaLiteMicrodata
+ * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
+ * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
@@ -34,37 +34,45 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\RdfaLiteMicrodata\Tests\Infrastructure;
+namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions;
 
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\DomDocumentFactory;
+use LibXMLError;
 
 /**
- * DOM document factory tests
+ * HTML parsing exception
  *
- * @package Jkphl\Micrometa
- * @subpackage Jkphl\RdfaLiteMicrodata\Tests
+ * @package Jkphl\Rdfalite
+ * @subpackage Jkphl\RdfaLiteMicrodata\Infrastructure
  */
-class DomDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class HtmlParsingException extends InvalidArgumentException
 {
     /**
-     * Test the DOM document factory
+     * HTML parsing error
+     *
+     * @var LibXMLError
      */
-    public function testHtmlDocument()
+    protected $error;
+
+    /**
+     * Constructor
+     *
+     * @param string $message Message
+     * @param int $code Code
+     * @param LibXMLError $error HTML parsing error
+     */
+    public function __construct($message = '', $code = 0, LibXMLError $error)
     {
-        $dom = new \DOMDocument();
-        $domDocumentFactory = new DomDocumentFactory();
-        $this->assertInstanceOf(\DOMDocument::class, $domDocumentFactory->createDocumentFromSource($dom));
+        parent::__construct($message, $code);
+        $this->error = $error;
     }
 
     /**
-     * Test the DOM document factory with an invalid source
+     * Return the HTML parsing error
      *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException
-     * @expectedExceptionCode 1488579793
+     * @return LibXMLError HTML parsing error
      */
-    public function testDomDocumentInvalidSource()
+    public function getParsingError()
     {
-        $domDocumentFactory = new DomDocumentFactory();
-        $domDocumentFactory->createDocumentFromSource(false);
+        return $this->error;
     }
 }

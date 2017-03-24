@@ -36,10 +36,11 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Infrastructure;
 
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\DomDocumentFactory;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\HtmlParsingException;
+use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 
 /**
- * HTML document factory tests
+ * DOM document factory tests
  *
  * @package Jkphl\Micrometa
  * @subpackage Jkphl\RdfaLiteMicrodata\Tests
@@ -51,20 +52,38 @@ class HtmlDocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testHtmlDocument()
     {
-        $dom = new \DOMDocument();
-        $domDocumentFactory = new DomDocumentFactory();
-        $this->assertInstanceOf(\DOMDocument::class, $domDocumentFactory->createDocumentFromSource($dom));
+        $htmlDocumentFactory = new HtmlDocumentFactory();
+        $htmlSource = '<html><head><title>Test</title></head><body><article>Test</article></body></html>';
+        $this->assertInstanceOf(\DOMDocument::class, $htmlDocumentFactory->createDocumentFromSource($htmlSource));
     }
 
     /**
-     * Test the DOM document factory with an invalid source
+     * Test the HTML document factory with an invalid element
      *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\RuntimeException
-     * @expectedExceptionCode 1488579793
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\HtmlParsingException
      */
-    public function testDomDocumentInvalidSource()
+    public function testHtmlDocumentInvalidElement()
     {
-        $domDocumentFactory = new DomDocumentFactory();
-        $domDocumentFactory->createDocumentFromSource(false);
+        $htmlDocumentFactory = new HtmlDocumentFactory();
+        $htmlSource = '<html><head><title>Test</title></head><body><invalid>Test</invalid></body></html>';
+        $htmlDocumentFactory->createDocumentFromSource($htmlSource);
+    }
+
+    /**
+     * Test the HTML document factory parsing error
+     */
+    public function testHtmlDocumentParsingError()
+    {
+        try {
+            $htmlDocumentFactory = new HtmlDocumentFactory();
+            $htmlSource = '<html><head><title>Test</title></head><body><invalid>Test</invalid></body></html>';
+            $htmlDocumentFactory->createDocumentFromSource($htmlSource);
+        } catch (HtmlParsingException $e) {
+            $parsingError = $e->getParsingError();
+            $this->assertInstanceOf(\LibXMLError::class, $parsingError);
+            $this->assertEquals(2, $parsingError->level);
+            $this->assertEquals(801, $parsingError->code);
+            $this->assertEquals('Tag invalid invalid', trim($parsingError->message));
+        }
     }
 }
