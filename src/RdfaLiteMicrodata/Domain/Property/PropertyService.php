@@ -58,7 +58,7 @@ class PropertyService
         $name = trim($name);
 
         // If the property name is invalid
-        if (!strlen($name) || !preg_match('/^[a-z][a-zA-Z0-9]*$/', $name)) {
+        if (!strlen($name) || !preg_match('/^[a-zA-Z][a-zA-Z0-9]*$/', $name)) {
             throw new RuntimeException(
                 sprintf(RuntimeException::INVALID_PROPERTY_NAME_STR, $name),
                 RuntimeException::INVALID_PROPERTY_NAME
