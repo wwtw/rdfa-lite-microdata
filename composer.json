@@ -27,7 +27,8 @@
         }
     },
     "require": {
-        "php": ">=5.5"
+        "php": ">=5.5",
+        "jkphl/dom-factory": "^0.1.0"
     },
     "autoload": {
         "psr-4": {

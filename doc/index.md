@@ -19,11 +19,6 @@ $rdfaItems = $rdfaParser->parseHtmlFile('/path/to/file.html');
 // Parse an HTML string
 $rdfaItems = $rdfaParser->parseHtml('<html><head>...</head><body vocab="http://schema.org/">...</body>');
 
-// Parse an HTML file with custom error handler
-$rdfaItems = $rdfaParser->parseHtmlFile('/path/to/file.html', function(\LibXMLError $error) {
-    // ...
-});
-
 // Parse a DOM document (here: created from an HTML string)
 $rdfaDom = new \DOMDocument();
 $rdfaDom->loadHTML('<html><head>...</head><body vocab="http://schema.org/">...</body>');
@@ -168,7 +163,7 @@ The [Microdata](https://www.w3.org/TR/microdata/) format isn't specified for non
 $microdataParser = new \Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata();
 
 // Parse an HTML file
-$microdataItems = $microdataParser->parseHtmlFile('/path/to/file.html' /*, $customErrorHandler*/);
+$microdataItems = $microdataParser->parseHtmlFile('/path/to/file.html');
 
 // Parse an HTML string
 $microdataItems = $microdataParser->parseHtml('<html><head>...</head><body itemscope itemtype="http://schema.org/Movie">...</body>');
@@ -181,34 +176,6 @@ $microdataItems = $microdataParser->parseDom($microdataDom);
 // Parse an HTML string with types / property names treated as IRIs
 $microdataParserIri = new \Jkphl\RdfaLiteMicrodata\Ports\Parser\Microdata(true);
 $microdataItems = $microdataParser->parseHtmlFile('/path/to/file.html');
-```
-
-## HTML parsing error handling
-
-The parser uses PHP's bundled [libxml2](http://php.net/manual/de/book.libxml.php) to parse web documents, which requires the documents to be reasonably well-formed and valid. Unfortunately, libxml2 isn't very up-to-date and fails e.g. on all the modern HTML5 elements. It also throws errors on various common HTML problems like
-
-* invalid HTML entities (e.g. an unescaped ampersand `"&"`) or
-* multiple attributes with the same name on a single element.
-
-Generally ignoring these errors isn't a good idea, however, as this could lead to fundamentally wrong parsing results. Therefore, the parser sports an internal HTML5 compatibility layer and additionally allows passing in a custom parsing error handler for all the `parseHtml*()` methods as the second argument. The handler is called for each parsing error and is expected to return `true` for allowable errors, `false` otherwise.
-
-```php
-$customErrorHandler = function(\LibXMLError $error) {
-    // Allow elements with unknown names
-    if ($error->code == 801) {
-        return true;
-    }
-    return false;
-};
-$parser->parseHtml('<html>...</html>', $customErrorHandler);
-```
-
-The various error codes are described within the official [xmlError API documentation](http://www.xmlsoft.org/html/libxml-xmlerror.html#xmlParserErrors). To completely suppress all parsing errors you might use a handler like this:
-
-```php
-$customErrorHandler = function(\LibXMLError $error) {
-    return true;
-};
 ```
 
 ## Installation

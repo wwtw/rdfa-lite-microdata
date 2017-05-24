@@ -58,18 +58,6 @@ class HtmlDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test the HTML document factory with an invalid element
-     *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\HtmlParsingException
-     */
-    public function testHtmlDocumentInvalidElement()
-    {
-        $htmlDocumentFactory = new HtmlDocumentFactory();
-        $htmlSource = '<html><head><title>Test</title></head><body><invalid>Test</invalid></body></html>';
-        $htmlDocumentFactory->createDocumentFromSource($htmlSource);
-    }
-
-    /**
      * Test the HTML document factory parsing error
      */
     public function testHtmlDocumentParsingError()

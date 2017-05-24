@@ -27,7 +27,7 @@
                     "profile": "http:\/\/schema.org\/",
                     "name": "articleBody",
                     "values": [
-                        "\n                Lorem ipsum dolor.News article content here.\n            "
+                        "\n                \n                    \n                    Lorem ipsum dolor.\n                \n                News article content here.\n            "
                     ]
                 },
                 "http:\/\/schema.org\/datePublished": {
