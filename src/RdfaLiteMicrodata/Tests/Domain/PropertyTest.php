@@ -82,6 +82,18 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test another invalid property name
+     *
+     * @expectedException \Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException
+     * @expectedExceptionCode 1486848618
+     */
+    public function testAnotherInvalidPropertyName()
+    {
+        $vocabulary = new Vocabulary(VocabularyTest::SCHEMA_ORG_URI);
+        new Property('name-width-dash', $vocabulary, 'value');
+    }
+
+    /**
      * Test the property list
      */
     public function testPropertyList()

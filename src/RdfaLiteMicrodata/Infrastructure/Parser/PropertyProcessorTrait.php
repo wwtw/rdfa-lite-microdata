@@ -37,6 +37,7 @@
 namespace Jkphl\RdfaLiteMicrodata\Infrastructure\Parser;
 
 use Jkphl\RdfaLiteMicrodata\Application\Context\ContextInterface;
+use Jkphl\RdfaLiteMicrodata\Domain\Exceptions\RuntimeException;
 use Jkphl\RdfaLiteMicrodata\Domain\Property\Property;
 use Jkphl\RdfaLiteMicrodata\Domain\Thing\ThingInterface;
 use Jkphl\RdfaLiteMicrodata\Domain\Vocabulary\VocabularyInterface;
@@ -65,7 +66,11 @@ trait PropertyProcessorTrait
     {
         $vocabulary = $this->getVocabulary($prefix, $context);
         if ($vocabulary instanceof VocabularyInterface) {
-            $context = $this->addProperty($element, $context, $name, $vocabulary, $last);
+            try {
+                $context = $this->addProperty($element, $context, $name, $vocabulary, $last);
+            } catch (RuntimeException $e) {
+                // Skip invalid property
+            }
         }
 
         return $context;

@@ -144,16 +144,4 @@ class MicrodataParserTest extends AbstractTest
     {
         (new Microdata())->parseHtmlFile('invalid');
     }
-
-    /**
-     * Test a HTML runtime exception
-     *
-     * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException
-     */
-    public function testRuntimeException()
-    {
-        (new Microdata())->parseHtmlFile(
-            dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'empty-property-microdata.html'
-        );
-    }
 }
