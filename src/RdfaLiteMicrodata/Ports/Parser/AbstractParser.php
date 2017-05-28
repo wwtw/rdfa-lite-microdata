@@ -74,7 +74,7 @@ abstract class AbstractParser implements ParserInterface
      * Get the contents of a file
      *
      * @param string $file File
-     * @return array Extracted things
+     * @return string File contents
      * @throws RuntimeException If the file is not readable
      */
     protected function getFileContents($file)

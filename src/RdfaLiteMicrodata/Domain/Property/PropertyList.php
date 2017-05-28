@@ -134,7 +134,8 @@ class PropertyList implements PropertyListInterface
             return;
         }
 
-        $this->offsetGet($iri)[] = $property;
+        $propertyStore =& $this->offsetGet($iri);
+        $propertyStore[] = $property;
     }
 
     /**

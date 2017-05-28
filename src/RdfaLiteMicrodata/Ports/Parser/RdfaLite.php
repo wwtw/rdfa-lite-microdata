@@ -82,22 +82,20 @@ class RdfaLite extends AbstractParser
      * Parse an HTML file
      *
      * @param string $file HTML file path
-     * @param callable|null $errorHandler Custom HTML parsing error handler
      * @return \stdClass Extracted things
      */
-    public function parseHtmlFile($file, array $errorHandler = null)
+    public function parseHtmlFile($file)
     {
-        return $this->parseHtml($this->getFileContents($file), $errorHandler);
+        return $this->parseHtml($this->getFileContents($file));
     }
 
     /**
      * Parse an HTML string
      *
      * @param string $string HTML string
-     * @param callable|null $errorHandler Custom HTML parsing error handler
      * @return \stdClass Extracted things
      */
-    public function parseHtml($string, array $errorHandler = null)
+    public function parseHtml($string)
     {
         return $this->parseSource(
             $string,
