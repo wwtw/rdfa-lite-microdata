@@ -2,6 +2,12 @@
 
 All Notable changes to *jkphl/rdfa-lite-microdata* will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.2] - 2017-05-29
+
+### Fixed
+
+* Fixed faulty node hashing scheme
+
 ## [0.4.1] - 2017-05-29
 
 ### Changed
