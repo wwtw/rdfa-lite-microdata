@@ -101,8 +101,7 @@ trait PropertyProcessorTrait
         $name,
         VocabularyInterface $vocabulary,
         $last
-    )
-    {
+    ) {
         $resourceId = $this->getResourceId($element);
 
         // Get the property value
