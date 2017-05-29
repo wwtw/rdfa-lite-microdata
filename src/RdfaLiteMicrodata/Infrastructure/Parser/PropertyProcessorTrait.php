@@ -101,7 +101,8 @@ trait PropertyProcessorTrait
         $name,
         VocabularyInterface $vocabulary,
         $last
-    ) {
+    )
+    {
         $resourceId = $this->getResourceId($element);
 
         // Get the property value
@@ -153,7 +154,7 @@ trait PropertyProcessorTrait
      */
     protected function getPropertyCache(\DOMElement $element)
     {
-        $elementHash = spl_object_hash($element);
+        $elementHash = $element->getNodePath();
         return isset($this->propertyCache[$elementHash]) ? $this->propertyCache[$elementHash] : null;
     }
 
@@ -175,7 +176,7 @@ trait PropertyProcessorTrait
      */
     protected function setPropertyCache(\DOMElement $element, $value)
     {
-        return $this->propertyCache[spl_object_hash($element)] = $value;
+        return $this->propertyCache[$element->getNodePath()] = $value;
     }
 
     /**

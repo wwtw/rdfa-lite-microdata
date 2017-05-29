@@ -109,8 +109,8 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 
         // Run through and register all nodes
         /** @var \DOMNode $node */
-        foreach ($nodeList as $node) {
-            $nodes[spl_object_hash($node)] = $this->registerNode($node);
+        foreach ($nodeList as $index => $node) {
+            $nodes[$node->getNodePath()] = $this->registerNode($node);
         }
 
         return $nodes;
@@ -134,7 +134,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
                 $this->contexts[$localContextId] = $localContext;
             }
 
-            $this->contextMap[spl_object_hash($node)] = $localContextId;
+            $this->contextMap[$node->getNodePath()] = $localContextId;
         }
 
         return $node;
