@@ -2,7 +2,13 @@
 
 All Notable changes to *jkphl/rdfa-lite-microdata* will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.4.3] - 2017-0614
+## [0.4.4] - 2017-10-15
+
+### Changed
+
+* Added `content` attribute support according to [new spec](https://www.w3.org/TR/microdata/#values) ([#2](https://github.com/jkphl/rdfa-lite-microdata/issues/2))
+
+## [0.4.3] - 2017-06-14
 
 ### Changed
 

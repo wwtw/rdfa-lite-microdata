@@ -28,13 +28,13 @@
 <!-- jkphl/dom&#45;factory -->
 <g id="node3" class="node"><title>jkphl/dom&#45;factory</title>
 <path fill="#eeeeee" stroke="black" d="M259.5,-393C259.5,-393 125.5,-393 125.5,-393 119.5,-393 113.5,-387 113.5,-381 113.5,-381 113.5,-369 113.5,-369 113.5,-363 119.5,-357 125.5,-357 125.5,-357 259.5,-357 259.5,-357 265.5,-357 271.5,-363 271.5,-369 271.5,-369 271.5,-381 271.5,-381 271.5,-387 265.5,-393 259.5,-393"/>
-<text text-anchor="middle" x="192.5" y="-371.3" font-family="Times,serif" font-size="14.00" fill="#314b5f">jkphl/dom&#45;factory: v0.1.0</text>
+<text text-anchor="middle" x="192.5" y="-371.3" font-family="Times,serif" font-size="14.00" fill="#314b5f">jkphl/dom&#45;factory: v0.1.2</text>
 </g>
 <!-- jkphl/rdfa&#45;lite&#45;microdata&#45;&gt;jkphl/dom&#45;factory -->
 <g id="edge2" class="edge"><title>jkphl/rdfa&#45;lite&#45;microdata&#45;&gt;jkphl/dom&#45;factory</title>
 <path fill="none" stroke="#1a2833" d="M100.313,-439.822C117.531,-427.902 140.655,-411.892 159.436,-398.89"/>
 <polygon fill="#1a2833" stroke="#1a2833" points="161.493,-401.723 167.723,-393.153 157.509,-395.968 161.493,-401.723"/>
-<text text-anchor="middle" x="154" y="-414" font-family="Times,serif" font-size="10.00" fill="#767676">^0.1.0</text>
+<text text-anchor="middle" x="154" y="-414" font-family="Times,serif" font-size="10.00" fill="#767676">^0.1.2</text>
 </g>
 <!-- jkphl/dom&#45;factory&#45;&gt;php -->
 <g id="edge11" class="edge"><title>jkphl/dom&#45;factory&#45;&gt;php</title>

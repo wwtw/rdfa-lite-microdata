@@ -132,8 +132,7 @@ class ThingGateway
                         'profile' => $propertyIri->getProfile(),
                         'name' => $propertyIri->getName(),
                         'values' => $propertyValues,
-                    ] :
-                    $propertyValues;
+                    ] : $propertyValues;
             }
         }
 

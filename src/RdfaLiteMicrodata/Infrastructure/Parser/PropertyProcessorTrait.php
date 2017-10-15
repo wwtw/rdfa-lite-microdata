@@ -188,7 +188,10 @@ trait PropertyProcessorTrait
     {
         // If HTML mode is active
         if ($this->html) {
-            $value = $this->getPropertyHtmlValue($element);
+            $value = $this->getPropertyContentAttrValue($element);
+            if ($value === null) {
+                $value = $this->getPropertyHtmlValue($element);
+            }
             if ($value !== null) {
                 return $value;
             }
@@ -196,6 +199,18 @@ trait PropertyProcessorTrait
 
         // Return the text content
         return $element->textContent;
+    }
+
+    /**
+     * Return a content attribute property value
+     *
+     * @param \DOMElement $element DOM element
+     * @return null|string Property value
+     */
+    protected function getPropertyContentAttrValue(\DOMElement $element)
+    {
+        $value = trim($element->getAttribute('content'));
+        return strlen($value) ? $value : null;
     }
 
     /**
