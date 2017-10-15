@@ -109,7 +109,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
 
         // Run through and register all nodes
         /** @var \DOMNode $node */
-        foreach ($nodeList as $index => $node) {
+        foreach ($nodeList as $node) {
             $nodes[$node->getNodePath()] = $this->registerNode($node);
         }
 

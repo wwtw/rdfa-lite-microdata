@@ -36,7 +36,7 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Infrastructure;
 
-use Jkphl\RdfaLiteMicrodata\Infrastructure\Exceptions\HtmlParsingException;
+use Jkphl\Domfactory\Ports\DomfactoryExceptionInterface;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 
 /**
@@ -66,25 +66,12 @@ class HtmlDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             $htmlDocumentFactory = new HtmlDocumentFactory();
             $htmlSource = '<html><head><title>Test</title></head><body><invalid>Test</invalid></body></html>';
             $htmlDocumentFactory->createDocumentFromSource($htmlSource);
-        } catch (HtmlParsingException $e) {
+        } catch (DomfactoryExceptionInterface $e) {
             $parsingError = $e->getParsingError();
             $this->assertInstanceOf(\LibXMLError::class, $parsingError);
             $this->assertEquals(2, $parsingError->level);
             $this->assertEquals(801, $parsingError->code);
             $this->assertEquals('Tag invalid invalid', trim($parsingError->message));
         }
-    }
-
-    /**
-     * Test a custom HTML parsing error handler
-     */
-    public function testHtmlDocumentCustomErrorHandler()
-    {
-        $customErrorHandler = function (\LibXMLError $error) {
-            return ($error->level == 2) && ($error->code == 801) && (trim($error->message) == 'Tag invalid invalid');
-        };
-        $htmlDocumentFactory = new HtmlDocumentFactory($customErrorHandler);
-        $htmlSource = '<html><head><title>Test</title></head><body><invalid>Test</invalid></body></html>';
-        $htmlDocumentFactory->createDocumentFromSource($htmlSource);
     }
 }
