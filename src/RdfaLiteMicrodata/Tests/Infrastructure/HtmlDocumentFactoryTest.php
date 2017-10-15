@@ -36,7 +36,6 @@
 
 namespace Jkphl\RdfaLiteMicrodata\Tests\Infrastructure;
 
-use Jkphl\Domfactory\Ports\DomfactoryExceptionInterface;
 use Jkphl\RdfaLiteMicrodata\Infrastructure\Factories\HtmlDocumentFactory;
 
 /**
@@ -55,23 +54,5 @@ class HtmlDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         $htmlDocumentFactory = new HtmlDocumentFactory();
         $htmlSource = '<html><head><title>Test</title></head><body><article>Test</article></body></html>';
         $this->assertInstanceOf(\DOMDocument::class, $htmlDocumentFactory->createDocumentFromSource($htmlSource));
-    }
-
-    /**
-     * Test the HTML document factory parsing error
-     */
-    public function testHtmlDocumentParsingError()
-    {
-        try {
-            $htmlDocumentFactory = new HtmlDocumentFactory();
-            $htmlSource = '<html><head><title>Test</title></head><body><invalid>Test</invalid></body></html>';
-            $htmlDocumentFactory->createDocumentFromSource($htmlSource);
-        } catch (DomfactoryExceptionInterface $e) {
-            $parsingError = $e->getParsingError();
-            $this->assertInstanceOf(\LibXMLError::class, $parsingError);
-            $this->assertEquals(2, $parsingError->level);
-            $this->assertEquals(801, $parsingError->code);
-            $this->assertEquals('Tag invalid invalid', trim($parsingError->message));
-        }
     }
 }
