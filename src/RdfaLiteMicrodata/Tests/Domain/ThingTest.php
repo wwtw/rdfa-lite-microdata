@@ -116,6 +116,22 @@ class ThingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the instantiation of a minimum thing
+     */
+    public function testAddType()
+    {
+        $types = [
+            new Type('Book', self::$schemaOrgVocabulary),
+            new Type('Product', self::$schemaOrgVocabulary),
+        ];
+
+        $thing = new Thing($types[0]);
+        $thing->addType($types[1]);
+
+        $this->assertCount(2, $thing->getTypes());
+    }
+
+    /**
      * Test adding a property
      */
     public function testAddProperty()
