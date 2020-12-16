@@ -129,7 +129,9 @@ class MicrodataElementProcessor extends AbstractElementProcessor
      */
     protected function processChild(\DOMElement $element, ContextInterface $context)
     {
-        if ($element->hasAttribute('itemscope') && empty($element->getAttribute('itemprop'))) {
+        if ($element->hasAttribute('itemscope') 
+            && (empty($element->getAttribute('itemprop')) || is_a($context->getParentThing(), RootThing::class))
+        ) {
             $context = $this->createAndAddChild($element, $context);
         }
 
