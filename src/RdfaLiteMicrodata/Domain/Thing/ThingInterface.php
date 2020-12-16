@@ -57,6 +57,13 @@ interface ThingInterface
     public function getTypes();
 
     /**
+     * Adds a resource Type
+     * 
+     * @param TypeInterface $type
+     */
+    public function addType(TypeInterface $type);
+
+    /**
      * Return the resource ID
      *
      * @return null|string Resource ID

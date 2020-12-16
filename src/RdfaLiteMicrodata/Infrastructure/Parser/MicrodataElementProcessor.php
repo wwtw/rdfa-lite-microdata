@@ -89,9 +89,18 @@ class MicrodataElementProcessor extends AbstractElementProcessor
     protected function processProperty(\DOMElement $element, ContextInterface $context)
     {
         if ($element->hasAttribute('itemprop') && !($context->getParentThing() instanceof RootThing)) {
-            $itemprops = trim($element->getAttribute('itemprop'));
-            $itemprops = strlen($itemprops) ? preg_split('/\s+/', $itemprops) : [];
-            $context = $this->processProperties($itemprops, $element, $context);
+            $itemprop = trim($element->getAttribute('itemprop'));
+
+            switch ($itemprop) {
+                case 'additionalType':
+                    $type = $this->getType($element->getAttribute('href'), $context);
+                    $context->getParentThing()->addType($type);
+                    break;
+                default:
+                    $itemprops = strlen($itemprop) ? preg_split('/\s+/', $itemprop) : [];
+                    $context = $this->processProperties($itemprops, $element, $context);
+                    break;
+            }
         }
 
         return $context;

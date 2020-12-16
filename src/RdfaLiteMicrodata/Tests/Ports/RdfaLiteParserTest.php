@@ -114,6 +114,34 @@ class RdfaLiteParserTest extends AbstractTest
     }
 
     /**
+     * Test parsing an RDFa Lite DOM containing multiple types
+     *
+     * "An additional type for the item, typically used for adding more specific 
+     *  types from external vocabularies in microdata syntax... In RDFa syntax, 
+     *  it is better to use the native RDFa syntax - the 'typeof' attribute - for 
+     *  multiple types."
+     * 
+     * @see http://schema.org/additionalType
+     */
+    public function testRdfaLiteDomWithAdditionalType()
+    {
+        $htmlDomFactory = new HtmlDocumentFactory();
+
+        $dom = $htmlDomFactory->createDocumentFromSource(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'typeof-multiple-rdfa-lite.html'
+            )
+        );
+
+        $things = (new RdfaLite())->parseDom($dom);
+
+        $this->assertCount(2, $things->items);
+        $this->assertCount(2, $things->items[0]->type);
+        $this->assertContains('http://schema.org/Book', $things->items[0]->type);
+        $this->assertContains('http://schema.org/Product', $things->items[0]->type);
+    }
+
+    /**
      * Test an invalid file
      *
      * @expectedException \Jkphl\RdfaLiteMicrodata\Ports\Exceptions\RuntimeException

@@ -113,6 +113,32 @@ class MicrodataParserTest extends AbstractTest
     }
 
     /**
+     * Test parsing a Microdata HTML DOM containing the additionalType itemprop
+     *
+     * "An additional type for the item, typically used for adding more specific 
+     *  types from external vocabularies in microdata syntax."
+     * 
+     * @see http://schema.org/additionalType
+     */
+    public function testMicrodataWithAdditionalType()
+    {
+        $htmlDomFactory = new HtmlDocumentFactory();
+
+        $dom = $htmlDomFactory->createDocumentFromSource(
+            file_get_contents(
+                dirname(__DIR__).DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'additional-type-microdata.html'
+            )
+        );
+
+        $things = (new Microdata())->parseDom($dom);
+
+        $this->assertCount(2, $things->items);
+        $this->assertCount(2, $things->items[0]->type);
+        $this->assertContains('http://schema.org/Book', $things->items[0]->type);
+        $this->assertContains('http://schema.org/Product', $things->items[0]->type);
+    }
+
+    /**
      * Test an anonymous item with property references
      */
     public function testAnonymousItemWithPropertyRefs()
