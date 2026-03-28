@@ -159,6 +159,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      *
      * @return boolean Current node has child nodes
      */
+    #[\ReturnTypeWillChange]
     public function hasChildren()
     {
         return $this->current()->hasChildNodes();
@@ -169,6 +170,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      *
      * @return DOMIterator Child node iterator
      */
+    #[\ReturnTypeWillChange]
     public function getChildren()
     {
         $element = $this->current();
@@ -184,6 +186,7 @@ class DOMIterator extends \ArrayIterator implements \RecursiveIterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         parent::rewind();

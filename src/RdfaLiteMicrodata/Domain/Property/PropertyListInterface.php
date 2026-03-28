@@ -52,6 +52,7 @@ interface PropertyListInterface extends \ArrayAccess, \Iterator, \Countable
      * @param IriInterface|string $iri IRI
      * @return boolean Property exists
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($iri);
 
     /**
@@ -60,6 +61,7 @@ interface PropertyListInterface extends \ArrayAccess, \Iterator, \Countable
      * @param IriInterface|string $iri IRI
      * @return array Property values
      */
+    #[\ReturnTypeWillChange]
     public function &offsetGet($iri);
 
     /**
@@ -68,6 +70,7 @@ interface PropertyListInterface extends \ArrayAccess, \Iterator, \Countable
      * @param IriInterface|string $iri IRI
      * @param array $value Property values
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($iri, $value);
 
     /**
@@ -75,6 +78,7 @@ interface PropertyListInterface extends \ArrayAccess, \Iterator, \Countable
      *
      * @param IriInterface|string $iri IRI
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($iri);
 
     /**

@@ -84,6 +84,7 @@ class PropertyList implements PropertyListInterface
      * @param IriInterface|string $iri IRI
      * @throws ErrorException
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($iri)
     {
         throw new ErrorException(
@@ -98,6 +99,7 @@ class PropertyList implements PropertyListInterface
      *
      * @return int Number of properties
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->nameToCursor);
@@ -144,6 +146,7 @@ class PropertyList implements PropertyListInterface
      * @param IriInterface|string $iri IRI
      * @return boolean Property exists
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($iri)
     {
         return array_key_exists(strval($iri), $this->nameToCursor);
@@ -155,6 +158,7 @@ class PropertyList implements PropertyListInterface
      * @param IriInterface|string $iri IRI
      * @param array $value Property values
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($iri, $value)
     {
         $iriStr = strval($iri);
@@ -170,6 +174,7 @@ class PropertyList implements PropertyListInterface
      * @param IriInterface|string $iri IRI
      * @return array Property values
      */
+    #[\ReturnTypeWillChange]
     public function &offsetGet($iri)
     {
         $iriStr = strval($iri);

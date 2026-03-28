@@ -54,6 +54,7 @@ trait PropertyListIteratorTrait
      *
      * @return array Property values
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->values[$this->cursor];
@@ -62,6 +63,7 @@ trait PropertyListIteratorTrait
     /**
      * Move forward to next element
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->cursor;
@@ -72,6 +74,7 @@ trait PropertyListIteratorTrait
      *
      * @return IriInterface IRI key
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->names[$this->cursor];
@@ -82,6 +85,7 @@ trait PropertyListIteratorTrait
      *
      * @return boolean The current position is valid
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->values[$this->cursor]);
@@ -90,6 +94,7 @@ trait PropertyListIteratorTrait
     /**
      * Rewind the Iterator to the first element
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->cursor = 0;
